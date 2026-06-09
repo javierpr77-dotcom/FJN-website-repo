@@ -159,7 +159,7 @@ const PricingSection = () => {
         <>Brands looking for better <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">positioning</span>.</>
       ],
       features: language === 'es' ? [
-        "website de hasta 3 páginas",
+        "website de hasta 5 páginas",
         "diseño personificado, moderno y profesional",
         "estructura estratégica de conversión",
         "copywriting básico",
@@ -168,7 +168,7 @@ const PricingSection = () => {
         "bloque de confianza o prueba social",
         "SEO básico"
       ] : [
-        "website of up to 3 pages",
+        "website of up to 5 pages",
         "personalized, modern and professional design",
         "strategic conversion structure",
         "basic copywriting",
@@ -230,7 +230,7 @@ const PricingSection = () => {
         <>Businesses ready to increase their <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">conversion</span>.</>
       ],
       features: language === 'es' ? [
-        "website de hasta 5 páginas",
+        "website de hasta 10 páginas",
         "diseño premium, moderno y profesional",
         "estructura orientada a conversión y autoridad",
         "organización avanzada de servicios o soluciones",
@@ -240,7 +240,7 @@ const PricingSection = () => {
         "SEO avanzado",
         "WhatsApp Chatbot integrado"
       ] : [
-        "website of up to 5 pages",
+        "website of up to 10 pages",
         "premium, modern and professional design",
         "structure oriented to conversion and authority",
         "advanced organization of services or solutions",
@@ -303,7 +303,7 @@ const PricingSection = () => {
         <>To position yourself with <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">more authority</span>.</>
       ],
       features: language === 'es' ? [
-        "website de hasta 7 páginas",
+        "website de hasta 15 páginas",
         "diseño premium elevado, elegante y más exclusivo",
         "estructura comercial de alto impacto",
         "experiencia visual más inmersiva y refinada",
@@ -313,7 +313,7 @@ const PricingSection = () => {
         "SEO Pro",
         "WhatsApp Chatbot integrado"
       ] : [
-        "website of up to 7 pages",
+        "website of up to 15 pages",
         "elevated premium design, elegant and more exclusive",
         "high-impact commercial structure",
         "more immersive and refined visual experience",
@@ -437,7 +437,13 @@ const PricingSection = () => {
           {plans.map((plan, index) => (
             <div 
               key={plan.id}
-              className={`relative flex flex-col rounded-3xl transition-all duration-500 hover:-translate-y-2 ${plan.popular ? 'border-[#145BFF]/50 shadow-[0_0_40px_rgba(20,91,255,0.15)]' : 'border-white/[0.08] hover:border-[#145BFF]/30 hover:shadow-[0_0_30px_rgba(20,91,255,0.1)]'}`}
+              className={`relative flex flex-col rounded-3xl transition-all duration-500 hover:-translate-y-2 ${
+                plan.id === "plan-2" 
+                  ? "border-white/45 shadow-[0_0_25px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.28)]" 
+                  : plan.popular 
+                    ? "border-[#145BFF]/50 shadow-[0_0_40px_rgba(20,91,255,0.15)]" 
+                    : "border-white/[0.08] hover:border-[#145BFF]/30 hover:shadow-[0_0_30px_rgba(20,91,255,0.1)]"
+              }`}
               style={{
                 background: 'linear-gradient(135deg, rgba(13,18,32,0.15) 0%, rgba(5,5,7,0.25) 100%)',
                 backdropFilter: 'blur(4px)',
@@ -458,7 +464,7 @@ const PricingSection = () => {
               )}
 
               {/* Top edge shine */}
-              <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent ${plan.popular ? 'via-[#145BFF]' : 'via-white/20'} to-transparent opacity-50`}></div>
+              <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent ${plan.id === "plan-2" ? "via-white/70" : plan.popular ? "via-[#145BFF]" : "via-white/20"} to-transparent opacity-60`}></div>
 
               <div className="p-6 md:p-8 flex flex-col flex-grow">
                 {/* Header */}

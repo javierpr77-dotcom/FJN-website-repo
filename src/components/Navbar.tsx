@@ -153,7 +153,24 @@ const Navbar = () => {
               <motion.button
                 key={item.key}
                 initial={{ opacity: 0, x: 20 }}
-                animate={{ 
+                animate={item.key === "portfolio" ? {
+                  opacity: [0.9, 1, 0.9],
+                  x: 0,
+                  scale: [1, 1.05, 1],
+                  filter: [
+                    "drop-shadow(0 0 4px rgba(57,255,20,0.5))",
+                    "drop-shadow(0 0 12px rgba(57,255,20,1))",
+                    "drop-shadow(0 0 4px rgba(57,255,20,0.5))"
+                  ],
+                  backgroundPosition: ["0% 50%", "200% 50%"],
+                  transition: {
+                    scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                    filter: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                    opacity: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                    x: { duration: 0.4, delay: index * 0.1, ease: "easeOut" },
+                    backgroundPosition: { duration: 8, repeat: Infinity, ease: "linear" }
+                  }
+                } : { 
                   opacity: 1, 
                   x: 0,
                   backgroundPosition: ["0% 50%", "200% 50%"],
@@ -175,11 +192,13 @@ const Navbar = () => {
                 onClick={() => handleNavigation(item.key)}
                 className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block"
                 style={{
-                  backgroundImage: "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
+                  backgroundImage: item.key === "portfolio"
+                    ? "linear-gradient(90deg, #39FF14, #FFFFFF, #39FF14)"
+                    : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
                   backgroundSize: "200% auto",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  filter: "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
+                  filter: item.key === "portfolio" ? undefined : "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
                 }}
               >
                 {item.label}
@@ -234,22 +253,34 @@ const Navbar = () => {
                     onClick={() => handleNavigation(item.key)}
                     className="w-full text-left font-body text-lg py-4 font-medium transition-all duration-300"
                     style={{
-                      backgroundImage: "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
+                      backgroundImage: item.key === "portfolio"
+                        ? "linear-gradient(90deg, #39FF14, #FFFFFF, #39FF14)"
+                        : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
                       backgroundSize: "200% auto",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                     }}
                   >
                     <motion.span
-                      animate={{ 
+                      animate={item.key === "portfolio" ? {
+                        backgroundPosition: ["0% 50%", "200% 50%"],
+                        scale: [1, 1.02, 1],
+                      } : { 
                         backgroundPosition: ["0% 50%", "200% 50%"],
                       }}
-                      transition={{ 
+                      transition={item.key === "portfolio" ? { 
+                        scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+                        backgroundPosition: { duration: 8, repeat: Infinity, ease: "linear" }
+                      } : {
                         duration: 8, 
                         repeat: Infinity,
                         ease: "linear"
                       }}
-                      className="w-full drop-shadow-[0_0_8px_rgba(20,91,255,0.6)]"
+                      className={`w-full inline-block ${
+                        item.key === 'portfolio' 
+                          ? 'drop-shadow-[0_0_12px_rgba(57,255,20,0.8)]' 
+                          : 'drop-shadow-[0_0_8px_rgba(20,91,255,0.6)]'
+                      }`}
                       style={{
                         backgroundImage: "inherit",
                         backgroundSize: "inherit",
