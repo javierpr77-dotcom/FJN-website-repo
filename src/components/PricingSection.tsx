@@ -65,6 +65,28 @@ const PricingSection = () => {
       .then(() => console.log("Netlify pricing order submission successful"))
       .catch((error) => console.error("Netlify submission error:", error));
 
+    // Send email notification via serverless Netlify function using Resend
+    fetch("/.netlify/functions/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        plan: selectedPlan?.name || "",
+        addons: selectedAddons.join(", ") || "Ninguno/None",
+        total: `$${estimatedTotal.toLocaleString()} USD`
+      })
+    })
+      .then(response => {
+        if (!response.ok) {
+          console.error("Failed to send email notification for plan request");
+        } else {
+          console.log("Email notification for plan request sent successfully");
+        }
+      })
+      .catch(error => console.error("Error calling send-email function:", error));
+
     setModalStep(3);
   };
 
