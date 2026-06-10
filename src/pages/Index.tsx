@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import PortfolioSection from "@/components/PortfolioSection";
@@ -13,6 +15,27 @@ import Navbar from "@/components/Navbar";
 import SEO from "@/components/SEO";
 
 const Index = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/portfolio") {
+      const scrollWithRetry = (attempts = 0) => {
+        const element = document.getElementById("portfolio");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        } else if (attempts < 10) {
+          setTimeout(() => scrollWithRetry(attempts + 1), 100);
+        }
+      };
+
+      const timer = setTimeout(() => {
+        scrollWithRetry();
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
+
   return (
     <div className="min-h-screen relative">
       <SEO />

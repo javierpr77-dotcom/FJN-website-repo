@@ -61,7 +61,7 @@ const ContactForm = () => {
     const dateFormatted = selectedDate ? format(selectedDate, 'PPP', { locale: language === 'es' ? es : enUS }) : (language === 'es' ? 'No seleccionada' : 'Not selected');
     const timeFormatted = selectedTime || (language === 'es' ? 'No seleccionada' : 'Not selected');
 
-    // Send to Netlify in the background silently
+    // Send to Netlify in the background silently (makes submissions appear in Netlify forms dashboard for free!)
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -77,6 +77,23 @@ const ContactForm = () => {
     })
       .then(() => console.log("Netlify form submission successful"))
       .catch((error) => console.error("Netlify submission error:", error));
+
+    // Send instant email notification using our secure serverless function with Resend (completely free!)
+    fetch("/.netlify/functions/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        phone,
+        email,
+        goal,
+        date: dateFormatted,
+        time: timeFormatted
+      })
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Resend secure email notification sent:", data))
+      .catch((error) => console.error("Resend secure email notification error:", error));
 
     const message = language === 'es' 
       ? `¡Hola! Me gustaría agendar una asesoría para definir el mejor plan.%0A%0A*Mi Nombre:* ${name}%0A*Mi Teléfono:* ${phone}%0A*Mi Email:* ${email}%0A*Mi Objetivo:* ${goal}%0A*Fecha Deseada:* ${dateFormatted}%0A*Hora Deseada:* ${timeFormatted}` 
