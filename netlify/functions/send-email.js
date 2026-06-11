@@ -85,9 +85,6 @@ exports.handler = async function(event, context) {
               </table>
             </div>
           </div>
-          <div style="text-align: center; margin-top: 8px;">
-            <a href="https://wa.me/${phone.replace(/[^0-9]/g, '')}" style="display: inline-block; padding: 14px 32px; background-color: #25D366; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(37,211,102,0.25); font-size: 16px;">Chatear Directo por WhatsApp</a>
-          </div>
           <div style="margin-top: 24px; border-top: 1px solid #e5e7eb; padding-top: 16px; text-align: center;">
             <p style="margin: 0; color: #9ca3af; font-size: 12px;">Enviado de forma segura mediante Resend y Netlify Functions.</p>
           </div>
@@ -127,9 +124,6 @@ exports.handler = async function(event, context) {
                 <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #111827; font-size: 15px;">${time || 'No seleccionada'}</td>
               </tr>
             </table>
-          </div>
-          <div style="text-align: center; margin-top: 8px;">
-            <a href="https://wa.me/${phone.replace(/[^0-9]/g, '')}" style="display: inline-block; padding: 14px 32px; background-color: #25D366; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(37,211,102,0.25); font-size: 16px;">Contactar por WhatsApp Directo</a>
           </div>
           <div style="margin-top: 24px; border-top: 1px solid #e5e7eb; padding-top: 16px; text-align: center;">
             <p style="margin: 0; color: #9ca3af; font-size: 12px;">Enviado de forma segura mediante Resend y Netlify Functions.</p>
