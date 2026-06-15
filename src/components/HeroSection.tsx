@@ -21,7 +21,13 @@ const HeroSection = () => {
     }
   };
 
-  const scrollToContact = () => scrollToSection('contact');
+  const scrollToContact = () => {
+    if (window.innerWidth < 1024) {
+      window.dispatchEvent(new CustomEvent("open-booking-modal"));
+    } else {
+      scrollToSection('contact');
+    }
+  };
   const scrollToPlanes = () => scrollToSection('planes');
   const scrollToReviews = () => scrollToSection('resenas');
 

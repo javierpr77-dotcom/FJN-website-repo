@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
-import { ArrowUp, MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const FloatingButtons = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400);
+      // Show when the user scrolls down more than 300px
+      setShowScrollTop(window.scrollY > 300);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -18,25 +19,38 @@ const FloatingButtons = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const openWhatsApp = () => {
-    window.open('https://wa.me/17872102204?text=Hola%2C%20me%20interesa%20conocer%20más%20sobre%20sus%20servicios%20de%20marketing%20digital', '_blank');
-  };
-
   return (
-    <div className="fixed bottom-12 sm:bottom-6 right-6 z-[100] flex flex-col gap-4">
-      {/* Scroll to Top Button */}
+    <AnimatePresence>
       {showScrollTop && (
-        <button
+        <motion.button
           type="button"
           onClick={scrollToTop}
-          className="w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center bg-transparent border-0 shadow-[0_0_15px_rgba(20,91,255,0.6),inset_0_0_8px_rgba(20,91,255,0.4)] hover:shadow-[0_0_25px_rgba(20,91,255,0.9),inset_0_0_12px_rgba(20,91,255,0.6)] hover:bg-[#145BFF]/5 backdrop-blur-sm hover:scale-110 transition-all duration-300 cursor-pointer animate-fade-in-up"
+          initial={{ opacity: 0, scale: 0.6, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.6, y: 15 }}
+          whileHover={{ scale: 1.15, borderColor: "rgba(20, 91, 255, 0.4)" }}
+          whileTap={{ scale: 0.95 }}
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center bg-[#050507]/80 border border-white/10 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.5),0_0_8px_rgba(20,91,255,0.1)] cursor-pointer text-white/70 hover:text-white transition-colors duration-300 group"
           title="Volver arriba"
           aria-label="Volver arriba"
         >
-          <ArrowUp className="w-4 h-4 md:w-5 md:h-5 text-[#145BFF] drop-shadow-[0_0_8px_rgba(20,91,255,0.8)]" />
-        </button>
+          {/* Ambient grow/breathe visual halo effect */}
+          <motion.div
+            className="absolute inset-0 rounded-full bg-[#145BFF]/15 z-[-1]"
+            animate={{
+              scale: [1, 1.45, 1],
+              opacity: [0.6, 0, 0.6],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <ChevronUp className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
+        </motion.button>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
 

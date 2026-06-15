@@ -86,6 +86,11 @@ const Navbar = () => {
     if (itemKey === "resenas") sectionId = "resenas";
     if (itemKey === "consultas") sectionId = "contact";
     
+    if (sectionId === "contact" && window.innerWidth < 1024) {
+      window.dispatchEvent(new CustomEvent("open-booking-modal"));
+      return;
+    }
+    
     if (location.pathname !== "/") {
       navigate("/");
       // Wait for page to load before scrolling

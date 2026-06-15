@@ -4,6 +4,8 @@ import { Send, Sparkles, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Cl
 import { useLanguage } from "@/contexts/LanguageContext";
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, getDay, isBefore, startOfDay } from 'date-fns';
 import { enUS, es } from 'date-fns/locale';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import confetti from "canvas-confetti";
 
 const ContactForm = () => {
   const { language } = useLanguage();
@@ -17,6 +19,8 @@ const ContactForm = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   // Prevent scrolling when modal is open
   useEffect(() => {
@@ -29,6 +33,17 @@ const ContactForm = () => {
       document.body.style.overflow = '';
     };
   }, [isCalendarModalOpen]);
+
+  // Listen to open booking modal triggers
+  useEffect(() => {
+    const handleOpen = () => {
+      setIsBookingModalOpen(true);
+    };
+    window.addEventListener("open-booking-modal", handleOpen);
+    return () => {
+      window.removeEventListener("open-booking-modal", handleOpen);
+    };
+  }, []);
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -54,6 +69,37 @@ const ContactForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const triggerPremiumConfetti = () => {
+    const colors = ["#145BFF", "#3B7BFF", "#000000", "#FFFFFF", "#7C3AED"];
+    confetti({
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.6 },
+      colors: colors
+    });
+    
+    // extra bursts from sides
+    setTimeout(() => {
+      confetti({
+        particleCount: 60,
+        angle: 60,
+        spread: 60,
+        origin: { x: 0 },
+        colors: colors
+      });
+    }, 150);
+    
+    setTimeout(() => {
+      confetti({
+        particleCount: 60,
+        angle: 120,
+        spread: 60,
+        origin: { x: 1 },
+        colors: colors
+      });
+    }, 300);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { name, phone, email, goal } = formData;
@@ -61,7 +107,7 @@ const ContactForm = () => {
     const dateFormatted = selectedDate ? format(selectedDate, 'PPP', { locale: language === 'es' ? es : enUS }) : (language === 'es' ? 'No seleccionada' : 'Not selected');
     const timeFormatted = selectedTime || (language === 'es' ? 'No seleccionada' : 'Not selected');
 
-    // Send to Netlify in the background silently (makes submissions appear in Netlify forms dashboard for free!)
+    // Send to Netlify in the background silently
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -78,7 +124,7 @@ const ContactForm = () => {
       .then(() => console.log("Netlify form submission successful"))
       .catch((error) => console.error("Netlify submission error:", error));
 
-    // Send instant email notification using our secure serverless function with Resend (completely free!)
+    // Send instant email notification using our secure serverless function with Resend
     fetch("/.netlify/functions/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -95,12 +141,170 @@ const ContactForm = () => {
       .then((data) => console.log("Resend secure email notification sent:", data))
       .catch((error) => console.error("Resend secure email notification error:", error));
 
-    const message = language === 'es' 
-      ? `¡Hola! Me gustaría agendar una asesoría para definir el mejor plan.%0A%0A*Mi Nombre:* ${name}%0A*Mi Teléfono:* ${phone}%0A*Mi Email:* ${email}%0A*Mi Objetivo:* ${goal}%0A*Fecha Deseada:* ${dateFormatted}%0A*Hora Deseada:* ${timeFormatted}` 
-      : `Hello! I would like to schedule a consultation to define the best plan.%0A%0A*My Name:* ${name}%0A*My Phone:* ${phone}%0A*My Email:* ${email}%0A*My Goal:* ${goal}%0A*Desired Date:* ${dateFormatted}%0A*Desired Time:* ${timeFormatted}`;
-    
-    // Redirect to WhatsApp
-    window.open(`https://wa.me/17872102204?text=${message}`, '_blank');
+    triggerPremiumConfetti();
+    setIsSubmitted(true);
+  };
+
+  const renderFormContent = (isModalLayout = false) => {
+    return (
+      <div className={isModalLayout ? "w-full" : "relative z-10 w-full"}>
+        {!isSubmitted ? (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="font-body text-sm text-white/70 ml-1 text-left">
+                  {language === 'es' ? 'Tu Nombre' : 'Your Name'}
+                </label>
+                <input 
+                  type="text" 
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder={language === 'es' ? "Ej. Carlos Rodríguez" : "Ex. Carlos Rodriguez"}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="font-body text-sm text-white/70 ml-1 text-left">
+                  {language === 'es' ? 'Tu Teléfono' : 'Your Phone'}
+                </label>
+                <input 
+                  type="tel" 
+                  name="phone"
+                  required
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder={language === 'es' ? "Ej. +1 234 567 8900" : "Ex. +1 234 567 8900"}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="font-body text-sm text-white/70 ml-1 text-left">
+                {language === 'es' ? '¿Cuál es tu objetivo principal?' : 'What is your main goal?'}
+              </label>
+              <textarea 
+                name="goal"
+                required
+                value={formData.goal}
+                onChange={handleChange}
+                rows={4}
+                placeholder={language === 'es' ? "Ej. Quiero aumentar mis leads mensuales en un 50%..." : "Ex. I want to increase my monthly leads by 50%..."}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300 resize-none"
+              />
+            </div>
+
+            {/* Calendar Trigger */}
+            <div className="flex flex-col gap-3">
+              <label className="font-body text-sm text-white/70 ml-1 text-left flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <CalendarIcon className="w-4 h-4 text-[#145BFF]" />
+                  {language === 'es' ? 'Agendar Asesoría (Opcional)' : 'Schedule Consultation (Optional)'}
+                </span>
+                {(selectedDate && selectedTime) && (
+                  <span className="text-xs text-[#145BFF] flex items-center gap-1 bg-[#145BFF]/10 px-2 py-1 rounded-full border border-[#145BFF]/20">
+                    <Check className="w-3 h-3" />
+                    {language === 'es' ? 'Agendado' : 'Scheduled'}
+                  </span>
+                )}
+              </label>
+              
+              <button
+                type="button"
+                onClick={() => setIsCalendarModalOpen(true)}
+                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 flex items-center justify-between hover:bg-white/[0.05] hover:border-[#145BFF]/50 transition-all group/calendar-btn"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#145BFF]/10 flex items-center justify-center border border-[#145BFF]/20 group-hover/calendar-btn:scale-110 transition-transform">
+                    <CalendarIcon className="w-5 h-5 text-[#145BFF]" />
+                  </div>
+                  <div className="flex flex-col items-start text-left">
+                    <span className="text-white font-body text-sm font-medium">
+                      {selectedDate && selectedTime 
+                        ? `${format(selectedDate, 'MMM d, yyyy', { locale: language === 'es' ? es : enUS })} · ${selectedTime}`
+                        : (language === 'es' ? 'Seleccionar día y hora' : 'Select day and time')}
+                    </span>
+                    <span className="text-white/40 text-xs font-body">
+                       {language === 'es' ? 'Lunes - Sábado, 9:00 AM - 6:00 PM' : 'Monday - Saturday, 9:00 AM - 6:00 PM'}
+                    </span>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-white/30 group-hover/calendar-btn:text-white/70 transition-colors group-hover/calendar-btn:translate-x-1 duration-300" />
+              </button>
+            </div>
+
+            <motion.button 
+              type="submit"
+              whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(20,91,255,0.8)" }}
+              animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              className="group relative w-full flex items-center justify-center gap-2 mt-2 px-8 py-4 font-body font-bold text-white transition-all duration-500 rounded-xl overflow-hidden cursor-pointer"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)',
+                backgroundSize: '200% auto',
+                boxShadow: '0 0 20px rgba(20,91,255,0.6)',
+                color: '#030712'
+              }}
+            >
+              <span className="relative flex items-center gap-2">
+                {language === 'es' ? 'Solicitar Agenda' : 'Request Consultation'}
+                <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              </span>
+            </motion.button>
+          </form>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center justify-center text-center py-6"
+          >
+            <div className="w-16 h-16 rounded-full bg-[#145BFF]/20 border border-[#145BFF]/30 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(20,91,255,0.3)]">
+              <Check className="w-8 h-8 text-[#145BFF]" />
+            </div>
+            <h3 className="font-heading text-2xl text-white font-medium mb-3">
+              {language === 'es' ? '¡Solicitud Recibida!' : 'Request Received!'}
+            </h3>
+            <p className="text-[#CFCFD4]/85 font-body text-sm font-light leading-relaxed max-w-sm mb-6">
+              {language === 'es' 
+                ? 'Gracias por contactarnos. Hemos recibido tu información de asesoría. Nos pondremos en contacto contigo por teléfono muy pronto.' 
+                : 'Thank you for reaching out. We have received your consultation details. We will contact you by phone very soon.'}
+            </p>
+            
+            {selectedDate && selectedTime && (
+              <div className="bg-[#145BFF]/5 border border-white/5 rounded-2xl p-4 w-full text-left mb-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-[#145BFF]" />
+                <p className="text-xs font-body text-[#CFCFD4]/60 uppercase tracking-widest mb-1.5">
+                  {language === 'es' ? 'Asesoría Agendada' : 'Scheduled Call'}
+                </p>
+                <p className="text-white font-body text-sm font-medium">
+                  {format(selectedDate, 'PPPP', { locale: language === 'es' ? es : enUS })}
+                </p>
+                <p className="text-[#3B7BFF] font-body text-xs mt-1 font-semibold">
+                  {selectedTime} ({language === 'es' ? 'Llamada telefónica' : 'Phone consult'})
+                </p>
+              </div>
+            )}
+
+            <button
+              onClick={() => {
+                setIsSubmitted(false);
+                setFormData({ name: "", phone: "", email: "", goal: "" });
+                setSelectedDate(null);
+                setSelectedTime(null);
+                if (isModalLayout) {
+                  setIsBookingModalOpen(false);
+                }
+              }}
+              className="py-2.5 px-6 rounded-xl border border-white/10 text-[#CFCFD4]/70 hover:text-white font-body text-xs cursor-pointer hover:bg-white/5 transition-all duration-300"
+            >
+              {language === 'es' ? 'Enviar otro mensaje' : 'Submit another request'}
+            </button>
+          </motion.div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -258,129 +462,43 @@ const ContactForm = () => {
                   WebkitMaskComposite: 'destination-out',
                   maskComposite: 'exclude'
                 }}
-              ></div>
+              />
               
-              <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-body text-sm text-white/70 ml-1 text-left">{language === 'es' ? 'Tu Nombre' : 'Your Name'}</label>
-                    <input 
-                      type="text" 
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder={language === 'es' ? "Ej. Carlos Rodríguez" : "Ex. Carlos Rodriguez"}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="font-body text-sm text-white/70 ml-1 text-left">{language === 'es' ? 'Tu Teléfono' : 'Your Phone'}</label>
-                    <input 
-                      type="tel" 
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder={language === 'es' ? "Ej. +1 234 567 8900" : "Ex. +1 234 567 8900"}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="font-body text-sm text-white/70 ml-1 text-left">{language === 'es' ? 'Tu Correo Electrónico' : 'Your Email'}</label>
-                  <input 
-                    type="email" 
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={language === 'es' ? "Ej. carlos@tu-correo.com" : "Ex. your@email.com"}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="font-body text-sm text-white/70 ml-1 text-left">{language === 'es' ? '¿Cuál es tu objetivo principal?' : 'What is your main goal?'}</label>
-                  <textarea 
-                    name="goal"
-                    required
-                    value={formData.goal}
-                    onChange={handleChange}
-                    rows={3}
-                    placeholder={language === 'es' ? "Ej. Quiero aumentar mis leads mensuales en un 50%..." : "Ex. I want to increase my monthly leads by 50%..."}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300 resize-none"
-                  ></textarea>
-                </div>
-
-                {/* Calendar Trigger */}
-                <div className="flex flex-col gap-4 mt-2">
-                  <label className="font-body text-sm text-white/70 ml-1 text-left flex items-center justify-between">
-                    <span className="flex items-center gap-2">
-                      <CalendarIcon className="w-4 h-4 text-[#145BFF]" />
-                      {language === 'es' ? 'Agendar Asesoría (Opcional)' : 'Schedule Consultation (Optional)'}
-                    </span>
-                    {(selectedDate && selectedTime) && (
-                      <span className="text-xs text-[#145BFF] flex items-center gap-1 bg-[#145BFF]/10 px-2 py-1 rounded-full border border-[#145BFF]/20">
-                        <Check className="w-3 h-3" />
-                        {language === 'es' ? 'Agendado' : 'Scheduled'}
-                      </span>
-                    )}
-                  </label>
-                  
-                  <button
-                    type="button"
-                    onClick={() => setIsCalendarModalOpen(true)}
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 flex items-center justify-between hover:bg-white/[0.05] hover:border-[#145BFF]/50 transition-all group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#145BFF]/10 flex items-center justify-center border border-[#145BFF]/20 group-hover:scale-110 transition-transform">
-                        <CalendarIcon className="w-5 h-5 text-[#145BFF]" />
-                      </div>
-                      <div className="flex flex-col items-start">
-                        <span className="text-white font-body text-sm font-medium">
-                          {selectedDate && selectedTime 
-                            ? `${format(selectedDate, 'MMM d, yyyy', { locale: language === 'es' ? es : enUS })} · ${selectedTime}`
-                            : (language === 'es' ? 'Seleccionar día y hora' : 'Select day and time')}
-                        </span>
-                        <span className="text-white/40 text-xs font-body">
-                           {language === 'es' ? 'Lunes - Sábado, 9:00 AM - 6:00 PM' : 'Monday - Saturday, 9:00 AM - 6:00 PM'}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-white/30 group-hover:text-white/70 transition-colors group-hover:translate-x-1 duration-300" />
-                  </button>
-                </div>
-
-                <motion.button 
-                  type="submit"
-                  whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(20,91,255,0.8)" }}
-                  animate={{ backgroundPosition: ["0% 50%", "200% 50%"] }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="group relative w-full flex items-center justify-center gap-2 mt-4 px-8 py-4 font-body font-bold text-[#030712] transition-all duration-500 rounded-xl overflow-hidden"
-                  style={{
-                    backgroundImage: 'linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)',
-                    backgroundSize: '200% auto',
-                    boxShadow: '0 0 20px rgba(20,91,255,0.6)'
-                  }}
-                >
-                  <span className="relative flex items-center gap-2">
-                    {language === 'es' ? 'Solicitar Asesoría' : 'Request Consultation'}
-                    <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-                  </span>
-                </motion.button>
-              </form>
+              {renderFormContent(false)}
             </div>
           </motion.div>
 
         </div>
       </div>
+
+      {/* Global Booking Dialog Modal centered on Mobile/everywhere */}
+      <Dialog open={isBookingModalOpen} onOpenChange={setIsBookingModalOpen}>
+        <DialogContent 
+          className="bg-[#050507]/95 backdrop-blur-xl border-white/[0.08] text-white max-w-lg w-[95vw] rounded-3xl p-6 md:p-8 overflow-y-auto max-h-[90vh] shadow-[0_0_50px_rgba(20,91,255,0.2)] scrollbar-thin"
+        >
+          <DialogHeader className="mb-4 text-left">
+            <div className="flex items-center gap-2 mb-2 font-heading text-[#145BFF] font-medium text-sm tracking-widest uppercase">
+              <Sparkles className="w-4 h-4" />
+              {language === 'es' ? 'Asesoría VIP' : 'Elite Consultation'}
+            </div>
+            <DialogTitle className="font-heading text-2xl font-light text-[#F2F2F4]">
+              {language === 'es' ? 'Completa tu' : 'Complete your'} <span className="text-[#145BFF] font-medium">{language === 'es' ? 'agendamiento' : 'booking'}</span>
+            </DialogTitle>
+            <DialogDescription className="text-[#CFCFD4]/70 font-body text-xs mt-1">
+              {language === 'es' ? 'Elige tus horarios y dinos sobre tu negocio para preparar un plan de conversión personalizado.' : 'Choose times and tell us about your business to draft a custom high-performance plan.'}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="relative mt-2">
+            {renderFormContent(true)}
+          </div>
+        </DialogContent>
+      </Dialog>
       
       {/* Calendar Modal */}
       <AnimatePresence>
         {isCalendarModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
             {/* Backdrop Blur */}
             <motion.div 
               initial={{ opacity: 0 }}

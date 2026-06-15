@@ -61,10 +61,12 @@ exports.handler = async function(event, context) {
                 <td style="padding: 10px; font-weight: bold; border-bottom: 1px solid #e5e7eb; color: #4b5563; font-size: 14px;">Teléfono:</td>
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; color: #111827; font-size: 14px;"><a href="tel:${phone}" style="color: #145bff; text-decoration: none; font-weight: bold;">${phone}</a></td>
               </tr>
+              ${email ? `
               <tr style="background-color: #f9fafb;">
                 <td style="padding: 10px; font-weight: bold; border-bottom: 1px solid #e5e7eb; color: #4b5563; font-size: 14px;">Email:</td>
                 <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; color: #111827; font-size: 14px;"><a href="mailto:${email}" style="color: #145bff; text-decoration: none;">${email}</a></td>
               </tr>
+              ` : ''}
             </table>
 
             <h3 style="color: #145bff; border-bottom: 2px solid #f3f4f6; padding-bottom: 6px; margin-top: 0;">Resumen del Plan</h3>
@@ -107,10 +109,12 @@ exports.handler = async function(event, context) {
                 <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e5e7eb; color: #4b5563;">Teléfono:</td>
                 <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #111827; font-size: 15px;"><a href="tel:${phone}" style="color: #145bff; text-decoration: none; font-weight: bold;">${phone}</a></td>
               </tr>
+              ${email ? `
               <tr style="background-color: #f9fafb;">
                 <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e5e7eb; color: #4b5563;">Email:</td>
                 <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #111827; font-size: 15px;"><a href="mailto:${email}" style="color: #145bff; text-decoration: none;">${email}</a></td>
               </tr>
+              ` : ''}
               <tr>
                 <td style="padding: 12px; font-weight: bold; border-bottom: 1px solid #e5e7eb; color: #4b5563;">Objetivo:</td>
                 <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #111827; font-size: 15px; line-height: 1.5;">${goal}</td>

@@ -65,7 +65,13 @@ const PainPointsSection = () => {
           <div className="flex justify-center mt-6">
             <ArrowDown 
               className="w-6 h-6 text-primary opacity-70 animate-bounce cursor-pointer hover:opacity-100 transition-opacity" 
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                if (window.innerWidth < 1024) {
+                  window.dispatchEvent(new CustomEvent("open-booking-modal"));
+                } else {
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             />
           </div>
         </div>

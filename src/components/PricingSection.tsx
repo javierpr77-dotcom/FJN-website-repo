@@ -96,289 +96,194 @@ const PricingSection = () => {
     .reduce((sum, a) => sum + parseInt(a.price.replace(/,/g, '')), 0) || 0;
   const estimatedTotal = basePrice + addonsTotal;
 
+  /* 
+   * ARCHIVED PLAN REFERENCE (for documentation purposes):
+   * ID: "plan-starter" ("Starter")
+   * Price: "500" USD
+   * Ideal for clients starting from scratch with a very low budget.
+   * Moved to archive to target premium, high-value conversion clients.
+   */
+
   const plans: Plan[] = [
     {
-      id: "plan-1",
-      name: "Starter",
+      id: "plan-landing",
+      name: language === 'es' ? "Premium Landing Page" : "Premium Landing Page",
       titleIcon: <Sparkles className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "500",
+      price: "1,200",
       idealForBullets: language === 'es' ? [
-        <>Emprendedores que comienzan desde <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">cero</span>.</>,
-        <>Negocios buscando presencia seria con baja <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">inversión</span>.</>,
-        <>Marcas que necesitan validar antes de <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">escalar</span>.</>
+        <>Empresas y compañías que necesitan capturar leads calificados con un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">embudo de alta conversión</span>.</>,
+        <>Profesionales independientes que buscan automatizar la adquisición de prospectos mediante un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">túnel de conversión élite</span>.</>,
+        <>Marcas y proyectos que requieren una página única <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">ultra pulida, veloz y enfocada en resultados</span>.</>
       ] : [
-        <>Entrepreneurs starting from <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">scratch</span>.</>,
-        <>Businesses looking for serious presence with low <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">investment</span>.</>,
-        <>Brands that need to validate before <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">scaling</span>.</>
+        <>Businesses and companies that need to capture qualified leads with a <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">high-converting funnel</span>.</>,
+        <>Independent professionals looking to automate prospect acquisition using an <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">elite conversion tunnel</span>.</>,
+        <>Brands and projects requiring an ultra-polished single page <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">focused strictly on results</span>.</>
       ],
       features: language === 'es' ? [
-        "1 landing page de una sola página",
-        "diseño moderno básico responsive",
-        "hero principal con llamado a la acción",
-        "sección sobre el negocio",
-        "sección de servicios o beneficios",
-        "formulario de contacto",
-        "1 revisión incluida"
+        "Landing page de una sola página premium",
+        "Estructurada en un túnel de conversión estratégico",
+        "Copywriting persuasivo y optimizado para leads",
+        "Formulario inteligente de captura de prospectos directo",
+        "Sección sobre tu negocio y propuesta de valor",
+        "Sección de tus servicios, beneficios claves o soluciones",
+        "Optimización de velocidad de carga ultra rápida de nivel élite",
+        "Optimización de SEO técnico inicial",
+        "Diseño 100% responsivo y adaptado para celulares"
       ] : [
-        "1 single-page landing page",
-        "basic modern responsive design",
-        "main hero with call to action",
-        "about the business section",
-        "services or benefits section",
-        "contact form",
-        "1 revision included"
-      ],
-      addons: language === 'es' ? [
-        { name: "Sección adicional", price: "75" },
-        { name: "Página adicional", price: "150" },
-        { name: "Botón de WhatsApp", price: "85" },
-        { name: "Copywriting profesional", price: "200" },
-        { name: "Formulario avanzado con más campos / lógica básica", price: "100" },
-        { name: "Recepcionista AI", price: "275" },
-        { name: "Configuración con plataforma de email marketing", price: "180" },
-        { name: "Integración con CRM", price: "225" },
-        { name: "Versión bilingüe manual (español / inglés)", price: "180" },
-        { name: "Auto-identificador / selector de idioma AI", price: "300" },
-        { name: "Widget externo de booking / calendario / reserva", price: "185" },
-        { name: "Galería premium más desarrollada", price: "150" },
-        { name: "Sección de testimonios / prueba social más robusta", price: "125" },
-        { name: "Integración de Google Maps / Waze", price: "85" },
-        { name: "Automatización simple de leads / respuesta inicial", price: "180" },
-        { name: "Integración de Google Analytics (análisis de data y métricas)", price: "100" }
-      ] : [
-        { name: "Additional section", price: "75" },
-        { name: "Additional page", price: "150" },
-        { name: "WhatsApp button", price: "85" },
-        { name: "Professional copywriting", price: "200" },
-        { name: "Advanced form with more fields / basic logic", price: "100" },
-        { name: "AI Receptionist", price: "275" },
-        { name: "Setup with email marketing platform", price: "180" },
-        { name: "CRM Integration", price: "225" },
-        { name: "Manual bilingual version (Spanish / English)", price: "180" },
-        { name: "AI Auto-identifier / language selector", price: "300" },
-        { name: "External booking / calendar widget", price: "185" },
-        { name: "Premium developed gallery", price: "150" },
-        { name: "More robust testimonials / social proof section", price: "125" },
-        { name: "Google Maps / Waze integration", price: "85" },
-        { name: "Simple lead automation / initial response", price: "180" },
-        { name: "Google Analytics integration (data analysis and metrics)", price: "100" }
-      ],
-      notIncluded: language === 'es' ? "Este plan cubre una base funcional y profesional. Toda integración, funcionalidad o configuración adicional no incluida en el plan base se cotiza aparte según complejidad." : "This plan covers a functional and professional base. Any additional integration, functionality or setup not included in the base plan is quoted separately based on complexity.",
-      popular: false
-    },
-    {
-      id: "plan-2",
-      name: "Business Pro",
-      titleIcon: <Briefcase className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "800",
-      idealForBullets: language === 'es' ? [
-        <>Negocios locales y freelancers con <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">experiencia</span>.</>,
-        <>Empresas que necesitan una web más <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">firme</span>.</>,
-        <>Marcas buscando mejor <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">posicionamiento</span>.</>
-      ] : [
-        <>Local businesses and experienced <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">freelancers</span>.</>,
-        <>Companies that need a <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">firmer</span> website.</>,
-        <>Brands looking for better <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">positioning</span>.</>
-      ],
-      features: language === 'es' ? [
-        "website de hasta 5 páginas",
-        "diseño personificado, moderno y profesional",
-        "estructura estratégica de conversión",
-        "copywriting básico",
-        "formulario de contacto y/o botón de WhatsApp",
-        "sección de servicios más desarrollada",
-        "bloque de confianza o prueba social",
-        "SEO básico"
-      ] : [
-        "website of up to 5 pages",
-        "personalized, modern and professional design",
-        "strategic conversion structure",
-        "basic copywriting",
-        "contact form and/or WhatsApp button",
-        "more developed services section",
-        "trust block or social proof section",
-        "basic SEO"
+        "Premium single-page landing page",
+        "Structured as a strategic conversion tunnel",
+        "Persuasive copywriting optimized for leads",
+        "Direct intelligent lead capture form",
+        "About your business & value proposition sections",
+        "Services, core benefits or solutions modules",
+        "Elite ultra-fast loading speed optimization",
+        "Initial onpage technical SEO setup",
+        "100% responsive design optimized for mobile"
       ],
       addons: language === 'es' ? [
         { name: "Sección adicional (layout moderno)", price: "150" },
-        { name: "Página adicional estratégica / personificada", price: "150" },
-        { name: "Copywriting profesional (persuasivo)", price: "200" },
-        { name: "Formulario avanzado (branding)", price: "145" },
-        { name: "Recepcionista AI (modelo avanzado / automatizaciones)", price: "380" },
-        { name: "Configuración con plataforma de email marketing", price: "180" },
-        { name: "Integración con CRM", price: "225" },
-        { name: "Versión bilingüe manual (español / inglés)", price: "180" },
+        { name: "Página adicional estratégica / de soporte", price: "150" },
+        { name: "Copywriting profesional persuasivo avanzado", price: "200" },
+        { name: "Recepcionista AI / Agente IA conversacional avanzada", price: "380" },
+        { name: "Sincronización directa con CRM comercial", price: "225" },
+        { name: "Integración avanzada con plataforma de Email Marketing", price: "180" },
+        { name: "Bilingüe manual (Español / Inglés)", price: "180" },
         { name: "Auto-identificador / selector de idioma AI", price: "300" },
-        { name: "Widget externo de booking / calendario / reserva", price: "185" },
+        { name: "Widget externo de programación / calendario / reserva", price: "185" },
         { name: "Galería premium (slider / carrusel)", price: "180" },
-        { name: "Sección de testimonios / prueba social (diseño moderno)", price: "185" },
-        { name: "Integración de Google Maps / Waze", price: "85" },
-        { name: "Automatización de leads / respuesta inicial", price: "180" },
-        { name: "Integración de blog", price: "350" },
-        { name: "Integración de Google Analytics, eventos clave y reportes detallados", price: "185" }
+        { name: "Google Analytics tracking y eventos de conversión", price: "185" }
       ] : [
         { name: "Additional section (modern layout)", price: "150" },
-        { name: "Additional strategic / personalized page", price: "150" },
-        { name: "Professional copywriting (persuasive)", price: "200" },
-        { name: "Advanced form (branding)", price: "145" },
-        { name: "AI Receptionist (advanced model / automations)", price: "380" },
-        { name: "Setup with email marketing platform", price: "180" },
-        { name: "CRM Integration", price: "225" },
+        { name: "Additional strategic / support page", price: "150" },
+        { name: "Advanced persuasive professional copywriting", price: "200" },
+        { name: "AI Receptionist / Advanced Conversation Agent", price: "380" },
+        { name: "Direct commercial CRM synchronization", price: "225" },
+        { name: "Advanced setup with Email Marketing platform", price: "180" },
         { name: "Manual bilingual version (Spanish / English)", price: "180" },
         { name: "AI Auto-identifier / language selector", price: "300" },
-        { name: "External booking / calendar widget", price: "185" },
+        { name: "External booking / calendar / reserve widget", price: "185" },
         { name: "Premium gallery (slider / carousel)", price: "180" },
-        { name: "Testimonies / social proof section (modern design)", price: "185" },
-        { name: "Google Maps / Waze integration", price: "85" },
-        { name: "Lead automation / initial response", price: "180" },
-        { name: "Blog integration", price: "350" },
-        { name: "Google Analytics integration, key events and detailed reports", price: "185" }
+        { name: "Google Analytics tracking & conversion events setup", price: "185" }
       ],
-      notIncluded: language === 'es' ? "No incluye CRM, email marketing, automatizaciones complejas, versión bilingüe manual ni ecommerce." : "Does not include CRM, email marketing, complex automations, manual bilingual version, or ecommerce.",
-      popular: true
-    },
-    {
-      id: "plan-3",
-      name: "Growth Premium",
-      titleIcon: <TrendingUp className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "1,200",
-      idealForBullets: language === 'es' ? [
-        <>Empresas estructuradas con múltiples <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">servicios</span>.</>,
-        <>Proyectos y marcas con enfoque <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">premium</span>.</>,
-        <>Negocios listos para aumentar su <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">conversión</span>.</>
-      ] : [
-        <>Structured companies with multiple <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">services</span>.</>,
-        <>Projects and brands with a <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">premium</span> focus.</>,
-        <>Businesses ready to increase their <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">conversion</span>.</>
-      ],
-      features: language === 'es' ? [
-        "website de hasta 10 páginas",
-        "diseño premium, moderno y profesional",
-        "estructura orientada a conversión y autoridad",
-        "organización avanzada de servicios o soluciones",
-        "copywriting avanzado",
-        "sección de autoridad, confianza o portafolio",
-        "formularios y CTA estratégicos",
-        "SEO avanzado",
-        "WhatsApp Chatbot integrado"
-      ] : [
-        "website of up to 10 pages",
-        "premium, modern and professional design",
-        "structure oriented to conversion and authority",
-        "advanced organization of services or solutions",
-        "advanced copywriting",
-        "authority, trust or portfolio section",
-        "strategic forms and CTA",
-        "advanced SEO",
-        "Integrated WhatsApp Chatbot"
-      ],
-      addons: language === 'es' ? [
-        { name: "Sección adicional (layout premium / conversión)", price: "150" },
-        { name: "Página adicional estratégica / personificada", price: "150" },
-        { name: "Copywriting profesional (persuasivo)", price: "200" },
-        { name: "Formulario avanzado (branding)", price: "145" },
-        { name: "Recepcionista AI (5 automatizaciones avanzadas)", price: "550" },
-        { name: "Configuración con plataforma de email marketing", price: "180" },
-        { name: "Integración con CRM", price: "225" },
-        { name: "Versión bilingüe manual (español / inglés)", price: "180" },
-        { name: "Auto-identificador / selector de idioma AI", price: "300" },
-        { name: "Widget externo de booking / calendario / reserva", price: "185" },
-        { name: "Galería premium (slider / carrusel)", price: "180" },
-        { name: "Sección de testimonios / prueba social (diseño moderno)", price: "185" },
-        { name: "Integración de Google Maps / Waze", price: "85" },
-        { name: "Automatización de leads / respuesta inicial", price: "180" },
-        { name: "Integración de Google Analytics, eventos clave y reportes detallados", price: "185" },
-        { name: "Integración de blog estratégico", price: "450" }
-      ] : [
-        { name: "Additional section (premium layout / conversion)", price: "150" },
-        { name: "Additional strategic / personalized page", price: "150" },
-        { name: "Professional copywriting (persuasive)", price: "200" },
-        { name: "Advanced form (branding)", price: "145" },
-        { name: "AI Receptionist (5 advanced automations)", price: "550" },
-        { name: "Setup with email marketing platform", price: "180" },
-        { name: "CRM Integration", price: "225" },
-        { name: "Manual bilingual version (Spanish / English)", price: "180" },
-        { name: "AI Auto-identifier / language selector", price: "300" },
-        { name: "External booking / calendar widget", price: "185" },
-        { name: "Premium gallery (slider / carousel)", price: "180" },
-        { name: "Testimonies / social proof section (modern design)", price: "185" },
-        { name: "Google Maps / Waze integration", price: "85" },
-        { name: "Lead automation / initial response", price: "180" },
-        { name: "Google Analytics integration, key events and detailed reports", price: "185" },
-        { name: "Strategic blog integration", price: "450" }
-      ],
-      notIncluded: language === 'es' ? "No incluye CRM completo ni automatizaciones avanzadas, email marketing avanzado ni agentes IA especializados." : "Does not include full CRM, advanced automations, advanced email marketing, or specialized AI agents.",
+      notIncluded: language === 'es' ? "Este plan cubre un landing page funcional premium de una sola página. Secciones adicionales o integraciones de terceros avanzadas no incluidas en el plan base se cotizan según requerimientos." : "This plan covers a premium functional single-page landing page. Additional sections or advanced third-party integrations not included in the base plan are quoted depending on your requirements.",
       popular: false
     },
     {
-      id: "plan-4",
-      name: "Elite Signature",
-      titleIcon: <Crown className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "1,500",
+      id: "plan-ecommerce",
+      name: language === 'es' ? "E-commerce Personalizado" : "Custom E-commerce",
+      titleIcon: <Diamond className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
+      price: "1,800",
       idealForBullets: language === 'es' ? [
-        <>Marcas premium, negocios consolidados y proyectos que necesitan una <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">presencia digital de alto nivel</span>.</>,
-        <>Más <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">exclusiva</span>, más <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">impactante</span> y mejor estructurada.</>,
-        <>Para posicionarse con <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">más autoridad</span>.</>
+        <>Marcas y comercios que desean una <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">tienda online única y personalizada</span> sin usar plantillas de baja calidad.</>,
+        <>Negocios enfocados en ofrecer una <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">experiencia de pago fluida</span> para multiplicar sus ventas en Puerto Rico y el mundo.</>,
+        <>Emprendedores ambiciosos que buscan <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">escalar con pasarelas integradas</span> (Stripe, Paypal, ATH Móvil).</>
       ] : [
-        <>Premium brands, established businesses and projects that need a <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">high-level digital presence</span>.</>,
-        <>More <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">exclusive</span>, more <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">impactful</span> and better structured.</>,
-        <>To position yourself with <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">more authority</span>.</>
+        <>Brands and merchants wanting a <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">unique, customized online store</span> instead of standard lower-end templates.</>,
+        <>Businesses focused on offering a <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">seamless checkout experience</span> to scale sales locally and globally.</>,
+        <>Ambitious entrepreneurs looking to <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">grow with integrated gateways</span> (Stripe, Paypal, ATH Movil).</>
       ],
       features: language === 'es' ? [
-        "website de hasta 15 páginas",
-        "diseño premium elevado, elegante y más exclusivo",
-        "estructura comercial de alto impacto",
-        "experiencia visual más inmersiva y refinada",
-        "copywriting profesional y persuasivo",
-        "secciones de autoridad, portafolio y confianza más robustas",
-        "CTA y rutas de conversión más trabajadas",
-        "SEO Pro",
-        "WhatsApp Chatbot integrado"
+        "Tienda virtual personalizada con pasarela de pago (Stripe / PayPal / ATH Móvil)",
+        "Catálogo premium con buscador, filtros y categorías estructuradas",
+        "Panel de administración auto-gestionable para productos e inventario",
+        "Estructura orientada a conversión y aumento del ticket promedio (CRO)",
+        "Proceso de checkout rápido integrado para celulares",
+        "Sistema automático de alertas de pedidos por correo",
+        "Formulario de contacto de atención y soporte integrado",
+        "Optimización de velocidad premium de alto rendimiento",
+        "SEO técnico para indexación óptima de tus productos"
       ] : [
-        "website of up to 15 pages",
-        "elevated premium design, elegant and more exclusive",
-        "high-impact commercial structure",
-        "more immersive and refined visual experience",
-        "professional and persuasive copywriting",
-        "more robust authority, portfolio and trust sections",
-        "better crafted CTAs and conversion routes",
-        "Pro SEO",
-        "Integrated WhatsApp Chatbot"
+        "Custom online store with checkout gateways (Stripe / PayPal / ATH Movil)",
+        "Premium catalog structure with search, filters & custom categories",
+        "Self-manageable admin panel for tracking products & inventory",
+        "CRO strategies optimized to increase average order value",
+        "Fast-checkout checkout system fully optimized for mobile devices",
+        "Automated order email alerts system built-in",
+        "Direct integrated contact and customer support form",
+        "High performance premium loading speed optimizations",
+        "Technical SEO optimization to index and rank your products"
       ],
       addons: language === 'es' ? [
-        { name: "Sección adicional (layout premium / conversión)", price: "150" },
-        { name: "Página adicional estratégica / personificada", price: "150" },
-        { name: "Formulario avanzado (branding)", price: "145" },
-        { name: "Recepcionista AI (5 automatizaciones avanzadas)", price: "550" },
-        { name: "Configuración con plataforma de email marketing", price: "180" },
-        { name: "Integración con CRM", price: "225" },
-        { name: "Versión bilingüe manual (español / inglés)", price: "180" },
+        { name: "Categoría de productos adicional estructurada", price: "150" },
+        { name: "Copywriting persuasivo avanzado de productos", price: "250" },
+        { name: "Agente IA avanzado de atención al cliente y soporte", price: "450" },
+        { name: "Configuración de automatización para carritos abandonados", price: "225" },
+        { name: "Integración avanzada con CRM comercial", price: "250" },
+        { name: "Sistema avanzado de cupones, promociones y descuentos", price: "185" },
+        { name: "Versión bilingüe manual (Español / Inglés)", price: "280" },
         { name: "Auto-identificador / selector de idioma AI", price: "300" },
-        { name: "Widget externo de booking / calendario / reserva", price: "185" },
-        { name: "Galería premium (slider / carrusel)", price: "180" },
-        { name: "Sección de testimonios / prueba social (diseño moderno)", price: "185" },
-        { name: "Integración de Google Maps / Waze", price: "85" },
-        { name: "Automatización de leads / respuesta inicial", price: "180" },
-        { name: "Integración de Google Analytics, reportes detallados y Microsoft Clarity", price: "225" },
-        { name: "Integración de blog estratégico", price: "450" }
+        { name: "Integración de píxeles publicitarios (Meta / TikTok Ads) para remarketing", price: "180" },
+        { name: "Analítica avanzada de ecommerce con Google Analytics 4", price: "225" }
       ] : [
-        { name: "Additional section (premium layout / conversion)", price: "150" },
-        { name: "Additional strategic / personalized page", price: "150" },
-        { name: "Advanced form (branding)", price: "145" },
-        { name: "AI Receptionist (5 advanced automations)", price: "550" },
-        { name: "Setup with email marketing platform", price: "180" },
-        { name: "CRM Integration", price: "225" },
-        { name: "Manual bilingual version (Spanish / English)", price: "180" },
+        { name: "Additional product category structure", price: "150" },
+        { name: "Advanced persuasive product copywriting", price: "250" },
+        { name: "AI Agent for support and item recommendation", price: "450" },
+        { name: "Email Marketing setup / Abandoned cart flows", price: "225" },
+        { name: "Advanced integration with sales CRM", price: "250" },
+        { name: "Advanced coupon, discount and promos system", price: "185" },
+        { name: "Manual bilingual version (Spanish / English)", price: "280" },
         { name: "AI Auto-identifier / language selector", price: "300" },
-        { name: "External booking / calendar widget", price: "185" },
-        { name: "Premium gallery (slider / carousel)", price: "180" },
-        { name: "Testimonies / social proof section (modern design)", price: "185" },
-        { name: "Google Maps / Waze integration", price: "85" },
-        { name: "Lead automation / initial response", price: "180" },
-        { name: "Google Analytics integration, detailed reports and Microsoft Clarity", price: "225" },
-        { name: "Strategic blog integration", price: "450" }
+        { name: "Ad pixels integration (Meta / TikTok Ads) for remarketing", price: "180" },
+        { name: "E-commerce analytics events with Google Analytics 4", price: "225" }
       ],
-      notIncluded: language === 'es' ? "Cualquier desarrollo externo que requiera integración de terceros (SaaS de terceros) debe cotizarse previamente." : "Any external development requiring third-party integration (third-party SaaS) must be quoted in advance.",
+      notIncluded: language === 'es' ? "No incluye carga masiva de inventario mayor a 100 productos (se cotiza de forma independiente), ni administración mensual posventa." : "Does not include bulk upload of more than 100 products (quoted independently), or ongoing post-sale store administration.",
+      popular: true
+    },
+    {
+      id: "plan-website",
+      name: language === 'es' ? "Website Premium" : "Websites Premium",
+      titleIcon: <Crown className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
+      price: "2,500",
+      idealForBullets: language === 'es' ? [
+        <>Compañías y marcas corporativas con servicios múltiples que exigen un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">website de nivel internacional</span>.</>,
+        <>Empresas consolidadas en Puerto Rico y EE.UU. enfocadas en <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">liderar su categoría con máxima autoridad</span>.</>,
+        <>Negocios listos para integrar flujos automatizados de interacción, <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">blog estratégico y automatizaciones de élite</span>.</>
+      ] : [
+        <>Corporate brands with multiple services demanding an <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">elite multi-page presence</span>.</>,
+        <>Established companies focused on <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">leading their category with maximum authority</span>.</>,
+        <>Businesses ready to integrate automated interaction flows, <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">strategic blogging and premium systems</span>.</>
+      ],
+      features: language === 'es' ? [
+        "Website multipágina premium personalizada (hasta 10 páginas estratégicas)",
+        "Estructura comercial completa optimizada para múltiples funnels y servicios",
+        "Copywriting profesional y altamente persuasivo redactado a medida",
+        "Secciones avanzadas de testimonios, prueba social, portafolio y autoridad",
+        "Formularios de contacto inteligentes e interactivos",
+        "SEO avanzado on-page completo para Puerto Rico y Estados Unidos",
+        "Botón de chat de WhatsApp inteligente y personalizado integrado",
+        "Optimización de rendimiento excepcional y velocidad de carga prémium",
+        "Diseño 100% responsivo y adaptativo de máxima calidad"
+      ] : [
+        "Premium custom multi-page website (up to 10 strategic pages)",
+        "Complete commercial structure optimized for multiple services & funnels",
+        "Tailored professional and highly persuasive copywriting for all pages",
+        "Advanced testimonials, social proof, portfolio & authority sections",
+        "Intelligent multi-step interactive contact forms",
+        "Advanced on-page SEO fully optimized for Puerto Rico and US markets",
+        "Smart personalized WhatsApp communication chat widget",
+        "Exceptional speed optimization and high-performance loading scales",
+        "100% flawless custom responsive layout across all resolutions"
+      ],
+      addons: language === 'es' ? [
+        { name: "Página adicional estructurada", price: "150" },
+        { name: "Sección interactiva personalizada (layout avanzado)", price: "180" },
+        { name: "Sistema completo de Blog corporativo estratégico", price: "450" },
+        { name: "Asistente AI premium integrado con agendamiento y FAQs automatizadas", price: "550" },
+        { name: "Sincronización automatizada con múltiples CRMs", price: "250" },
+        { name: "Integración bilingüe e internacional avanzada", price: "280" },
+        { name: "Auto-identificador / selector de idioma AI", price: "300" },
+        { name: "Analítica avanzada con Google Analytics 4 y Microsoft Clarity", price: "225" }
+      ] : [
+        { name: "Additional structured page", price: "150" },
+        { name: "Custom interactive section (advanced layout)", price: "180" },
+        { name: "Complete strategic corporate Blog system", price: "450" },
+        { name: "Premium AI Assistant with integrated scheduling & auto-FAQs", price: "550" },
+        { name: "Automated sync with sales CRMs", price: "250" },
+        { name: "Advanced bilingual and international setup", price: "280" },
+        { name: "AI Auto-identifier / language selector", price: "300" },
+        { name: "Advanced metrics with Google Analytics 4 and Microsoft Clarity", price: "225" }
+      ],
+      notIncluded: language === 'es' ? "No incluye integraciones de software a la medida complejo externo, ni pasarelas de pago de comercio electrónico transaccional (cubierto en el plan E-commerce)." : "Does not include complex enterprise custom software integration, or checkout billing gateways (covered fully in our Custom E-commerce plan).",
       popular: false
     }
   ];
@@ -455,7 +360,7 @@ const PricingSection = () => {
         </div>
 
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
             <div 
               key={plan.id}
@@ -758,10 +663,6 @@ const PricingSection = () => {
                       <input required type="text" placeholder={language === 'es' ? 'Tu nombre completo' : 'Your full name'} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" />
                     </div>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFCFD4]/40" />
-                      <input required type="email" placeholder={language === 'es' ? 'Tu correo electrónico' : 'Your email'} value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" />
-                    </div>
-                    <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFCFD4]/40" />
                       <input required type="tel" placeholder={language === 'es' ? 'Tu número de teléfono' : 'Your phone number'} value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" />
                     </div>
@@ -790,33 +691,19 @@ const PricingSection = () => {
               <div className="p-8 md:p-12 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-500">
                 <div className="w-16 h-16 bg-[#145BFF]/20 rounded-full flex items-center justify-center mb-6 border border-[#145BFF]/30">
                   <CheckCircle2 className="w-8 h-8 text-[#145BFF]" />
-                </div>
+                 </div>
                 <h3 className="font-heading text-2xl text-white mb-3">
                   {language === 'es' ? '¡Solicitud Recibida!' : 'Request Received!'}
                 </h3>
                 <p className="text-[#CFCFD4]/70 font-body text-sm mb-6 max-w-[280px]">
-                  {language === 'es' ? 'Gracias ' : 'Thank you '} <span className="text-white font-medium">{formData.name.split(' ')[0]}</span>. {language === 'es' ? 'Hemos recibido tu selección del plan ' : 'We have received your selection for the '} <span className="text-white font-medium">{selectedPlan?.name}</span>. {language === 'es' ? 'Tu solicitud ya fue registrada y la recibimos por correo.' : 'Your request has been registered and received by email.'}
+                  {language === 'es' ? 'Gracias ' : 'Thank you '} <span className="text-white font-medium">{formData.name.split(' ')[0]}</span>. {language === 'es' ? 'Hemos recibido tu selección de plan con los datos de contacto suministrados.' : 'We have received your plan selection with the contact details provided.'}
                 </p>
                 <div className="flex flex-col gap-3 w-full">
-                  <button
-                    onClick={() => {
-                      const planMessage = language === 'es'
-                        ? `¡Hola! Acabo de solicitar el Plan *${selectedPlan?.name}* con los siguientes add-ons: ${selectedAddons.join(', ') || 'Ninguno'}. Mi inversión estimada es de $${estimatedTotal.toLocaleString()} USD.%0A%0A*Mi Nombre:* ${formData.name}%0A*Mi Teléfono:* ${formData.phone}%0A*Mi Email:* ${formData.email}`
-                        : `Hello! I just requested the *${selectedPlan?.name}* Plan with the following add-ons: ${selectedAddons.join(', ') || 'None'}. My estimated investment is $${estimatedTotal.toLocaleString()} USD.%0A%0A*My Name:* ${formData.name}%0A*My Phone:* ${formData.phone}%0A*My Email:* ${formData.email}`;
-                      window.open(`https://wa.me/17872102204?text=${planMessage}`, '_blank');
-                    }}
-                    className="w-full py-3 px-6 rounded-xl font-body text-sm font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path d="M.057 24l1.687-6.163c-1.042-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.261 2.266 3.504 5.28 3.501 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.731-1.456L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.863-9.73.001-2.595-1.013-5.035-2.855-6.877C16.638 2.155 14.191 1.157 12 1.157c-5.438 0-9.863 4.372-9.866 9.731-.001 1.714.457 3.39 1.32 4.894L2.435 21.03l5.212-1.365zM17.06 14.37c-.277-.139-1.64-.81-1.895-.903-.255-.093-.44-.139-.626.139-.186.278-.718.903-.88 1.088-.163.186-.325.208-.602.069-.277-.139-1.17-.431-2.228-1.374-.823-.734-1.38-1.64-1.54-1.92-.163-.277-.018-.427.12-.566.125-.125.277-.324.416-.486.14-.162.186-.278.277-.463.093-.186.046-.347-.023-.486-.069-.139-.626-1.505-.856-2.061-.225-.541-.472-.467-.626-.467-.146-.006-.314-.006-.482-.006-.168 0-.442.063-.673.314-.23.25-.88.861-.88 2.099 0 1.238.9 2.432 1.002 2.571.102.14 1.772 2.706 4.293 3.792.6.258 1.068.413 1.432.529.602.191 1.15.164 1.583.1.482-.072 1.64-.67 1.871-1.318.23-.65.23-1.205.162-1.318-.069-.115-.254-.185-.531-.324z"/>
-                    </svg>
-                    {language === 'es' ? 'Iniciar Chat en WhatsApp' : 'Start Chat on WhatsApp'}
-                  </button>
                   <button
                     onClick={() => handleCloseModal(false)}
                     className="w-full py-3 px-6 rounded-xl border border-white/10 text-[#CFCFD4]/70 hover:text-white font-body text-sm hover:bg-white/5 transition-colors"
                   >
-                    {language === 'es' ? 'Cerrar' : 'Close'}
+                    {language === 'es' ? 'Cerrar ventana' : 'Close window'}
                   </button>
                 </div>
               </div>
@@ -887,7 +774,11 @@ const PricingSection = () => {
 };
 
 const scrollToContact = () => {
-  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  if (window.innerWidth < 1024) {
+    window.dispatchEvent(new CustomEvent("open-booking-modal"));
+  } else {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  }
 };
 
 export default PricingSection;
