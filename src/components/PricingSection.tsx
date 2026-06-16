@@ -227,7 +227,7 @@ const PricingSection = () => {
         { name: "E-commerce analytics events with Google Analytics 4", price: "225" }
       ],
       notIncluded: language === 'es' ? "No incluye carga masiva de inventario mayor a 100 productos (se cotiza de forma independiente), ni administración mensual posventa." : "Does not include bulk upload of more than 100 products (quoted independently), or ongoing post-sale store administration.",
-      popular: true
+      popular: false
     },
     {
       id: "plan-website",

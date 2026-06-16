@@ -18,9 +18,18 @@ const Index = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === "/portfolio") {
+    const path = location.pathname.toLowerCase();
+    let targetId = "";
+
+    if (path === "/portfolio" || path === "/portafolio") {
+      targetId = "portfolio";
+    } else if (path === "/planes" || path === "/pricing") {
+      targetId = "planes";
+    }
+
+    if (targetId) {
       const scrollWithRetry = (attempts = 0) => {
-        const element = document.getElementById("portfolio");
+        const element = document.getElementById(targetId);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
         } else if (attempts < 10) {
