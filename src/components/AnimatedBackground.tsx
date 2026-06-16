@@ -78,7 +78,7 @@ const AnimatedBackground = () => {
           {particles.map((p) => (
             <div
               key={p.id}
-              className="absolute rounded-full bg-white"
+              className="absolute rounded-full bg-white animate-gpu"
               style={{
                 left: p.left,
                 top: p.top,
@@ -89,7 +89,8 @@ const AnimatedBackground = () => {
                 animation: p.isStar 
                   ? `twinkle-global ${p.duration}s ease-in-out infinite alternate`
                   : `drift-global ${p.duration * 2}s linear infinite`,
-                animationDelay: `${p.delay}s`
+                animationDelay: `${p.delay}s`,
+                willChange: 'transform, opacity'
               }}
             />
           ))}

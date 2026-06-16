@@ -29,10 +29,18 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 20);
+      const nextScrolled = currentScrollY > 20;
+
+      setIsScrolled((prev) => {
+        if (prev !== nextScrolled) return nextScrolled;
+        return prev;
+      });
 
       // When scrolling, it should appear
-      setIsVisible(true);
+      setIsVisible((prev) => {
+        if (prev !== true) return true;
+        return prev;
+      });
 
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
@@ -59,7 +67,10 @@ const Navbar = () => {
 
   const handleMouseEnter = () => {
     setIsHovering(true);
-    setIsVisible(true);
+    setIsVisible((prev) => {
+      if (prev !== true) return true;
+      return prev;
+    });
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
@@ -67,7 +78,7 @@ const Navbar = () => {
 
   const handleMouseLeave = () => {
     setIsHovering(false);
-    if (window.scrollY > 20 && !isMobileMenuOpen) {
+    if (window.scrollY > 20 && !isMobileMenuOpenRef.current) {
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }

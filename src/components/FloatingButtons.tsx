@@ -7,8 +7,11 @@ const FloatingButtons = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show when the user scrolls down more than 300px
-      setShowScrollTop(window.scrollY > 300);
+      const shouldShow = window.scrollY > 300;
+      setShowScrollTop((prev) => {
+        if (prev !== shouldShow) return shouldShow;
+        return prev;
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
