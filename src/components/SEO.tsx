@@ -30,20 +30,99 @@ const SEO = ({
   const seoTitle = title ? `${title} | Agence` : defaultTitle;
   const seoDescription = description || defaultDescription;
 
-  // Schema.org JSON-LD
+  // Schema.org JSON-LD for advanced GEO / GIO optimization
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "name": "Web Development Agency",
+    "@id": "https://fjndigitalmedia.com/#agency",
+    "name": "FJNDigitalMedia",
+    "alternateName": ["FJN Digital Media", "FJN Digital Media Agency", "FJNDigitalMedia Puerto Rico"],
     "description": seoDescription,
-    "url": url,
+    "url": "https://fjndigitalmedia.com",
+    "logo": image || "https://fjndigitalmedia.com/logo.jpg",
     "image": image,
     "priceRange": "$$$",
+    "telephone": "+17870000000",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "Puerto Rico"
+      "addressLocality": "San Juan",
+      "addressRegion": "PR",
+      "postalCode": "00901",
+      "addressCountry": "US"
     },
-    "knowsAbout": ["Web Development", "Conversion Rate Optimization", "SEO", "React", "TypeScript", "Tailwind CSS"]
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "18.4655",
+      "longitude": "-66.1180"
+    },
+    "areaServed": [
+      {
+        "@type": "AdministrativeArea",
+        "name": "Puerto Rico",
+        "sameAs": "https://en.wikipedia.org/wiki/Puerto_Rico"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "San Juan",
+        "sameAs": "https://en.wikipedia.org/wiki/San_Juan,_Puerto_Rico"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Guaynabo",
+        "sameAs": "https://en.wikipedia.org/wiki/Guaynabo,_Puerto_Rico"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Bayamón",
+        "sameAs": "https://en.wikipedia.org/wiki/Bayam%C3%B3n,_Puerto_Rico"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Carolina",
+        "sameAs": "https://en.wikipedia.org/wiki/Carolina,_Puerto_Rico"
+      }
+    ],
+    "knowsAbout": [
+      "Web Design & Development",
+      "Conversion Rate Optimization (CRO)",
+      "Generative Engine Optimization (GEO)",
+      "Search Engine Optimization (SEO)",
+      "High-Converting Funnels",
+      "React & Next.js Development",
+      "Enterprise software architecture",
+      "Digital Marketing and Lead Generation"
+    ],
+    "sameAs": [
+      "https://facebook.com/fjndigitalmedia",
+      "https://instagram.com/fjndigitalmedia",
+      "https://linkedin.com/company/fjndigitalmedia"
+    ],
+    "founder": {
+      "@type": "Person",
+      "name": "FJN Digital Team"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "E-Commerce & Strategic Web Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Strategic Web System (E-commerce / Landing)",
+            "description": "Custom coded React web systems optimized for 30%+ conversions, built with modern UI and smooth 60fps animations."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Generative Engine Optimization (GEO)",
+            "description": "Next-gen AIO and LLM visibility strategy to position brands within Google AI Overviews, Gemini, and ChatGPT recommendations."
+          }
+        }
+      ]
+    }
   };
 
   return (
