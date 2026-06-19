@@ -109,14 +109,21 @@ const Navbar = () => {
     } else if (itemKey === "planes") {
       targetPath = language === "es" ? "/planes" : "/pricing";
     } else if (itemKey === "resenas") {
-      targetPath = language === "es" ? "/casos-de-exito" : "/success-stories";
+      targetPath = language === "es" ? "/casos de éxito" : "/success stories";
     } else if (itemKey === "consultas") {
       targetPath = language === "es" ? "/consultas" : "/contact";
     } else if (itemKey === "servicios") {
       targetPath = language === "es" ? "/servicios" : "/services";
     }
 
-    if (location.pathname === targetPath) {
+    let decodedCurrentPath = "";
+    try {
+      decodedCurrentPath = decodeURIComponent(location.pathname);
+    } catch (e) {
+      decodedCurrentPath = location.pathname;
+    }
+
+    if (decodedCurrentPath === targetPath) {
       document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
     } else {
       navigate(targetPath);

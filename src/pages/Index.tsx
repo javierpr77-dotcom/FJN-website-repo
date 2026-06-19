@@ -33,7 +33,16 @@ const Index = () => {
       targetId = "planes";
     } else if (decodedPath === "/servicios" || decodedPath === "/services") {
       targetId = "servicios";
-    } else if (decodedPath === "/resenas" || decodedPath === "/reseñas" || decodedPath === "/reviews" || decodedPath === "/casos-de-exito" || decodedPath === "/success-stories") {
+    } else if (
+      decodedPath === "/resenas" ||
+      decodedPath === "/reseñas" ||
+      decodedPath === "/reviews" ||
+      decodedPath === "/casos-de-exito" ||
+      decodedPath === "/casos de éxito" ||
+      decodedPath === "/casos de exito" ||
+      decodedPath === "/success-stories" ||
+      decodedPath === "/success stories"
+    ) {
       targetId = "resenas";
     } else if (decodedPath === "/consultas" || decodedPath === "/contact" || decodedPath === "/consultations") {
       targetId = "contact";
