@@ -109,7 +109,7 @@ const PricingSection = () => {
       id: "plan-landing",
       name: language === 'es' ? "Premium Landing Page" : "Premium Landing Page",
       titleIcon: <Sparkles className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "1,200",
+      price: "1,500",
       idealForBullets: language === 'es' ? [
         <>Empresas y compañías que necesitan capturar leads calificados con un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">embudo de alta conversión</span>.</>,
         <>Profesionales independientes que buscan automatizar la adquisición de prospectos mediante un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">túnel de conversión élite</span>.</>,
@@ -172,7 +172,7 @@ const PricingSection = () => {
       id: "plan-ecommerce",
       name: language === 'es' ? "E-commerce Personalizado" : "Custom E-commerce",
       titleIcon: <Diamond className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "1,800",
+      price: "2,500",
       idealForBullets: language === 'es' ? [
         <>Marcas y comercios que desean una <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">tienda online única y personalizada</span> sin usar plantillas de baja calidad.</>,
         <>Negocios enfocados en ofrecer una <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">experiencia de pago fluida</span> para multiplicar sus ventas en Puerto Rico y el mundo.</>,
@@ -233,7 +233,7 @@ const PricingSection = () => {
       id: "plan-website",
       name: language === 'es' ? "Website Premium" : "Websites Premium",
       titleIcon: <Crown className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "2,500",
+      price: "3,200",
       idealForBullets: language === 'es' ? [
         <>Compañías y marcas corporativas con servicios múltiples que exigen un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">website de nivel internacional</span>.</>,
         <>Empresas consolidadas en Puerto Rico y EE.UU. enfocadas en <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">liderar su categoría con máxima autoridad</span>.</>,

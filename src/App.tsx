@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import MouseFollower from "@/components/MouseFollower";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DesignResearch from "./pages/DesignResearch";
@@ -19,6 +20,7 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <LanguageProvider>
+          <MouseFollower />
           <Toaster />
           <Sonner />
           <BrowserRouter>
