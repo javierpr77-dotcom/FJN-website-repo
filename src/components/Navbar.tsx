@@ -179,21 +179,21 @@ const Navbar = () => {
           />
         </div>
 
-        {/* Desktop Menu - Animación Secuencial */}
-        <div className="hidden md:flex items-center gap-8 relative z-10">
+        {/* Desktop Menu - Centered (Those Four Links) */}
+        <div className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2 z-10">
           <AnimatePresence>
-            {showNavItems && menuItems.map((item, index) => (
+            {showNavItems && menuItems.filter(item => item.key !== "consultas").map((item, index) => (
               <motion.button
                 key={item.key}
                 initial={{ opacity: 0, x: 20 }}
                 animate={item.key === "portfolio" ? {
-                  opacity: [0.9, 1, 0.9],
+                  opacity: [0.95, 1, 0.95],
                   x: 0,
                   scale: [1, 1.05, 1],
                   filter: [
-                    "drop-shadow(0 0 4px rgba(255,255,255,0.6))",
-                    "drop-shadow(0 0 16px rgba(255,255,255,1))",
-                    "drop-shadow(0 0 4px rgba(255,255,255,0.6))"
+                    "drop-shadow(0 0 4px rgba(255,255,255,0.7)) drop-shadow(0 0 2px rgba(255,255,255,0.5))",
+                    "drop-shadow(0 0 18px rgba(255,255,255,1)) drop-shadow(0 0 8px rgba(255,255,255,0.9)) drop-shadow(0 0 2px rgba(255,255,255,0.8))",
+                    "drop-shadow(0 0 4px rgba(255,255,255,0.7)) drop-shadow(0 0 2px rgba(255,255,255,0.5))"
                   ],
                   backgroundPosition: ["0% 50%", "200% 50%"],
                   transition: {
@@ -223,20 +223,47 @@ const Navbar = () => {
                   } 
                 }}
                 onClick={() => handleNavigation(item.key)}
-                className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block"
+                className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block cursor-pointer transition-all duration-300"
                 style={{
                   backgroundImage: item.key === "portfolio"
-                    ? "linear-gradient(90deg, #FFFFFF, #E2E8F0, #FFFFFF)"
+                    ? "linear-gradient(90deg, #FFFFFF, #F8FAFC, #FFFFFF)"
                     : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
                   backgroundSize: "200% auto",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  filter: item.key === "portfolio" ? undefined : "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
+                  filter: item.key === "portfolio" 
+                    ? "drop-shadow(0 0 4px rgba(255,255,255,0.7)) drop-shadow(0 0 2px rgba(255,255,255,0.5))" 
+                    : "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
                 }}
               >
                 {item.label}
               </motion.button>
             ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Desktop CTA (Far Right Corner - Consultation Button) */}
+        <div className="hidden md:flex items-center gap-5 relative z-10 ml-auto">
+          <AnimatePresence>
+            {showNavItems && (
+              <motion.button
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.4 }}
+                onClick={() => handleNavigation("consultas")}
+                className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block cursor-pointer transition-all duration-300"
+                style={{
+                  backgroundImage: "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
+                  backgroundSize: "200% auto",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  filter: "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
+                }}
+              >
+                {language === 'es' ? 'Consulta' : 'Consultation'}
+              </motion.button>
+            )}
           </AnimatePresence>
         </div>
 
@@ -287,7 +314,7 @@ const Navbar = () => {
                     className="w-full text-left font-body text-lg py-4 font-medium transition-all duration-300"
                     style={{
                       backgroundImage: item.key === "portfolio"
-                        ? "linear-gradient(90deg, #FFFFFF, #E2E8F0, #FFFFFF)"
+                        ? "linear-gradient(90deg, #FFFFFF, #F8FAFC, #FFFFFF)"
                         : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
                       backgroundSize: "200% auto",
                       WebkitBackgroundClip: "text",
@@ -309,16 +336,15 @@ const Navbar = () => {
                         repeat: Infinity,
                         ease: "linear"
                       }}
-                      className={`w-full inline-block ${
-                        item.key === 'portfolio' 
-                          ? 'drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]' 
-                          : 'drop-shadow-[0_0_8px_rgba(20,91,255,0.6)]'
-                      }`}
+                      className="w-full inline-block"
                       style={{
                         backgroundImage: "inherit",
                         backgroundSize: "inherit",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
+                        filter: item.key === 'portfolio' 
+                          ? "drop-shadow(0 0 16px rgba(255,255,255,1)) drop-shadow(0 0 4px rgba(255,255,255,0.8))" 
+                          : "drop-shadow(0 0 8px rgba(20,91,255,0.6))"
                       }}
                     >
                       {item.label}
