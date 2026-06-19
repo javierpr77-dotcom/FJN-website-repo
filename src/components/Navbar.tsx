@@ -191,9 +191,9 @@ const Navbar = () => {
                   x: 0,
                   scale: [1, 1.05, 1],
                   filter: [
-                    "drop-shadow(0 0 4px rgba(57,255,20,0.5))",
-                    "drop-shadow(0 0 12px rgba(57,255,20,1))",
-                    "drop-shadow(0 0 4px rgba(57,255,20,0.5))"
+                    "drop-shadow(0 0 4px rgba(255,255,255,0.6))",
+                    "drop-shadow(0 0 16px rgba(255,255,255,1))",
+                    "drop-shadow(0 0 4px rgba(255,255,255,0.6))"
                   ],
                   backgroundPosition: ["0% 50%", "200% 50%"],
                   transition: {
@@ -226,7 +226,7 @@ const Navbar = () => {
                 className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block"
                 style={{
                   backgroundImage: item.key === "portfolio"
-                    ? "linear-gradient(90deg, #39FF14, #FFFFFF, #39FF14)"
+                    ? "linear-gradient(90deg, #FFFFFF, #E2E8F0, #FFFFFF)"
                     : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
                   backgroundSize: "200% auto",
                   WebkitBackgroundClip: "text",
@@ -287,7 +287,7 @@ const Navbar = () => {
                     className="w-full text-left font-body text-lg py-4 font-medium transition-all duration-300"
                     style={{
                       backgroundImage: item.key === "portfolio"
-                        ? "linear-gradient(90deg, #39FF14, #FFFFFF, #39FF14)"
+                        ? "linear-gradient(90deg, #FFFFFF, #E2E8F0, #FFFFFF)"
                         : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
                       backgroundSize: "200% auto",
                       WebkitBackgroundClip: "text",
@@ -311,7 +311,7 @@ const Navbar = () => {
                       }}
                       className={`w-full inline-block ${
                         item.key === 'portfolio' 
-                          ? 'drop-shadow-[0_0_12px_rgba(57,255,20,0.8)]' 
+                          ? 'drop-shadow-[0_0_12px_rgba(255,255,255,0.85)]' 
                           : 'drop-shadow-[0_0_8px_rgba(20,91,255,0.6)]'
                       }`}
                       style={{

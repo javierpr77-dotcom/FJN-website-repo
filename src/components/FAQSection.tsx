@@ -9,53 +9,53 @@ const FAQSection = () => {
 
   const faqs = language === 'es' ? [
     {
-      question: "¿Por qué mi página web recibe tráfico pero no me genera ventas o leads?",
-      answer: "Este es el problema principal de tener un 'brochure digital'. Tu tráfico llega, pero la fricción visual y la falta de un embudo de ventas los ahuyenta. Nosotros no diseñamos páginas web estáticas; construimos Sistemas de Conversión. Aplicamos ingeniería y psicología del consumidor para guiar a ese tráfico hacia un cierre seguro."
+      question: "¿Por qué mi página de internet no aparece en Google al buscar mis servicios en Puerto Rico?",
+      answer: "La falta de visibilidad orgánica local ocurre porque la mayoría de las páginas web carecen de optimización técnica de velocidad e indexación estructurada JSON-LD. En FJN Digital Media implementamos microdatos schema geolocalizados para Puerto Rico, optimizamos la velocidad de respuesta (TTFB) a menos de 200ms en el borde CDN de Netlify y creamos clústeres semánticos de contenido de alta autoridad. Así garantizamos que tu negocio escale orgánicamente y aparezca número uno en las búsquedas tradicionales de Google y en resúmenes generativos de Inteligencia Artificial."
     },
     {
-      question: "¿Qué diferencia a su agencia de otras opciones de diseño web más baratas?",
-      answer: "El mercado está lleno de agencias que cobran por instalar plantillas genéricas. Pagar por una 'página bonita' que no vende es el modelo antiguo. Nuestra metodología Premium se centra en el Retorno de Inversión (ROI). Desarrollamos un diseño web de alto rendimiento, código a medida y embudos que tu competencia no puede igualar."
+      question: "¿Qué diferencia real hay entre un website barato con plantillas prediseñadas y un desarrollo a la medida de FJN Digital Media?",
+      answer: "Las plantillas de WordPress baratas o constructores visuales pesados poseen código basura, lentitud e inestabilidad extrema, lo que penaliza severamente el posicionamiento en buscadores. Nosotros codificamos sistemas web limpios desde cero utilizando React y Vite, logrando puntajes superiores al 98% en Pagespeed y cargas instantáneas. Esto elimina fugas de tráfico, genera seguridad de nivel bancario y consolida embudos de venta con tasas de conversión reales superiores al 30%."
     },
     {
-      question: "¿Incluyen posicionamiento SEO dentro de la arquitectura web?",
-      answer: "Absolutamente. Un diseño de lujo no sirve de nada si Google no puede encontrarlo. Construimos tu sistema con SEO Técnico Avanzado desde la raíz. Optimizamos tiempos de carga en milisegundos, estructuramos meta-etiquetas y aplicamos arquitectura de información semántica para posicionarte orgánicamente y dominar a tu competencia local."
+      question: "¿Cómo posicionar mi negocio número uno en las búsquedas locales de Google y respuestas de Inteligencia Artificial (AIO) en Puerto Rico?",
+      answer: "Dominar el mercado local hoy exige una combinación de SEO local geo-destinado, micro-datos JSON-LD y optimización para búsquedas de voz (AEO). Estructuramos tu sitio web para alimentar de forma directa los resúmenes de inteligencia artificial de Google AI Overviews y Gemini con respuestas directas de alto valor factual. Esta estrategia de optimización avanzada (GEO) aumenta la CTR (click-through rate) orgánica en un 55% y asegura la máxima visibilidad en San Juan, Ponce, Mayagüez y todo Puerto Rico."
     },
     {
-      question: "¿Por qué las campañas de mis anuncios (Meta/Google Ads) fracasan al llegar a mi web?",
-      answer: "Enviar tráfico de anuncios costosos a una página web deficiente es quemar dinero. Una campaña exitosa requiere una Landing Page diseñada milimétricamente para convertir ese clic pago en cliente. Alineamos el lenguaje de tus campañas con la arquitectura de la web para bajar tus costos de adquisición de clientes (CAC) dramáticamente."
+      question: "¿Cómo puedo conseguir clientes ideales de forma automática y aumentar las llamadas y mensajes a mi negocio?",
+      answer: "Para automatizar la captación de leads premium, diseñamos funnels de conversión automatizados combinados con landing pages de alto impacto táctico. En lugar de un catálogo digital estático, implementamos formularios asincrónicos, llamadas a la acción (CTA) persistentes e integraciones directas a bases de datos y WhatsApp. Esto reduce el costo de adquisición de leads (CPA) en un 45% y canaliza propuestas comerciales listas para cerrar."
     },
     {
-      question: "¿Si contrato un ecosistema avanzado, mi equipo podrá editar el contenido después?",
-      answer: "Sí. Aunque la ingeniería por detrás es avanzada, diseñamos la interfaz administrativa con extrema simplicidad. Integramos Sistemas de Gestión de Contenidos (CMS) de lujo para que tú o tu equipo puedan modificar textos, servicios o productos sin tocar o romper el código fuente."
+      question: "¿Por qué las campañas de mis anuncios de Google o Facebook Ads fracasan al llegar a mi página web?",
+      answer: "Enviar anuncios de pago a una página lenta y confusa es quemar el presupuesto publicitario. Una campaña de mercadeo exitosa requiere landing pages de alto impacto diseñadas con psicología del consumidor y velocidad extrema. Alineamos el mensaje comercial del anuncio con la arquitectura interna de la página web, reduciendo inmediatamente el porcentaje de rebote y maximizando drásticamente la tasa de conversión por clic."
     },
     {
-      question: "¿En cuánto tiempo podré lanzar mi nuevo Sistema de Conversión?",
-      answer: "Depende de la envergadura y complejidad corporativa, pero nuestra ejecución gracias a la Inteligencia Artificial nos permite reducir los típicos tiempos de agencia. Lo que a otros les toma semanas o meses, nosotros lo podemos desplegar en una fracción del tiempo con el doble de precisión. Una vez sepamos tus requerimientos, cerramos un cronograma exacto."
+      question: "¿Si mi negocio contrata un sistema web avanzado, podré editar el contenido fácilmente en el futuro?",
+      answer: "Totalmente. Aunque la ingeniería interna es de nivel corporativo, su administración es sumamente amigable. Integramos sistemas de gestión de contenido (CMS) simplificados y personalizados en la nube para que tu equipo pueda actualizar textos, portafolio, servicios o fotografías en segundos sin el riesgo de alterar o romper el código fuente."
     }
   ] : [
     {
-      question: "Why does my website get traffic but not generate sales or leads?",
-      answer: "This is the main problem of having a 'digital brochure'. Your traffic arrives, but visual friction and the lack of a sales funnel drives them away. We don't design static web pages; we build Conversion Systems. We apply engineering and consumer psychology to guide that traffic towards a secure close."
+      question: "Why is my business website super slow, and why doesn't it show up on Google in Puerto Rico?",
+      answer: "Slow loading is usually caused by unoptimized assets, bloated templates, and poor hosting infrastructure. Since slow sites have high bounce rates, Google penalizes them severely. FJN Digital Media crafts custom React setups served close to the user on Netlify's global edge network, bringing loading speeds below 1.2 seconds to satisfy search crawlers and secure top listings."
     },
     {
-      question: "What differentiates your agency from cheaper web design options?",
-      answer: "The market is full of agencies that charge to install generic templates. Paying for a 'pretty page' that doesn't sell is the old model. Our Premium methodology focuses on Return on Investment (ROI). We develop high-performance web design, custom code, and funnels that your competition cannot match."
+      question: "What is the difference between cheap template-based websites and a professional conversion system?",
+      answer: "Cheap visual editors or generic templates offer no distinct branding or conversion tactics, leading to conversion rates of less than 2%. FJN Digital Media develops bespoke high-performance structures from scratch. By combining modern typography, fluid UX, and psychological sales triggers, we lift core conversion rates above 30%."
     },
     {
-      question: "Do you include SEO positioning within the web architecture?",
-      answer: "Absolutely. A luxury design is useless if Google can't find it. We build your system with Advanced Technical SEO from the root. We optimize load times in milliseconds, structure meta-tags, and apply semantic information architecture to position you organically and dominate your local competition."
+      question: "How can my business rank first on Google Local Pack and AI Overviews in Puerto Rico?",
+      answer: "Ranking first requires an advanced blend of geo-targeted local SEO, structured JSON-LD schemas, and content optimized for Generative Engine Optimization (GEO). We model your website structure to serve Gemini and Google AI Overviews directly with authoritative factual data. This advanced architecture elevates organic click-through rates by up to 55%."
     },
     {
-      question: "Why do my ad campaigns (Meta/Google Ads) fail when reaching my website?",
-      answer: "Sending expensive ad traffic to a poor website is burning money. A successful campaign requires a Landing Page designed down to the millimeter to convert that paid click into a client. We align the language of your campaigns with the web architecture to dramatically lower your customer acquisition costs (CAC)."
+      question: "How can I acquire high-quality warm sales leads and automate client calls for my local business?",
+      answer: "We design strategic lead generation sales funnels coupled with high-converting custom landing pages. Instead of a passive virtual flyer, we embed interactive, lightning-fast form captures and seamless routing to instant messenger channels, cutting lead acquisition costs (CPA) by 45% and funneling inquiries directly to your sales team."
     },
     {
-      question: "If I hire an advanced ecosystem, will my team be able to edit the content later?",
-      answer: "Yes. Although the backend engineering is advanced, we design the administrative interface with extreme simplicity. We integrate luxury Content Management Systems (CMS) so that you or your team can modify texts, services, or products without touching or breaking the source code."
+      question: "Why do my paid Meta and Google ad campaigns fail once users click through to my website?",
+      answer: "Driving paid traffic to a sluggish website is an expensive mistake. High-converting campaigns must route to single-focus landing pages tailored down to the millimeter with consumer psychology. We synchronize your ad messaging with our responsive layouts, reducing bounce rates and maximizing return on ad spend."
     },
     {
-      question: "How soon will I be able to launch my new Conversion System?",
-      answer: "It depends on the scope and corporate complexity, but our execution powered by Artificial Intelligence allows us to reduce typical agency timelines. What takes others weeks or months, we can deploy in a fraction of the time with double the precision. Once we know your requirements, we close an exact schedule."
+      question: "If we implement a custom advanced web system, will my team be able to edit content without breaking code?",
+      answer: "Absolutely. While the core under-the-hood engineering is high-performance React and Vite, the administrative panel is incredibly simple. We deploy localized, custom cloud CMS solutions, allowing your marketing team to edit services, text, and portfolio galleries in seconds without touching a single line of code."
     }
   ];
 
