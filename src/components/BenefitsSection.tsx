@@ -11,87 +11,87 @@ const BenefitsSection = () => {
     {
       title: language === 'es' ? "Arquitectura de Conversión" : "Conversion Architecture",
       description: language === 'es' ? (
-        <>Cada píxel está diseñado para vender. Utilizamos <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">psicología cognitiva y datos heurísticos</span> para estructurar recorridos que transforman a simples visitantes en <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">clientes de alto valor</span>, eliminando cualquier fricción en el proceso.</>
+        <>Cada píxel está estructurado para capturar el interés del usuario. Diseñamos sistemas interactivos que reducen la fricción cognitiva para guiar sistemáticamente a los visitantes hacia <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">la toma de decisiones directas</span> o cotizaciones instantáneas.</>
       ) : (
-        <>Every pixel is designed to sell. We use <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">cognitive psychology and heuristic data</span> to structure journeys that transform simple visitors into <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">high-value clients</span>, eliminating any friction in the process.</>
+        <>Every pixel is structured to secure the user's attention. We design interactive systems that minimize cognitive friction to guide visitors toward <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">direct decision-making</span> or instant quotes.</>
       ),
       bullets: language === 'es' ? [
-        <>Auditoría de competencia con <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">agentes</span> de IA.</>,
-        <>Mapeo exacto de puntos de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">dolor</span>.</>,
-        <>Túneles de ventas de alta <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">conversión</span>.</>
+        <>Estructuración por análisis de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">mapas de calor</span> reales.</>,
+        <>Mapeo del túnel psicológico del <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">comprador</span>.</>,
+        <>Túneles optimizados para el <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">ticket promedio</span>.</>
       ] : [
-        <>Competitor audit with AI <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">agents</span>.</>,
-        <>Exact mapping of pain <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">points</span>.</>,
-        <>High-converting sales <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">funnels</span>.</>
+        <>Structured by actual <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">heat-map</span> insights.</>,
+        <>User cognitive flow alignment for <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">conversion</span>.</>,
+        <>Funnels optimized to drive <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">average order value</span>.</>
       ],
       icon: <BrainCircuit className="w-6 h-6" />,
       colSpan: "md:col-span-2",
       delay: 0.1,
     },
     {
-      title: language === 'es' ? "Cero Plantillas. 100% Personalizado" : "Zero Templates. 100% Personalized",
+      title: language === 'es' ? "Cero Plantillas. Código Puro" : "Zero Templates. Pure Code",
       description: language === 'es' ? (
-        <>Cada diseño se concibe desde cero para reflejar la identidad única de tu marca, garantizando una estética incomparable y enfocada plenamente en conversiones.</>
+        <>Desarrollamos interfaces totalmente personalizadas escritas a mano. Evitamos constructores pesados como WordPress o Elementor para garantizar una robustez técnica incontestable.</>
       ) : (
-        <>Every design is crafted from scratch to reflect your brand's unique identity, ensuring an unmatched aesthetic fully focused on conversions.</>
+        <>We develop fully personalized, clean-coded interfaces from scratch. We skip bloated builders like WordPress or Elementor to ensure uncompromising technical performance.</>
       ),
       bullets: language === 'es' ? [
-        <>Branding 100% <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">personalizado</span>.</>,
-        <>Animaciones de alto <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">prestigio</span>.</>,
-        <>Cero plantillas, código <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">único</span>.</>,
-        <>Arquitectura modular e <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">inmersiva</span>.</>,
-        <>Identidad visual <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">inconfundible</span>.</>,
+        <>Diseño exclusivo adaptativo para <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">celulares</span>.</>,
+        <>Velocidad de carga de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">milisegundos</span>.</>,
+        <>Cero plantillas pre-fabricadas <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">comunes</span>.</>,
+        <>Arquitectura modular <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">maternal</span>.</>,
+        <>Identidad visual <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">distintiva</span>.</>,
       ] : [
-        <>100% custom <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">branding</span>.</>,
-        <>High-prestige <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">animations</span>.</>,
-        <>Zero templates, unique <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">code</span>.</>,
-        <>Modular and immersive <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">architecture</span>.</>,
-        <>Unmistakable visual <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">identity</span>.</>,
+        <>Clean adaptive layouts focused on <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">mobile UI</span>.</>,
+        <>Loading speed measured in <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">milliseconds</span>.</>,
+        <>Zero generic visual templates <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">reused</span>.</>,
+        <>Clean structured modular <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">components</span>.</>,
+        <>Distinctive brand visual <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">identities</span>.</>,
       ],
       icon: <Sparkles className="w-6 h-6" />,
       colSpan: "md:col-span-1",
       delay: 0.2,
     },
     {
-      title: language === 'es' ? "Desarrollo Acelerado" : "Accelerated Development",
+      title: language === 'es' ? "Desarrollo de Alto Rendimiento" : "High-Performance Buildout",
       bullets: language === 'es' ? [
-        <>Tiempos reducidos de 7 a 4 <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">días</span>.</>,
-        <>Auditoría de código en tiempo <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">real</span>.</>,
-        <>Despliegue impecable sin <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">errores</span>.</>
+        <>Lanzamientos rápidos y <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">optimizados</span>.</>,
+        <>Auditorías rigurosas de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">usabilidad</span>.</>,
+        <>Código óptimo libre de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">fricción</span> o caídas.</>
       ] : [
-        <>Time reduced from 7 to 4 <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">days</span>.</>,
-        <>Real-time code <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">auditing</span>.</>,
-        <>Flawless deployment without <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">errors</span>.</>
+        <>Fast, highly optimized <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">systems</span>.</>,
+        <>Rigorous functional interactive <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">checks</span>.</>,
+        <>Flawless interfaces built to <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">last</span>.</>
       ],
       icon: <Zap className="w-6 h-6" />,
       colSpan: "md:col-span-1",
       delay: 0.3,
     },
     {
-      title: language === 'es' ? "SEO Hiper-Personalizado" : "Hyper-Personalized SEO",
+      title: language === 'es' ? "SEO Técnico Avanzado" : "Advanced Technical SEO",
       bullets: language === 'es' ? [
-        <>Posicionamiento semántico <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">avanzado</span>.</>,
-        <>Dirigido a tu cliente <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">ideal</span>.</>,
-        <>Tráfico listo para <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">comprar</span>.</>
+        <>Indexación verificada en <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">Search Console</span>.</>,
+        <>Estructura semántica anti-penalizaciones <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">AI</span>.</>,
+        <>Sitemaps y marcado <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">Schema.org</span> nativos.</>
       ] : [
-        <>Advanced semantic <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">positioning</span>.</>,
-        <>Targeted to your ideal <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">client</span>.</>,
-        <>Traffic ready to <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">buy</span>.</>
+        <>Full crawl compliance on Google <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">Search Console</span>.</>,
+        <>Schema semantic setups to stand out <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">on results</span>.</>,
+        <>Configured Sitemap.xml and robots <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">assets</span>.</>
       ],
       icon: <Search className="w-6 h-6" />,
       colSpan: "md:col-span-1",
       delay: 0.4,
     },
     {
-      title: language === 'es' ? "Ecosistemas Vivos" : "Living Ecosystems",
+      title: language === 'es' ? "Ecosistemas Auto-Sustentables" : "Self-Sustaining Ecosystems",
       bullets: language === 'es' ? [
-        <>Agentes IA trabajando <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">24/7</span>.</>,
-        <>Cualificación automática de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">leads</span>.</>,
-        <>Servicio premium <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">ininterrumpido</span>.</>
+        <>Formularios inteligentes y agenda <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">integrada</span>.</>,
+        <>Captación autónoma sin mantenimiento <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">diario</span>.</>,
+        <>Canal de ventas propio sin intermediar <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">comisiones</span>.</>
       ] : [
-        <>AI agents working <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">24/7</span>.</>,
-        <>Automatic qualification of <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">leads</span>.</>,
-        <>Uninterrupted premium <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">service</span>.</>
+        <>Smart leads forms and direct booking <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">widgets</span>.</>,
+        <>Autopilot prospects tracking with <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">zero fuss</span>.</>,
+        <>Own direct transactional paths, bypass <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">extra costs</span>.</>
       ],
       icon: <Bot className="w-6 h-6" />,
       colSpan: "md:col-span-1",

@@ -28,6 +28,16 @@ const App = () => (
               <Route path="/portafolio" element={<Index />} />
               <Route path="/planes" element={<Index />} />
               <Route path="/pricing" element={<Index />} />
+              <Route path="/services" element={<Index />} />
+              <Route path="/servicios" element={<Index />} />
+              <Route path="/reviews" element={<Index />} />
+              <Route path="/resenas" element={<Index />} />
+              <Route path="/reseñas" element={<Index />} />
+              <Route path="/casos-de-exito" element={<Index />} />
+              <Route path="/success-stories" element={<Index />} />
+              <Route path="/contact" element={<Index />} />
+              <Route path="/consultas" element={<Index />} />
+              <Route path="/consultations" element={<Index />} />
               <Route path="/design-research" element={<DesignResearch />} />
               <Route path="/faq" element={<FAQ />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

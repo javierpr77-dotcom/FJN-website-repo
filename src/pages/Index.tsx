@@ -18,13 +18,25 @@ const Index = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const path = location.pathname.toLowerCase();
+    let decodedPath = "";
+    try {
+      decodedPath = decodeURIComponent(location.pathname).toLowerCase();
+    } catch (e) {
+      decodedPath = location.pathname.toLowerCase();
+    }
+    
     let targetId = "";
 
-    if (path === "/portfolio" || path === "/portafolio") {
+    if (decodedPath === "/portfolio" || decodedPath === "/portafolio") {
       targetId = "portfolio";
-    } else if (path === "/planes" || path === "/pricing") {
+    } else if (decodedPath === "/planes" || decodedPath === "/pricing") {
       targetId = "planes";
+    } else if (decodedPath === "/servicios" || decodedPath === "/services") {
+      targetId = "servicios";
+    } else if (decodedPath === "/resenas" || decodedPath === "/reseñas" || decodedPath === "/reviews" || decodedPath === "/casos-de-exito" || decodedPath === "/success-stories") {
+      targetId = "resenas";
+    } else if (decodedPath === "/consultas" || decodedPath === "/contact" || decodedPath === "/consultations") {
+      targetId = "contact";
     }
 
     if (targetId) {

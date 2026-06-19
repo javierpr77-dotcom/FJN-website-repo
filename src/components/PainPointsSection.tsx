@@ -4,23 +4,23 @@ const PainPointsSection = () => {
   const painPoints = [
     {
       icon: TrendingDown,
-      title: "Ventas Estancadas",
-      description: "Tu negocio no crece como esperabas y las ventas se mantienen igual mes tras mes"
+      title: "Tráfico que No Convierte",
+      description: "El 87% de los empresarios caribeños dirigen visitas costosas a páginas lentas que tardan más de 3 segundos en cargar, perdiendo de inmediato la mitad de sus prospectos."
     },
     {
       icon: Users,
-      title: "Pocos Clientes Nuevos",
-      description: "Dependes solo de clientes existentes y te cuesta atraer nuevos prospectos"
+      title: "Dependencia de Referidos",
+      description: "Depender únicamente del 'boca en boca' limita tu alcance comercial. Sin un sistema autónomo de captación, quedas rezagado frente a marcas que automatizan su flujo."
     },
     {
       icon: AlertTriangle,
-      title: "Marketing Sin Resultados",
-      description: "Inviertes en publicidad pero no ves retorno real en tu inversión"
+      title: "Desperdicio en Anuncios",
+      description: "Invertir cientos de dólares en Meta o Google Ads que apuntan a formularios fríos o menús digitales genéricos que no cierran la venta, disparando tu costo de adquisición."
     },
     {
       icon: Clock,
-      title: "Tiempo Perdido",
-      description: "Pierdes horas gestionando redes sociales sin una estrategia clara"
+      title: "Comisiones de Terceros",
+      description: "Entregar hasta el 25% de tus ingresos a portales intermediarios (Airbnb, Booking, UberEats) por no contar con una plataforma propia de reservas y cobros directos."
     }
   ];
 

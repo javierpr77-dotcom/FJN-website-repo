@@ -11,96 +11,96 @@ const ServicesSection = () => {
       title: language === 'es' ? "Landing Pages de Alta Conversión" : "High-Conversion Landing Pages",
       description: language === 'es' ? (
         <>
-          Diseñadas para transformar tráfico en <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">ventas inmediatas</span>. Eliminamos distracciones y guiamos a la acción.
+          Diseñadas sobre principios de psicología de consumo para capturar leads calificados en tiempo récord. Eliminamos menús innecesarios para concentrar al usuario en un único objetivo: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">la conversión</span>.
         </>
       ) : (
         <>
-          Designed to transform traffic into <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">immediate sales</span>. We eliminate distractions and guide to action.
+          Engineered using consumer psychology principles to capture highly qualified leads in record time. We eliminate friction to focus the visitor on a single call-to-action: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">conversion</span>.
         </>
       ),
       features: language === 'es' ? [
-        "Copywriting persuasivo",
-        <>Velocidad <span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">extrema</span></>,
-        "Embudos integrados"
+        "Copywriting de venta pura",
+        <>Velocidad <span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">extrema</span> ({"< 1s"})</>,
+        "Túneles de lead directos"
       ] : [
-        "Persuasive copywriting",
-        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">Extreme</span> speed</>,
-        "Integrated funnels"
+        "High-conversion copywriting",
+        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">Ultra</span> speed ({"< 1s"})</>,
+        "Direct lead capturing"
       ],
       icon: <MonitorSmartphone className="w-7 h-7" />,
-      trustTag: language === 'es' ? "Optimizado para Conversión" : "Optimized for Conversion",
+      trustTag: language === 'es' ? "Tasa de Rebote Mínima" : "Minimal Bounce Rate",
       trustIcon: <Zap className="w-4 h-4" />
     },
     {
       title: language === 'es' ? "E-Commerce Premium" : "Premium E-Commerce",
       description: language === 'es' ? (
         <>
-          Diseños <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">únicos y personalizados</span>. No usamos plantillas. Cero plantillas.
+          Sistemas de venta directa desarrollados a medida. Integramos pasarelas locales como <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe, PayPal y ATH Móvil</span> garantizando una experiencia de pago segura y sin comisiones abusivas de terceros.
         </>
       ) : (
         <>
-          <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Unique and custom</span> designs. We do not use templates. Zero templates.
+          Custom-built direct sales architectures. We integrate localized gateways like <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe, PayPal, and ATH Movil</span> to ensure quick checkout flows without high intermediary fees.
         </>
       ),
       features: language === 'es' ? [
-        "Pagos integrados",
+        "Checkout de un solo paso",
         <>Inventario <span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">automatizado</span></>,
-        "Recuperación de carritos"
+        "Recuperación activa de carritos"
       ] : [
-        "Integrated payments",
-        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">Automated</span> inventory</>,
-        "Cart recovery"
+        "One-step modern checkout",
+        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">Automated</span> inventory sync</>,
+        "Active cart recovery systems"
       ],
       icon: <ShoppingCart className="w-7 h-7" />,
-      trustTag: language === 'es' ? "Maximización de ROI" : "ROI Maximization",
+      trustTag: language === 'es' ? "Maximización de Margen" : "Margin Maximization",
       trustIcon: <TrendingUp className="w-4 h-4" />
     },
     {
-      title: language === 'es' ? "Webs Corporativas" : "Corporate Websites",
+      title: language === 'es' ? "Webs Corporativas de Autoridad" : "Authority Corporate Websites",
       description: language === 'es' ? (
         <>
-          Posicionamiento que eleva el <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">prestigio de tu marca</span>. Transmite confianza desde el primer segundo.
+          Soluciones multi-página robustas y estructuradas con <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">SEO técnico integrado</span>. Diseñadas para consolidar la presencia comercial de firmas locales o consultoras de alto perfil.
         </>
       ) : (
         <>
-          Positioning that elevates the <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">prestige of your brand</span>. Conveys trust from the first second.
+          Robust and well-structured multi-page solutions powered by <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">fully integrated technical SEO</span>. Designed to secure the search footprint for consulting firms and local enterprises.
         </>
       ),
       features: language === 'es' ? [
-        "Diseño a medida",
-        <>Arquitectura <span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">SEO</span></>,
-        "Integración CRM"
+        "Estructura adaptable única",
+        <>Arquitectura <span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">SEO Semántica</span></>,
+        "Sincronización directa con CRM"
       ] : [
-        "Custom design",
-        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">SEO</span> Architecture</>,
-        "CRM Integration"
+        "Tailored adaptive layout",
+        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">Semantic SEO</span> crawl structures</>,
+        "Native CRM sync options"
       ],
       icon: <Building2 className="w-7 h-7" />,
-      trustTag: language === 'es' ? "Posicionamiento Premium" : "Premium Positioning",
+      trustTag: language === 'es' ? "Posicionamiento en Google" : "Google Search Performance",
       trustIcon: <Crown className="w-4 h-4" />
     },
     {
-      title: language === 'es' ? "Plataformas de Reservas" : "Booking Platforms",
+      title: language === 'es' ? "Plataformas de Reserva Directa" : "Direct Booking Systems",
       description: language === 'es' ? (
         <>
-          Sistemas para alojamientos que gestionan pagos <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">sin comisiones</span> de terceros.
+          La solución perfecta para paradores, alquileres a corto plazo y clínicas en Puerto Rico. Automatiza citas y cobros de reservas de forma independiente, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">reteniendo el 100% de tu margen de ganancia</span>.
         </>
       ) : (
         <>
-          Systems for accommodations that manage payments <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">without commissions</span> from third parties.
+          The ideal engine for guest houses, rentals, and private clinics. Automate reservations and bookings independently on your own terms, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">keeping 100% of your operational profit</span>.
         </>
       ),
       features: language === 'es' ? [
-        "Calendarios sincronizados",
-        <>Pagos <span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">directos</span></>,
-        "Panel intuitivo"
+        "Sincronización bidireccional",
+        <>Cobros <span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">100% directos</span></>,
+        "Notificaciones de texto automatizadas"
       ] : [
-        "Synchronized calendars",
-        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">Direct</span> payments</>,
-        "Intuitive panel"
+        "Two-way calendar sync",
+        <><span className="text-[#3B7BFF] font-bold drop-shadow-[0_0_12px_rgba(59,123,255,0.8)]">100% Direct</span> payments</>,
+        "Automated SMS/alert notices"
       ],
       icon: <Home className="w-7 h-7" />,
-      trustTag: language === 'es' ? "Automatización Total" : "Total Automation",
+      trustTag: language === 'es' ? "Independencia Operativa" : "Operational Independence",
       trustIcon: <Settings className="w-4 h-4" />
     }
   ];

@@ -102,14 +102,24 @@ const Navbar = () => {
       return;
     }
     
-    if (location.pathname !== "/") {
-      navigate("/");
-      // Wait for page to load before scrolling
-      setTimeout(() => {
-        document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
+    // Determine proper router path based on itemKey and language
+    let targetPath = "/" + itemKey;
+    if (itemKey === "portfolio") {
+      targetPath = language === "es" ? "/portafolio" : "/portfolio";
+    } else if (itemKey === "planes") {
+      targetPath = language === "es" ? "/planes" : "/pricing";
+    } else if (itemKey === "resenas") {
+      targetPath = language === "es" ? "/casos-de-exito" : "/success-stories";
+    } else if (itemKey === "consultas") {
+      targetPath = language === "es" ? "/consultas" : "/contact";
+    } else if (itemKey === "servicios") {
+      targetPath = language === "es" ? "/servicios" : "/services";
+    }
+
+    if (location.pathname === targetPath) {
       document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate(targetPath);
     }
   };
 
@@ -228,7 +238,7 @@ const Navbar = () => {
           <button
             onClick={() => {
               setIsMobileMenuOpen(false);
-              document.getElementById("planes")?.scrollIntoView({ behavior: "smooth" });
+              navigate(language === 'es' ? "/planes" : "/pricing");
             }}
             className="px-3.5 py-1.5 rounded-full border border-[#145BFF]/40 text-xs font-semibold tracking-wide text-white bg-[#145BFF]/20 backdrop-blur-md shadow-[0_0_12px_rgba(20,91,255,0.25)] hover:bg-[#145BFF]/30 active:scale-95 transition-all duration-300 cursor-pointer"
           >
