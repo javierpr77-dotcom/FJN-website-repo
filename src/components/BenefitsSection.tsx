@@ -269,18 +269,23 @@ const BenefitsSection = () => {
                       {benefit.icon}
                     </div>
                     <h3 className="text-lg font-heading text-white tracking-tight">
-                      {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
-                      <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
-                        {benefit.title.split(" ").slice(-1)}
-                      </span>
+                      {index === 1 && language === 'es' ? (
+                        <>
+                          Cero plantillas.{" "}
+                          <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
+                            Cien porcientos personificadas
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
+                          <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
+                            {benefit.title.split(" ").slice(-1)}
+                          </span>
+                        </>
+                      )}
                     </h3>
                   </div>
-
-                  {benefit.description && (
-                    <p className="text-[#CFCFD4]/70 font-body text-xs leading-relaxed mb-1 font-light">
-                      {benefit.description}
-                    </p>
-                  )}
 
                   <ul className="space-y-2.5">
                     {benefit.bullets.map((bullet, i) => (
@@ -303,7 +308,7 @@ const BenefitsSection = () => {
         </div>
 
         {/* Tablet View - Sticky Scroll Card Stacking entering from Right */}
-        <div ref={tabletContainerRef} className="hidden md:block lg:hidden relative w-full max-w-[1040px] mx-auto z-20 py-2" style={{ height: "350vh" }}>
+        <div ref={tabletContainerRef} className="hidden md:block lg:hidden relative w-full max-w-[1040px] mx-auto z-20 py-2" style={{ height: "220vh" }}>
           {/* Sticky Container */}
           <div className="sticky top-[11vh] h-[545px] w-full flex flex-col justify-start items-center z-20 px-6">
             
