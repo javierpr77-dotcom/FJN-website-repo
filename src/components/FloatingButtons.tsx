@@ -31,26 +31,24 @@ const FloatingButtons = () => {
           initial={{ opacity: 0, scale: 0.6, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.6, y: 15 }}
-          whileHover={{ scale: 1.15, borderColor: "rgba(20, 91, 255, 0.4)" }}
+          whileHover={{ 
+            scale: 1.05, 
+            borderColor: "rgba(0, 212, 255, 0.8)", 
+            boxShadow: "0 0 25px rgba(20, 91, 255, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.2)" 
+          }}
           whileTap={{ scale: 0.95 }}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center bg-[#050507]/80 border border-white/10 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.5),0_0_8px_rgba(20,91,255,0.1)] cursor-pointer text-white/70 hover:text-white transition-colors duration-300 group"
+          className="fixed bottom-6 right-6 z-[9999] w-9 h-9 sm:w-9.5 sm:h-9.5 md:w-9.5 md:h-9.5 rounded-full flex items-center justify-center border text-white hover:text-[#00D4FF] transition-all duration-300 group cursor-pointer"
+          style={{
+            background: "rgba(255, 255, 255, 0.02)",
+            backdropFilter: "blur(14px) saturate(200%)",
+            WebkitBackdropFilter: "blur(14px) saturate(200%)",
+            borderColor: "rgba(20, 91, 255, 0.45)",
+            boxShadow: "0 0 15px rgba(20, 91, 255, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.15)"
+          }}
           title="Volver arriba"
           aria-label="Volver arriba"
         >
-          {/* Ambient grow/breathe visual halo effect */}
-          <motion.div
-            className="absolute inset-0 rounded-full bg-[#145BFF]/15 z-[-1]"
-            animate={{
-              scale: [1, 1.45, 1],
-              opacity: [0.6, 0, 0.6],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          <ChevronUp className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
+          <ChevronUp className="w-5 h-5 text-white group-hover:text-[#00D4FF] transition-transform duration-300 group-hover:-translate-y-0.5" />
         </motion.button>
       )}
     </AnimatePresence>

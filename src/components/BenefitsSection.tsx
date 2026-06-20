@@ -1,11 +1,26 @@
-import { motion } from "framer-motion";
-import { BrainCircuit, Sparkles, Zap, Target, Bot, Search } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { BrainCircuit, Sparkles, Zap, Target, Bot, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 import AnimatedDashboard from "./AnimatedDashboard";
 
 const BenefitsSection = () => {
   const { language } = useLanguage();
+  const [activeSlide, setActiveSlide] = useState(0);
+  const tabletContainerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: tabletContainerRef,
+    offset: ["start start", "end end"]
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const currentIdx = Math.min(4, Math.max(0, Math.floor(latest * 5)));
+    if (currentIdx !== activeSlide) {
+      setActiveSlide(currentIdx);
+    }
+  });
 
   const benefits = [
     {
@@ -39,7 +54,7 @@ const BenefitsSection = () => {
         <>Diseño exclusivo adaptativo para <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">celulares</span>.</>,
         <>Velocidad de carga de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">milisegundos</span>.</>,
         <>Cero plantillas pre-fabricadas <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">comunes</span>.</>,
-        <>Arquitectura modular <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">maternal</span>.</>,
+        <>Arquitectura modular <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">escalable</span>.</>,
         <>Identidad visual <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">distintiva</span>.</>,
       ] : [
         <>Clean adaptive layouts focused on <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">mobile UI</span>.</>,
@@ -99,8 +114,57 @@ const BenefitsSection = () => {
     }
   ];
 
+  // Themes config for electric unique colors for each card
+  const cardThemes = [
+    {
+      iconColor: "text-[#3B7BFF]",
+      borderColor: "border-[#145BFF]/35",
+      activeBorderColor: "border-[#145BFF]/70",
+      glowColor: "rgba(20,91,255,0.8)",
+      bulletsColor: "bg-[#145BFF]",
+      titleAccentColor: "text-[#3B7BFF]",
+      rawColor: "#3B7BFF"
+    },
+    {
+      iconColor: "text-[#FF9D00]",
+      borderColor: "border-[#FF9D00]/35",
+      activeBorderColor: "border-[#FF9D00]/70",
+      glowColor: "rgba(255,157,0,0.8)",
+      bulletsColor: "bg-[#FF9D00]",
+      titleAccentColor: "text-[#FF9D00]",
+      rawColor: "#FF9D00"
+    },
+    {
+      iconColor: "text-[#A855F7]",
+      borderColor: "border-[#A855F7]/35",
+      activeBorderColor: "border-[#A855F7]/70",
+      glowColor: "rgba(168,85,247,0.8)",
+      bulletsColor: "bg-[#A855F7]",
+      titleAccentColor: "text-[#A855F7]",
+      rawColor: "#A855F7"
+    },
+    {
+      iconColor: "text-[#39FF14]",
+      borderColor: "border-[#39FF14]/35",
+      activeBorderColor: "border-[#39FF14]/70",
+      glowColor: "rgba(57,255,20,0.8)",
+      bulletsColor: "bg-[#39FF14]",
+      titleAccentColor: "text-[#39FF14]",
+      rawColor: "#39FF14"
+    },
+    {
+      iconColor: "text-[#00D4FF]",
+      borderColor: "border-[#00D4FF]/35",
+      activeBorderColor: "border-[#00D4FF]/70",
+      glowColor: "rgba(0,212,255,0.8)",
+      bulletsColor: "bg-[#00D4FF]",
+      titleAccentColor: "text-[#00D4FF]",
+      rawColor: "#00D4FF"
+    }
+  ];
+
   return (
-    <section id="beneficios" className="pt-6 pb-4 md:pt-8 md:pb-8 relative overflow-hidden">
+    <section id="beneficios" className="pt-6 pb-4 md:pt-8 md:pb-8 relative">
       <style>{`
         @media (min-width: 768px) {
           .float-anim-0 { animation: float-premium 7s ease-in-out infinite; }
@@ -182,8 +246,439 @@ const BenefitsSection = () => {
           </motion.div>
         </div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        {/* Mobile View - Standard Stack */}
+        <div className="grid grid-cols-1 md:hidden gap-4">
+          {benefits.map((benefit, index) => (
+            <motion.div 
+              key={index} 
+              className="w-full"
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: index * 1.5 }}
+            >
+              <div
+                className={`group relative rounded-3xl p-6 overflow-hidden`}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(13,18,32,0.15) 0%, rgba(5,5,7,0.25) 100%)',
+                  backdropFilter: 'blur(4px)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                }}
+              >
+                <div className="relative z-10 h-full flex flex-col gap-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-[#145BFF]/10 border border-[#145BFF]/20 flex items-center justify-center text-[#3B7BFF]">
+                      {benefit.icon}
+                    </div>
+                    <h3 className="text-lg font-heading text-white tracking-tight">
+                      {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
+                      <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
+                        {benefit.title.split(" ").slice(-1)}
+                      </span>
+                    </h3>
+                  </div>
+
+                  {benefit.description && (
+                    <p className="text-[#CFCFD4]/70 font-body text-xs leading-relaxed mb-1 font-light">
+                      {benefit.description}
+                    </p>
+                  )}
+
+                  <ul className="space-y-2.5">
+                    {benefit.bullets.map((bullet, i) => (
+                      <li key={i} className="flex items-start gap-2 text-[#CFCFD4]/80 font-body text-xs leading-relaxed font-light">
+                        <div className="mt-1.2 w-1.5 h-1.5 rounded-full bg-[#145BFF] shrink-0 shadow-[0_0_8px_rgba(20,91,255,0.8)]"></div>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {index === 0 && (
+                    <div className="w-full shrink-0 relative min-h-[220px] max-h-[280px] mt-4">
+                      <AnimatedDashboard />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Tablet View - Sticky Scroll Card Stacking entering from Right */}
+        <div ref={tabletContainerRef} className="hidden md:block lg:hidden relative w-full max-w-[1040px] mx-auto z-20 py-2" style={{ height: "350vh" }}>
+          {/* Sticky Container */}
+          <div className="sticky top-[11vh] h-[545px] w-full flex flex-col justify-start items-center z-20 px-6">
+            
+            {/* Top Indicator Header */}
+            <div className="w-full max-w-[850px] flex justify-between items-center mb-6 px-4 shrink-0">
+              <span className="text-xs font-mono text-white/35 uppercase tracking-widest flex items-center gap-1.5 animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#145BFF]"></span>
+                {language === 'es' ? "Desliza hacia abajo para apilar las tarjetas" : "Scroll down to stack cards"}
+              </span>
+              <div className="flex gap-2">
+                {benefits.map((_, i) => (
+                  <div 
+                    key={i} 
+                    className="h-1.5 rounded-full transition-all duration-300"
+                    style={{
+                      width: i === activeSlide ? "22px" : "6px",
+                      backgroundColor: i === activeSlide ? cardThemes[i].rawColor : "rgba(255, 255, 255, 0.15)",
+                      boxShadow: i === activeSlide ? `0 0 12px ${cardThemes[i].glowColor}` : "none"
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Stacking Cards Container */}
+            <div className="w-full max-w-[850px] h-[480px] relative select-none">
+              {benefits.map((benefit, index) => {
+                const theme = cardThemes[index];
+                
+                // Helper to fetch custom tablet descriptions and bullet highlights inline
+                const isEs = language === 'es';
+                let description = "";
+                let bullets: React.ReactNode[] = [];
+
+                if (index === 0) {
+                  description = isEs 
+                    ? "Cada píxel está estructurado tácticamente para dirigir al visitante a la conversión directa sin fricciones."
+                    : "Every pixel is tactically structured to capture attention and direct users to straightforward conversion.";
+                  bullets = isEs ? [
+                    <>Diseño con <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>mapas de calor</span> reales.</>,
+                    <>Flujos de <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>conversión</span> limpios directos.</>,
+                    <>Túneles optimizados de <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>alto retorno</span>.</>
+                  ] : [
+                    <>Engineered with real-session <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>heatmap insights</span>.</>,
+                    <>High-impact <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>conversion funnels</span> without noise.</>,
+                    <>Maximum efficiency <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>acquisition systems</span>.</>
+                  ];
+                } else if (index === 1) {
+                  description = isEs
+                    ? "Desarrollamos interfaces de alto rendimiento escritas a mano bajo un código nativo e impecable."
+                    : "Our engineers build fully bespoke high-performance layouts with uncompromised clean custom-written code.";
+                  bullets = isEs ? [
+                    <>Modelado adaptativo para <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>celulares</span>.</>,
+                    <>Carga inteligente en <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>milisegundos</span>.</>,
+                    <>Integraciones del sistema <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>ultra-livianas</span>.</>
+                  ] : [
+                    <>Bespoke <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>mobile-first</span> layout precision.</>,
+                    <>Lightning-fast <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>render loadtimes</span>.</>,
+                    <>Zero boilerplate code, only <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>pure core</span> setups.</>
+                  ];
+                } else if (index === 2) {
+                  description = isEs
+                    ? "Lanzamientos optimizados libres de fricción combinando agilidad y la máxima robustez técnica."
+                    : "Frictionless deployment pipelines engineered to deliver international speed and operational standards.";
+                  bullets = isEs ? [
+                    <>Lanzamientos veloces de <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>software</span>.</>,
+                    <>Auditorías de <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>usabilidad</span> rigurosas.</>,
+                    <>Sistemas estables sin <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>fricciones</span>.</>
+                  ] : [
+                    <>Instant delivery pipeline with zero <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>latency</span>.</>,
+                    <>Rigorous user accessibility audits <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>included</span>.</>,
+                    <>Enterprise-grade server stability under <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>high load</span>.</>
+                  ];
+                } else if (index === 3) {
+                  description = isEs
+                    ? "Indexación semántica avanzada y estructura de datos optimizada para posicionar tu marca en Google."
+                    : "Smart technical crawl architectures and structured markup designed to boost indexing and results.";
+                  bullets = isEs ? [
+                    <>Indexación verificada <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>Search Console</span>.</>,
+                    <>Estructura semántica anti <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>Filtros AI</span>.</>,
+                    <>Formatos Schema y datos <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>estructurados</span>.</>
+                  ] : [
+                    <>Verified crawling in <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>Search Console</span>.</>,
+                    <>Anti-AI-penalty semantic <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>structures</span>.</>,
+                    <>Built-in metadata <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>Schema setups</span>.</>
+                  ];
+                } else {
+                  description = isEs
+                    ? "Sistemas automáticos de captación listos para nutrir leads y agendar reuniones sin costes extra."
+                    : "Automated leads generation forms and reservation booking flows running on autopilot with zero fees.";
+                  bullets = isEs ? [
+                    <>Agendas conectadas y widgets <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>directos</span>.</>,
+                    <>Captura automatizada constante de <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>leads</span>.</>,
+                    <>Canal directo propio sin <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>intermediarios</span>.</>
+                  ] : [
+                    <>Integrated booking <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>calendars</span>.</>,
+                    <>Autopilot system leads <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>capturing</span>.</>,
+                    <>Direct channel sales with <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>zero fees</span>.</>
+                  ];
+                }
+
+                // Stacking calculations: cards sliding from the right one by one and stacking
+                let cardX = "115%";
+                let cardScale = 1;
+                let cardY = 0;
+                let cardOpacity = 0;
+                let cardRotate = 0;
+                let pointerEvents: "auto" | "none" = "none";
+
+                if (index < activeSlide) {
+                  // Stacked back cards (placed slightly behind, stacked vertically)
+                  const depth = activeSlide - index;
+                  cardX = "0%";
+                  cardScale = Math.max(0.85, 1 - depth * 0.035);
+                  cardY = -depth * 8;
+                  cardOpacity = Math.max(0.2, 1 - depth * 0.22);
+                  cardRotate = -depth * 1.5;
+                  pointerEvents = "none";
+                } else if (index === activeSlide) {
+                  // Currently active card (fully centered, readable & clickable)
+                  cardX = "0%";
+                  cardScale = 1;
+                  cardY = 0;
+                  cardOpacity = 1;
+                  cardRotate = 0;
+                  pointerEvents = "auto";
+                } else {
+                  // Future cards waiting on the right side
+                  cardX = "115%";
+                  cardScale = 1.02;
+                  cardY = 30;
+                  cardOpacity = 0;
+                  cardRotate = 4;
+                  pointerEvents = "none";
+                }
+
+                return (
+                  <motion.div
+                    key={index}
+                    animate={{
+                      x: cardX,
+                      scale: cardScale,
+                      y: cardY,
+                      opacity: cardOpacity,
+                      rotate: cardRotate,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 90,
+                      damping: 18,
+                      mass: 0.95
+                    }}
+                    className="absolute inset-x-0 inset-y-0 rounded-3xl p-6 md:p-10 flex flex-col justify-between overflow-hidden border border-white/5 bg-[#050508] bg-gradient-to-br from-[#0a0d17] to-[#04060a] shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
+                    style={{
+                      borderColor: index === activeSlide ? theme.activeBorderColor : theme.borderColor,
+                      boxShadow: index === activeSlide 
+                        ? `0 35px 80px rgba(0,0,0,0.9), 0 0 40px ${theme.glowColor.replace('0.8', '0.35')}`
+                        : `0 20px 50px rgba(0,0,0,0.7)` ,
+                      pointerEvents,
+                      zIndex: index === activeSlide ? 30 : 20 - Math.abs(activeSlide - index)
+                    }}
+                  >
+                    {/* Glowing Accent Layer */}
+                    <div 
+                      className="absolute inset-0 pointer-events-none rounded-3xl transition-opacity duration-500"
+                      style={{
+                        background: `linear-gradient(135deg, ${theme.glowColor.replace('0.8', '0.08')} 0%, transparent 100%)`,
+                        opacity: index === activeSlide ? 1 : 0
+                      }}
+                    />
+
+                    <motion.div 
+                      className="w-full h-full flex flex-row gap-8 items-stretch relative z-10"
+                      animate={{ 
+                        opacity: index === activeSlide ? 1 : 0,
+                        filter: index === activeSlide ? "blur(0px)" : "blur(12px)"
+                      }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                    >
+                      {/* Left Side Content */}
+                      <div className="flex flex-col flex-1 justify-between h-full">
+                        <div>
+                          {/* Header Icon & Title */}
+                          <div className="flex items-center gap-4 mb-5">
+                            <div 
+                              className={`w-12 h-12 rounded-2xl bg-[#080c18] border flex items-center justify-center shrink-0 transition-all duration-300 ${theme.iconColor}`}
+                              style={{
+                                borderColor: theme.glowColor.replace('0.8', '0.6'),
+                                boxShadow: `0 0 16px ${theme.glowColor.replace('0.8', '0.45')}, inset 0 0 8px ${theme.glowColor.replace('0.8', '0.3')}`,
+                                filter: `drop-shadow(0 0 10px ${theme.glowColor.replace('0.8', '0.5')})`
+                              }}
+                            >
+                              {benefit.icon}
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-heading font-semibold text-white tracking-tight leading-tight">
+                              {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
+                              <span 
+                                className={theme.titleAccentColor}
+                                style={{
+                                  filter: `drop-shadow(0 0 10px ${theme.glowColor})`
+                                }}
+                              >
+                                {benefit.title.split(" ").slice(-1)}
+                              </span>
+                            </h3>
+                          </div>
+
+                          {/* Shorter description */}
+                          <p className="text-[#CFCFD4]/85 font-body text-sm md:text-base leading-relaxed mb-6 font-light">
+                            {description}
+                          </p>
+
+                          {/* Bullets layout inside Active Card */}
+                          <ul className="space-y-3.5 mt-2 font-light">
+                            {bullets.map((bullet, i) => (
+                              <li key={i} className="flex items-start gap-3.5 text-[#CFCFD4]/90 font-body text-sm md:text-base leading-relaxed">
+                                <div 
+                                  className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${theme.bulletsColor}`}
+                                  style={{
+                                    boxShadow: `0 0 8px ${theme.glowColor}`
+                                  }}
+                                ></div>
+                                <span className="text-sm md:text-base">{bullet}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                          <span className="text-[10px] font-mono tracking-wider text-white/35 uppercase">
+                            {language === 'es' ? `Cualidad ${index + 1} de 5` : `Quality ${index + 1} of 5`}
+                          </span>
+                          <span className="text-[10px] font-mono text-[#00D4FF] bg-[#00D4FF]/10 px-3 py-1 rounded-full font-medium tracking-wider">
+                            Active Edge
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Interactive Right Graphic Sidebar tailored to Slide context */}
+                      <div className="flex flex-col w-[260px] shrink-0 relative h-[320px] self-center justify-center">
+                        {index === 0 && (
+                          <div className="w-full h-full relative">
+                            <AnimatedDashboard />
+                          </div>
+                        )}
+
+                        {index === 1 && (
+                          <div className="flex flex-col w-full h-[320px] self-center justify-center p-6 rounded-2xl border border-white/5 bg-gradient-to-br from-black/60 to-[#0c0f1d]/40 backdrop-blur-md overflow-hidden relative">
+                            {/* Mini Performance Dashboard */}
+                            <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                              <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Performance.tsx</span>
+                              <div className="w-2 h-2 rounded-full bg-[#39FF14] animate-pulse"></div>
+                            </div>
+                            <div className="space-y-3.5 font-mono text-[11px] leading-normal">
+                              <div className="text-white/35">{"// Zero build bloat:"}</div>
+                              <div className="text-[#FF9D00] flex items-center justify-between bg-white/[0.02] p-2 rounded border border-white/5">
+                                <span>Lighthouse:</span>
+                                <span className="font-bold text-[#39FF14]" style={{ textShadow: "0 0 8px rgba(57,255,20,0.6)" }}>100 / 100</span>
+                              </div>
+                              <div className="text-white/70">{"import { FastRoute } from 'pure';" }</div>
+                              <div className="text-white/80">{"const App = () => {"}</div>
+                              <div className="text-[#3B7BFF] pl-3">{"return <OptimizeSpeed />;"}</div>
+                              <div className="text-white/80">{"};"}</div>
+                              <div className="text-white/30 pt-1">{"// Bundle size: 14KB"}</div>
+                            </div>
+                            <div className="absolute -bottom-10 -right-10 w-24 h-24 rounded-full bg-[#FF9D00]/10 blur-xl pointer-events-none"></div>
+                          </div>
+                        )}
+
+                        {index === 2 && (
+                          <div className="flex flex-col w-full h-[320px] self-center justify-center p-6 rounded-2xl border border-white/5 bg-gradient-to-br from-black/60 to-[#0c0f1d]/40 backdrop-blur-md overflow-hidden relative">
+                            <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                              <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Speed Monitor</span>
+                              <span className="text-[#A855F7] font-mono text-[10px] font-bold">OPTIMIZED</span>
+                            </div>
+                            <div className="space-y-4">
+                              <div>
+                                <div className="flex justify-between text-[11px] text-white/60 mb-1">
+                                  <span>Time to First Byte</span>
+                                  <span className="text-[#A855F7] font-bold font-mono">0.08s</span>
+                                </div>
+                                <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                  <div className="bg-[#A855F7] h-full rounded-full w-[15%]" style={{ boxShadow: "0 0 10px #A855F7" }}></div>
+                                </div>
+                              </div>
+                              <div>
+                                <div className="flex justify-between text-[11px] text-white/60 mb-1">
+                                  <span>Largest Contentful Paint</span>
+                                  <span className="text-[#39FF14] font-bold font-mono">0.42s</span>
+                                </div>
+                                <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                                  <div className="bg-[#39FF14] h-full rounded-full w-[20%]" style={{ boxShadow: "0 0 10px #39FF14" }}></div>
+                                </div>
+                              </div>
+                              <div className="p-3 rounded-xl bg-[#A855F7]/10 border border-[#A855F7]/20 text-center mt-3">
+                                <div className="text-[9px] font-mono text-white/40 tracking-wider">UX LATENCY GRADE</div>
+                                <div className="text-lg font-heading font-black text-white tracking-widest drop-shadow-[0_0_8px_rgba(168,85,247,0.8)]" style={{ textShadow: "0 0 10px #A855F7" }}>A+ ULTRA</div>
+                              </div>
+                            </div>
+                            <div className="absolute -top-10 -left-10 w-24 h-24 rounded-full bg-[#A855F7]/10 blur-xl pointer-events-none"></div>
+                          </div>
+                        )}
+
+                        {index === 3 && (
+                          <div className="flex flex-col w-full h-[320px] self-center justify-center p-6 rounded-2xl border border-white/5 bg-gradient-to-br from-black/60 to-[#0c0f1d]/40 backdrop-blur-md overflow-hidden relative">
+                            <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                              <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Google SERP</span>
+                              <span className="text-[#39FF14] font-mono text-[10px] font-bold">RANK #1</span>
+                            </div>
+                            <div className="space-y-3.5">
+                              <div className="space-y-1">
+                                <div className="text-[9px] text-white/30 flex items-center gap-1 font-mono">
+                                  <span>https://valiosa.com</span>
+                                  <span>›</span>
+                                  <span>conversiones</span>
+                                </div>
+                                <div className="text-[#3B7BFF] font-heading font-semibold text-xs hover:underline cursor-pointer">
+                                  Arquitectura Web de Alta Conversión
+                                </div>
+                                <div className="text-white/60 text-[10px] leading-relaxed">
+                                  Estructuras web de alto impacto optimizadas para buscadores Google, mapas de calor y velocidad ultra extrema...
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2 mt-2 pt-2 border-t border-white/5">
+                                <span className="text-[9px] font-mono text-[#39FF14] bg-[#39FF14]/10 border border-[#39FF14]/20 px-2 py-0.5 rounded">Semantic rich snippet</span>
+                              </div>
+                            </div>
+                            <div className="absolute -bottom-10 -left-10 w-24 h-24 rounded-full bg-[#39FF14]/10 blur-xl pointer-events-none"></div>
+                          </div>
+                        )}
+
+                        {index === 4 && (
+                          <div className="flex flex-col w-full h-[320px] self-center justify-center p-6 rounded-2xl border border-white/5 bg-gradient-to-br from-black/60 to-[#0c0f1d]/40 backdrop-blur-md overflow-hidden relative">
+                            <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                              <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Automation Engine</span>
+                              <span className="text-[#00D4FF] font-mono text-[10px] font-bold">AUTOPILOT</span>
+                            </div>
+                            <div className="space-y-3">
+                              <div className="flex items-center gap-2.5 p-1.5 rounded hover:bg-white/[0.02] transition-colors duration-200">
+                                <div className="w-6 h-6 rounded bg-[#00D4FF]/15 border border-[#00D4FF]/25 flex items-center justify-center text-[#00D4FF] text-[10px] font-mono font-semibold">1</div>
+                                <div className="flex-1">
+                                  <div className="text-[11px] text-white/80 font-semibold leading-none">Formulario Enviado</div>
+                                  <span className="text-[8px] text-white/40 font-mono">Conversión directa</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2.5 p-1.5 rounded hover:bg-white/[0.02] transition-colors duration-200">
+                                <div className="w-6 h-6 rounded bg-[#FF9D00]/15 border border-[#FF9D00]/25 flex items-center justify-center text-[#FF9D00] text-[10px] font-mono font-semibold">2</div>
+                                <div className="flex-1">
+                                  <div className="text-[11px] text-white/80 font-semibold leading-none">Google Calendar</div>
+                                  <span className="text-[8px] text-white/40 font-mono">Reunión programada</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2.5 p-1.5 rounded hover:bg-white/[0.02] transition-colors duration-200">
+                                <div className="w-6 h-6 rounded bg-[#39FF14]/15 border border-[#39FF14]/25 flex items-center justify-center text-[#39FF14] text-[10px] font-mono font-semibold">3</div>
+                                <div className="flex-1">
+                                  <div className="text-[11px] text-white/80 font-semibold leading-none">Slack & Mail Triggered</div>
+                                  <span className="text-[8px] text-white/40 font-mono">Notificación de Lead</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute -top-10 -right-10 w-24 h-24 rounded-full bg-[#00D4FF]/10 blur-xl pointer-events-none"></div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop View - Bento Grid */}
+        <div className="hidden lg:grid lg:grid-cols-3 gap-4 lg:gap-6">
           {benefits.map((benefit, index) => (
             <motion.div 
               key={index} 
@@ -202,68 +697,68 @@ const BenefitsSection = () => {
                   backdropFilter: 'blur(4px)',
                   border: '1px solid rgba(255,255,255,0.05)',
                 }}
-            >
-              {/* Hover Glow Effect */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#145BFF]/10 to-transparent"></div>
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#145BFF]/50 to-transparent"></div>
-              </div>
-
-              {/* Corner Neon Glows */}
-              <motion.div 
-                animate={{ 
-                  backgroundColor: ["#145BFF", "#FFFFFF", "#145BFF"],
-                  opacity: [0.4, 0.15, 0.4],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
-                className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
-              />
-              <motion.div 
-                animate={{ 
-                  backgroundColor: ["#FFFFFF", "#145BFF", "#FFFFFF"],
-                  opacity: [0.15, 0.4, 0.15],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
-                className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
-              />
-
-              <div className="relative z-10 h-full flex flex-col md:flex-row gap-6 md:gap-8">
-                <div className="flex flex-col flex-1">
-                  <div className="w-12 h-12 rounded-2xl bg-[#145BFF]/10 border border-[#145BFF]/20 flex items-center justify-center mb-6 text-[#3B7BFF] group-hover:scale-110 group-hover:text-white group-hover:bg-[#145BFF]/30 transition-all duration-500">
-                    {benefit.icon}
-                  </div>
-                  
-                  <h3 className="text-xl md:text-2xl font-heading text-white mb-4 tracking-tight transition-all duration-300">
-                    {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
-                    <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
-                      {benefit.title.split(" ").slice(-1)}
-                    </span>
-                  </h3>
-                  
-                  {benefit.description && (
-                    <p className={`hidden md:block ${index === 0 ? '' : 'lg:hidden'} text-[#CFCFD4]/70 font-body text-sm leading-relaxed mb-6 font-light`}>
-                      {benefit.description}
-                    </p>
-                  )}
-                  
-                  <ul className="space-y-3 mt-4 md:mt-auto">
-                    {benefit.bullets.map((bullet, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[#CFCFD4]/80 font-body text-sm md:text-base leading-relaxed font-light">
-                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#145BFF] shrink-0 shadow-[0_0_8px_rgba(20,91,255,0.8)]"></div>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+              >
+                {/* Hover Glow Effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#145BFF]/10 to-transparent"></div>
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#145BFF]/50 to-transparent"></div>
                 </div>
 
-                {index === 0 && (
-                  <div className="flex flex-col w-full md:w-[45%] lg:w-[40%] xl:w-[360px] shrink-0 relative min-h-[280px] max-h-[360px] mt-6 md:mt-0 xl:ml-auto">
-                    <AnimatedDashboard />
+                {/* Corner Neon Glows */}
+                <motion.div 
+                  animate={{ 
+                    backgroundColor: ["#145BFF", "#FFFFFF", "#145BFF"],
+                    opacity: [0.4, 0.15, 0.4],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
+                  className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
+                />
+                <motion.div 
+                  animate={{ 
+                    backgroundColor: ["#FFFFFF", "#145BFF", "#FFFFFF"],
+                    opacity: [0.15, 0.4, 0.15],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
+                  className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
+                />
+
+                <div className="relative z-10 h-full flex flex-col lg:flex-row gap-6 lg:gap-8">
+                  <div className="flex flex-col flex-1">
+                    <div className="w-12 h-12 rounded-2xl bg-[#145BFF]/10 border border-[#145BFF]/20 flex items-center justify-center mb-6 text-[#3B7BFF] group-hover:scale-110 group-hover:text-white group-hover:bg-[#145BFF]/30 transition-all duration-500">
+                      {benefit.icon}
+                    </div>
+                    
+                    <h3 className="text-xl md:text-2xl font-heading text-white mb-4 tracking-tight transition-all duration-300">
+                      {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
+                      <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
+                        {benefit.title.split(" ").slice(-1)}
+                      </span>
+                    </h3>
+                    
+                    {benefit.description && (
+                      <p className={`hidden md:block ${index === 0 ? '' : 'lg:hidden'} text-[#CFCFD4]/70 font-body text-sm leading-relaxed mb-6 font-light`}>
+                        {benefit.description}
+                      </p>
+                    )}
+                    
+                    <ul className={`space-y-3 mt-4 ${index === 0 ? 'lg:mt-auto' : 'md:mt-auto'}`}>
+                      {benefit.bullets.map((bullet, i) => (
+                        <li key={i} className="flex items-start gap-3 text-[#CFCFD4]/80 font-body text-sm md:text-base leading-relaxed font-light">
+                          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#145BFF] shrink-0 shadow-[0_0_8px_rgba(20,91,255,0.8)]"></div>
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                )}
-              </div>
+
+                  {index === 0 && (
+                    <div className="flex flex-col w-full lg:w-[42%] xl:w-[360px] shrink-0 relative min-h-[280px] max-h-[360px] mt-6 lg:mt-0 xl:ml-auto">
+                      <AnimatedDashboard />
+                    </div>
+                  )}
+                </div>
               </motion.div>
             </motion.div>
           ))}

@@ -11,11 +11,21 @@ const ServicesSection = () => {
       title: language === 'es' ? "Landing Pages de Alta Conversión" : "High-Conversion Landing Pages",
       description: language === 'es' ? (
         <>
-          Diseñadas sobre principios de psicología de consumo para capturar leads calificados en tiempo récord. Eliminamos menús innecesarios para concentrar al usuario en un único objetivo: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">la conversión</span>.
+          <span className="hidden md:inline">
+            Diseñadas sobre principios de psicología de consumo para capturar leads calificados en tiempo récord. Eliminamos menús innecesarios para concentrar al usuario en un único objetivo: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">la conversión</span>.
+          </span>
+          <span className="inline md:hidden">
+            Diseñadas bajo psicología de consumo para capturar prospectos calificados, eliminando lo innecesario para un único fin: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">la conversión</span>.
+          </span>
         </>
       ) : (
         <>
-          Engineered using consumer psychology principles to capture highly qualified leads in record time. We eliminate friction to focus the visitor on a single call-to-action: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">conversion</span>.
+          <span className="hidden md:inline">
+            Engineered using consumer psychology principles to capture highly qualified leads in record time. We eliminate friction to focus the visitor on a single call-to-action: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">conversion</span>.
+          </span>
+          <span className="inline md:hidden">
+            Built using behavioral psychology to capture ideal leads with zero friction, focused purely on: <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">conversion</span>.
+          </span>
         </>
       ),
       features: language === 'es' ? [
@@ -35,11 +45,21 @@ const ServicesSection = () => {
       title: language === 'es' ? "E-Commerce Premium" : "Premium E-Commerce",
       description: language === 'es' ? (
         <>
-          Sistemas de venta directa desarrollados a medida. Integramos pasarelas locales como <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe, PayPal y ATH Móvil</span> garantizando una experiencia de pago segura y sin comisiones abusivas de terceros.
+          <span className="hidden md:inline">
+            Sistemas de venta directa desarrollados a medida. Integramos pasarelas locales como <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe, PayPal y ATH Móvil</span> garantizando una experiencia de pago segura y sin comisiones abusivas de terceros.
+          </span>
+          <span className="inline md:hidden">
+            Tiendas online optimizadas con pasarelas de pago directas como <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe y ATH Móvil</span> libres de comisiones abusivas.
+          </span>
         </>
       ) : (
         <>
-          Custom-built direct sales architectures. We integrate localized gateways like <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe, PayPal, and ATH Movil</span> to ensure quick checkout flows without high intermediary fees.
+          <span className="hidden md:inline">
+            Custom-built direct sales architectures. We integrate localized gateways like <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe, PayPal, and ATH Movil</span> to ensure quick checkout flows without high intermediary fees.
+          </span>
+          <span className="inline md:hidden">
+            Bespoke e-commerce with zero external fees, integrating gateways like <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">Stripe & ATH Movil</span>.
+          </span>
         </>
       ),
       features: language === 'es' ? [
@@ -59,11 +79,21 @@ const ServicesSection = () => {
       title: language === 'es' ? "Webs Corporativas de Autoridad" : "Authority Corporate Websites",
       description: language === 'es' ? (
         <>
-          Soluciones multi-página robustas y estructuradas con <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">SEO técnico integrado</span>. Diseñadas para consolidar la presencia comercial de firmas locales o consultoras de alto perfil.
+          <span className="hidden md:inline">
+            Soluciones multi-página robustas y estructuradas con <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">SEO técnico integrado</span>. Diseñadas para consolidar la presencia comercial de firmas locales o consultoras de alto perfil.
+          </span>
+          <span className="inline md:hidden">
+            Estructuras multi-página excepcionales con <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">SEO técnico integrado</span> para dominar búsquedas locales.
+          </span>
         </>
       ) : (
         <>
-          Robust and well-structured multi-page solutions powered by <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">fully integrated technical SEO</span>. Designed to secure the search footprint for consulting firms and local enterprises.
+          <span className="hidden md:inline">
+            Robust and well-structured multi-page solutions powered by <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">fully integrated technical SEO</span>. Designed to secure the search footprint for consulting firms and local enterprises.
+          </span>
+          <span className="inline md:hidden">
+            Multi-page corporate platforms packing deep <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">technical SEO</span> to absolute rule local searches.
+          </span>
         </>
       ),
       features: language === 'es' ? [
@@ -83,11 +113,21 @@ const ServicesSection = () => {
       title: language === 'es' ? "Plataformas de Reserva Directa" : "Direct Booking Systems",
       description: language === 'es' ? (
         <>
-          La solución perfecta para paradores, alquileres a corto plazo y clínicas en Puerto Rico. Automatiza citas y cobros de reservas de forma independiente, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">reteniendo el 100% de tu margen de ganancia</span>.
+          <span className="hidden md:inline">
+            La solución perfecta para paradores, alquileres a corto plazo y clínicas en Puerto Rico. Automatiza citas y cobros de reservas de forma independiente, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">reteniendo el 100% de tu margen de ganancia</span>.
+          </span>
+          <span className="inline md:hidden">
+            Ideales para alquileres o clínicas de Puerto Rico. Automatiza citas libres de comisiones externas, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">reteniendo el 100% de tu margen</span>.
+          </span>
         </>
       ) : (
         <>
-          The ideal engine for guest houses, rentals, and private clinics. Automate reservations and bookings independently on your own terms, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">keeping 100% of your operational profit</span>.
+          <span className="hidden md:inline">
+            The ideal engine for guest houses, rentals, and private clinics. Automate reservations and bookings independently on your own terms, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">keeping 100% of your operational profit</span>.
+          </span>
+          <span className="inline md:hidden">
+            Direct scheduler platforms for guest rentals and private clinics, <span className="text-[#3B7BFF] font-semibold drop-shadow-[0_0_15px_rgba(20,91,255,0.9)]">saving 100% of booking fees</span>.
+          </span>
         </>
       ),
       features: language === 'es' ? [

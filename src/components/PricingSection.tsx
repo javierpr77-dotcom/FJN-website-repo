@@ -233,7 +233,7 @@ const PricingSection = () => {
       id: "plan-website",
       name: language === 'es' ? "Website Premium" : "Websites Premium",
       titleIcon: <Crown className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "3,200",
+      price: "3,249",
       idealForBullets: language === 'es' ? [
         <>Compañías y marcas corporativas con servicios múltiples que exigen un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">website de nivel internacional</span>.</>,
         <>Empresas consolidadas en Puerto Rico y EE.UU. enfocadas en <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">liderar su categoría con máxima autoridad</span>.</>,

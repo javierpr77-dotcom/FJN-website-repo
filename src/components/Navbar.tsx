@@ -185,10 +185,11 @@ const Navbar = () => {
             {showNavItems && menuItems.filter(item => item.key !== "consultas").map((item, index) => (
               <motion.button
                 key={item.key}
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 20, y: 0 }}
                 animate={item.key === "portfolio" ? {
                   opacity: [0.95, 1, 0.95],
                   x: 0,
+                  y: [0, -3.5, 0],
                   scale: [1, 1.05, 1],
                   filter: [
                     "drop-shadow(0 0 4px rgba(255,255,255,0.7)) drop-shadow(0 0 2px rgba(255,255,255,0.5))",
@@ -201,15 +202,18 @@ const Navbar = () => {
                     filter: { repeat: Infinity, duration: 2, ease: "easeInOut" },
                     opacity: { repeat: Infinity, duration: 2, ease: "easeInOut" },
                     x: { duration: 0.4, delay: index * 0.1, ease: "easeOut" },
+                    y: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: index * 0.3 },
                     backgroundPosition: { duration: 8, repeat: Infinity, ease: "linear" }
                   }
                 } : { 
                   opacity: 1, 
                   x: 0,
+                  y: [0, -3.5, 0],
                   backgroundPosition: ["0% 50%", "200% 50%"],
                   transition: {
                     opacity: { duration: 0.4, delay: index * 0.1, ease: "easeOut" },
                     x: { duration: 0.4, delay: index * 0.1, ease: "easeOut" },
+                    y: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: index * 0.3 },
                     backgroundPosition: { duration: 8, repeat: Infinity, ease: "linear" }
                   }
                 }}
@@ -247,10 +251,18 @@ const Navbar = () => {
           <AnimatePresence>
             {showNavItems && (
               <motion.button
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: 10, y: 0 }}
+                animate={{ 
+                  opacity: 1, 
+                  x: 0,
+                  y: [0, -3.5, 0]
+                }}
                 exit={{ opacity: 0, x: 10 }}
-                transition={{ duration: 0.4 }}
+                transition={{ 
+                  opacity: { duration: 0.4 },
+                  x: { duration: 0.4 },
+                  y: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1.2 }
+                }}
                 onClick={() => handleNavigation("consultas")}
                 className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block cursor-pointer transition-all duration-300"
                 style={{

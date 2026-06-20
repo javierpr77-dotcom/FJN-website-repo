@@ -32,43 +32,43 @@ const AnimatedDashboard = () => {
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 shadow-[0_0_8px_rgba(234,179,8,0.6)]" />
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/80 shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
         </div>
-        <div className="text-[10px] uppercase font-mono tracking-widest text-[#00D4FF] font-medium flex items-center gap-1.5">
-          <Cpu className="w-3 h-3" />
+        <div className="text-[8px] xs:text-[9.5px] sm:text-[10px] uppercase font-mono tracking-normal xs:tracking-widest text-[#00D4FF] font-medium flex items-center gap-1 xs:gap-1.5 shrink-0 whitespace-nowrap">
+          <Cpu className="w-2.5 h-2.5 xs:w-3 xs:h-3 text-[#00D4FF] shrink-0" />
           {language === 'es' ? 'Núcleo de I.A.' : 'A.I. Core'}
         </div>
       </div>
 
       {/* Grid Layout (Top 2 Metrics) */}
-      <div className="grid grid-cols-2 gap-3 relative z-10 shrink-0">
+      <div className="grid grid-cols-2 gap-2 xs:gap-3 relative z-10 shrink-0">
         {/* Metric 1: Conversion */}
         <motion.div
-          className="bg-white/[0.03] rounded-xl p-3 flex flex-col justify-between border border-white/5 relative overflow-hidden backdrop-blur-md hover:bg-white/[0.06] transition-colors"
+          className="bg-white/[0.03] rounded-xl p-2 sm:p-3 flex flex-col justify-between border border-white/5 relative overflow-hidden backdrop-blur-md hover:bg-white/[0.06] transition-colors"
           whileHover={{ y: -2 }}
         >
-          <div className="flex items-center gap-2 text-white/60 mb-2">
-            <TrendingUp className="w-4 h-4 text-[#00D4FF]" />
-            <span className="text-[10px] font-medium uppercase tracking-wider text-white/80 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 text-white/60 mb-1.5">
+            <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00D4FF] shrink-0" />
+            <span className="text-[8.5px] xs:text-[9.5px] sm:text-[10px] font-medium uppercase tracking-wider text-white/80 shrink-0 truncate">
               {language === 'es' ? 'Conversión' : 'Conversion'}
             </span>
           </div>
           
-          <div className="flex items-end gap-1.5">
+          <div className="flex flex-wrap items-end gap-1 sm:gap-1.5 w-full">
             <motion.span
               key={conversion}
               initial={{ opacity: 0.5, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-xl lg:text-2xl font-bold text-white drop-shadow-[0_0_12px_rgba(0,212,255,0.8)] font-mono"
+              className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold text-white drop-shadow-[0_0_12px_rgba(0,212,255,0.8)] font-mono leading-none shrink-0"
             >
               {conversion}%
             </motion.span>
-            <div className="flex items-center text-[10px] text-green-400 font-medium mb-1 drop-shadow-[0_0_5px_rgba(34,197,94,0.8)] bg-green-400/10 px-1 py-0.5 rounded">
-               <ArrowUpRight className="w-3 h-3 mr-0.5" />
+            <div className="flex items-center text-[7.5px] xs:text-[8.5px] sm:text-[9px] text-green-400 font-medium mb-0.5 drop-shadow-[0_0_5px_rgba(34,197,94,0.8)] bg-green-400/10 px-1 py-0.5 rounded shrink-0 select-none">
+               <ArrowUpRight className="w-2.5 h-2.5 mr-0.5 shrink-0" />
                3.2%
             </div>
           </div>
           
           {/* Animated Graph lines */}
-          <div className="mt-3 flex items-end gap-1 h-6">
+          <div className="mt-2.5 flex items-end gap-1 h-6">
             {[40, 25, 50, 45, 75, 60, 95].map((h, i) => (
               <motion.div
                 key={i}
@@ -89,33 +89,33 @@ const AnimatedDashboard = () => {
 
         {/* Metric 2: Agent Activity */}
         <motion.div
-          className="bg-white/[0.03] rounded-xl p-3 flex flex-col justify-between border border-white/5 relative overflow-hidden backdrop-blur-md hover:bg-white/[0.06] transition-colors"
+          className="bg-white/[0.03] rounded-xl p-2 sm:p-3 flex flex-col justify-between border border-white/5 relative overflow-hidden backdrop-blur-md hover:bg-white/[0.06] transition-colors"
           whileHover={{ y: -2 }}
         >
-          <div className="flex items-center gap-2 text-white/60 mb-2">
-            <Bot className="w-4 h-4 text-[#A855F7]" />
-            <span className="text-[10px] font-medium uppercase tracking-wider text-white/80 shrink-0 truncate">
+          <div className="flex items-center gap-1 sm:gap-2 text-white/60 mb-1.5">
+            <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#A855F7] shrink-0" />
+            <span className="text-[8.5px] xs:text-[9.5px] sm:text-[10px] font-medium uppercase tracking-wider text-white/80 shrink-0 truncate">
               {language === 'es' ? 'Agentes' : 'Agents'}
             </span>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <motion.span
               key={agents}
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
-              className="text-xl lg:text-2xl font-bold text-white drop-shadow-[0_0_12px_rgba(168,85,247,0.8)] font-mono"
+              className="text-base xs:text-lg sm:text-xl lg:text-2xl font-bold text-white drop-shadow-[0_0_12px_rgba(168,85,247,0.8)] font-mono leading-none shrink-0"
             >
               {agents}
             </motion.span>
-            <span className="relative flex h-2.5 w-2.5">
+            <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5 shrink-0 mb-0.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400/80"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,1)]"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,1)]"></span>
             </span>
           </div>
 
           {/* Radar / Node visual */}
-          <div className="mt-2 relative w-full h-8 flex items-center justify-center">
+          <div className="mt-1 relative w-full h-8 flex items-center justify-center">
              <motion.div 
                animate={{ rotate: 360 }} 
                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
@@ -137,10 +137,10 @@ const AnimatedDashboard = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-[#F59E0B]/5 to-transparent pointer-events-none" />
         
-        <div className="flex flex-col justify-center h-full p-2.5 z-10 w-[45%] border-r border-white/5">
+        <div className="flex flex-col justify-center h-full p-2 sm:p-2.5 z-10 w-[45%] border-r border-white/5">
           <div className="flex items-center gap-1.5 text-white/60 mb-1">
-            <Users className="w-3.5 h-3.5 text-[#F59E0B]" />
-            <span className="text-[9px] font-medium uppercase tracking-wider text-white/80">
+            <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F59E0B] shrink-0" />
+            <span className="text-[8px] xs:text-[9px] font-medium uppercase tracking-wider text-white/80 truncate">
               {language === 'es' ? 'Túnel Leads' : 'Leads Funnel'}
             </span>
           </div>
@@ -148,7 +148,7 @@ const AnimatedDashboard = () => {
             key={leads}
             initial={{ scale: 0.95 }}
             animate={{ scale: 1 }}
-            className="text-lg lg:text-xl font-bold text-white drop-shadow-[0_0_12px_rgba(245,158,11,0.8)] font-mono"
+            className="text-sm xs:text-base sm:text-lg lg:text-xl font-bold text-white drop-shadow-[0_0_12px_rgba(245,158,11,0.8)] font-mono"
           >
             +{leads.toLocaleString()}
           </motion.span>
