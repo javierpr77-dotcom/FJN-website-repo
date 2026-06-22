@@ -26,9 +26,9 @@ const BenefitsSection = () => {
     {
       title: language === 'es' ? "Arquitectura de Conversión" : "Conversion Architecture",
       description: language === 'es' ? (
-        <>Cada píxel está estructurado para capturar el interés del usuario. Diseñamos sistemas interactivos que reducen la fricción cognitiva para guiar sistemáticamente a los visitantes hacia <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">la toma de decisiones directas</span> o cotizaciones instantáneas.</>
+        <>Diseñamos flujos interactivos que de forma natural y sin fricciones guían a tus visitas hacia <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">decisiones directas</span> o cotizaciones instantáneas.</>
       ) : (
-        <>Every pixel is structured to secure the user's attention. We design interactive systems that minimize cognitive friction to guide visitors toward <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">direct decision-making</span> or instant quotes.</>
+        <>We design interactive, friction-free layouts that naturally guide your visitors toward <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">direct actions</span> or instant quotes.</>
       ),
       bullets: language === 'es' ? [
         <>Estructuración por análisis de <span className="text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]">mapas de calor</span> reales.</>,
@@ -44,7 +44,7 @@ const BenefitsSection = () => {
       delay: 0.1,
     },
     {
-      title: language === 'es' ? "Cero Plantillas. Código Puro" : "Zero Templates. Pure Code",
+      title: language === 'es' ? "Cero Plantillas. 100% Personificadas" : "Zero Templates. 100% Personalized",
       description: language === 'es' ? (
         <>Desarrollamos interfaces totalmente personalizadas escritas a mano. Evitamos constructores pesados como WordPress o Elementor para garantizar una robustez técnica incontestable.</>
       ) : (
@@ -248,63 +248,132 @@ const BenefitsSection = () => {
 
         {/* Mobile View - Standard Stack */}
         <div className="grid grid-cols-1 md:hidden gap-4">
-          {benefits.map((benefit, index) => (
-            <motion.div 
-              key={index} 
-              className="w-full"
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: index * 1.5 }}
-            >
-              <div
-                className={`group relative rounded-3xl p-6 overflow-hidden`}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(13,18,32,0.15) 0%, rgba(5,5,7,0.25) 100%)',
-                  backdropFilter: 'blur(4px)',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                }}
+          {benefits.map((benefit, index) => {
+            const theme = cardThemes[index];
+            return (
+              <motion.div 
+                key={index} 
+                className="w-full"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: index * 1.5 }}
               >
-                <div className="relative z-10 h-full flex flex-col gap-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-[#145BFF]/10 border border-[#145BFF]/20 flex items-center justify-center text-[#3B7BFF]">
-                      {benefit.icon}
-                    </div>
-                    <h3 className="text-lg font-heading text-white tracking-tight">
-                      {index === 1 && language === 'es' ? (
-                        <>
-                          Cero plantillas.{" "}
-                          <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
-                            Cien porcientos personificadas
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
-                          <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
-                            {benefit.title.split(" ").slice(-1)}
-                          </span>
-                        </>
-                      )}
-                    </h3>
+                <div
+                  className={`group relative rounded-3xl p-6 overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer`}
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(13,18,32,0.15) 0%, rgba(5,5,7,0.25) 100%)',
+                    backdropFilter: 'blur(4px)',
+                    border: `1px solid ${theme.rawColor}15`,
+                  }}
+                >
+                  {/* Hover Glow Effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${theme.rawColor}10 0%, transparent 100%)` }}></div>
+                    <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${theme.rawColor}60, transparent)` }}></div>
                   </div>
 
-                  <ul className="space-y-2.5">
-                    {benefit.bullets.map((bullet, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[#CFCFD4]/80 font-body text-xs leading-relaxed font-light">
-                        <div className="mt-1.2 w-1.5 h-1.5 rounded-full bg-[#145BFF] shrink-0 shadow-[0_0_8px_rgba(20,91,255,0.8)]"></div>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Corner Neon Glows */}
+                  <motion.div 
+                    animate={{ 
+                      backgroundColor: [theme.rawColor, "#FFFFFF", theme.rawColor],
+                      opacity: [0.35, 0.12, 0.35],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
+                    className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
+                  />
+                  <motion.div 
+                    animate={{ 
+                      backgroundColor: ["#FFFFFF", theme.rawColor, "#FFFFFF"],
+                      opacity: [0.12, 0.35, 0.12],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
+                    className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
+                  />
 
-                  {index === 0 && (
-                    <div className="w-full shrink-0 relative min-h-[220px] max-h-[280px] mt-4">
-                      <AnimatedDashboard />
+                  <div className="relative z-10 h-full flex flex-col gap-5">
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-350 shrink-0"
+                        style={{
+                          backgroundColor: `${theme.rawColor}15`,
+                          border: `1px solid ${theme.rawColor}70`,
+                          boxShadow: `0 0 14px ${theme.rawColor}50, inset 0 0 6px ${theme.rawColor}30`,
+                          color: theme.rawColor
+                        }}
+                      >
+                        {benefit.icon}
+                      </div>
+                      <h3 className="text-lg font-heading text-white tracking-tight">
+                        {index === 1 ? (
+                          language === 'es' ? (
+                            <>
+                              Cero plantillas.{" "}
+                              <span 
+                                className="block mt-0.5"
+                                style={{
+                                  color: theme.rawColor,
+                                  textShadow: `0 0 10px ${theme.rawColor}CC`
+                                }}
+                              >
+                                100% personificadas
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              Zero templates.{" "}
+                              <span 
+                                className="block mt-0.5"
+                                style={{
+                                  color: theme.rawColor,
+                                  textShadow: `0 0 10px ${theme.rawColor}CC`
+                                }}
+                              >
+                                100% personalized
+                              </span>
+                            </>
+                          )
+                        ) : (
+                          <>
+                            {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
+                            <span 
+                              style={{
+                                color: theme.rawColor,
+                                textShadow: `0 0 10px ${theme.rawColor}CC`
+                              }}
+                            >
+                              {benefit.title.split(" ").slice(-1)}
+                            </span>
+                          </>
+                        )}
+                      </h3>
                     </div>
-                  )}
+
+                    <ul className="space-y-2.5">
+                      {benefit.bullets.map((bullet, i) => (
+                        <li key={i} className="flex items-start gap-2 text-[#CFCFD4]/80 font-body text-xs leading-relaxed font-light">
+                          <div 
+                            className="mt-1.2 w-1.5 h-1.5 rounded-full shrink-0" 
+                            style={{
+                              backgroundColor: theme.rawColor,
+                              boxShadow: `0 0 8px ${theme.rawColor}`
+                            }}
+                          ></div>
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {index === 0 && (
+                      <div className="w-full shrink-0 relative min-h-[220px] max-h-[280px] mt-4">
+                        <AnimatedDashboard />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Tablet View - Sticky Scroll Card Stacking entering from Right */}
@@ -345,8 +414,8 @@ const BenefitsSection = () => {
 
                 if (index === 0) {
                   description = isEs 
-                    ? "Cada píxel está estructurado tácticamente para dirigir al visitante a la conversión directa sin fricciones."
-                    : "Every pixel is tactically structured to capture attention and direct users to straightforward conversion.";
+                    ? "Diseñamos flujos interactivos que de forma natural y sin fricciones guían a tus visitas."
+                    : "We design interactive, friction-free layouts that naturally guide your visitors.";
                   bullets = isEs ? [
                     <>Diseño con <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>mapas de calor</span> reales.</>,
                     <>Flujos de <span className="text-white font-semibold" style={{ textShadow: "0 0 10px rgba(255,255,255,0.9), 0 0 2px rgba(255,255,255,1)" }}>conversión</span> limpios directos.</>,
@@ -684,89 +753,111 @@ const BenefitsSection = () => {
 
         {/* Desktop View - Bento Grid */}
         <div className="hidden lg:grid lg:grid-cols-3 gap-4 lg:gap-6">
-          {benefits.map((benefit, index) => (
-            <motion.div 
-              key={index} 
-              className={`${benefit.colSpan}`}
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: index * 1.5 }}
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.7, delay: benefit.delay, type: "spring", stiffness: 50 }}
-                className={`group relative rounded-3xl p-8 md:p-10 overflow-hidden h-full`}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(13,18,32,0.15) 0%, rgba(5,5,7,0.25) 100%)',
-                  backdropFilter: 'blur(4px)',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                }}
+          {benefits.map((benefit, index) => {
+            const theme = cardThemes[index];
+            return (
+              <motion.div 
+                key={index} 
+                className={`${benefit.colSpan}`}
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: index * 1.5 }}
               >
-                {/* Hover Glow Effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#145BFF]/10 to-transparent"></div>
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#145BFF]/50 to-transparent"></div>
-                </div>
-
-                {/* Corner Neon Glows */}
-                <motion.div 
-                  animate={{ 
-                    backgroundColor: ["#145BFF", "#FFFFFF", "#145BFF"],
-                    opacity: [0.4, 0.15, 0.4],
-                    scale: [1, 1.1, 1]
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.7, delay: benefit.delay, type: "spring", stiffness: 50 }}
+                  className={`group relative rounded-3xl p-8 md:p-10 overflow-hidden h-full`}
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(13,18,32,0.15) 0%, rgba(5,5,7,0.25) 100%)',
+                    backdropFilter: 'blur(4px)',
+                    border: '1px solid rgba(255,255,255,0.05)',
                   }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
-                  className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
-                />
-                <motion.div 
-                  animate={{ 
-                    backgroundColor: ["#FFFFFF", "#145BFF", "#FFFFFF"],
-                    opacity: [0.15, 0.4, 0.15],
-                    scale: [1, 1.1, 1]
-                  }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
-                  className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
-                />
-
-                <div className="relative z-10 h-full flex flex-col lg:flex-row gap-6 lg:gap-8">
-                  <div className="flex flex-col flex-1">
-                    <div className="w-12 h-12 rounded-2xl bg-[#145BFF]/10 border border-[#145BFF]/20 flex items-center justify-center mb-6 text-[#3B7BFF] group-hover:scale-110 group-hover:text-white group-hover:bg-[#145BFF]/30 transition-all duration-500">
-                      {benefit.icon}
-                    </div>
-                    
-                    <h3 className="text-xl md:text-2xl font-heading text-white mb-4 tracking-tight transition-all duration-300">
-                      {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
-                      <span className="text-[#145BFF] drop-shadow-[0_0_12px_rgba(20,91,255,0.9)]">
-                        {benefit.title.split(" ").slice(-1)}
-                      </span>
-                    </h3>
-                    
-                    {benefit.description && (
-                      <p className={`hidden md:block ${index === 0 ? '' : 'lg:hidden'} text-[#CFCFD4]/70 font-body text-sm leading-relaxed mb-6 font-light`}>
-                        {benefit.description}
-                      </p>
-                    )}
-                    
-                    <ul className={`space-y-3 mt-4 ${index === 0 ? 'lg:mt-auto' : 'md:mt-auto'}`}>
-                      {benefit.bullets.map((bullet, i) => (
-                        <li key={i} className="flex items-start gap-3 text-[#CFCFD4]/80 font-body text-sm md:text-base leading-relaxed font-light">
-                          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#145BFF] shrink-0 shadow-[0_0_8px_rgba(20,91,255,0.8)]"></div>
-                          <span>{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
+                >
+                  {/* Hover Glow Effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${theme.rawColor}10 0%, transparent 100%)` }}></div>
+                    <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${theme.rawColor}60, transparent)` }}></div>
                   </div>
 
-                  {index === 0 && (
-                    <div className="flex flex-col w-full lg:w-[42%] xl:w-[360px] shrink-0 relative min-h-[280px] max-h-[360px] mt-6 lg:mt-0 xl:ml-auto">
-                      <AnimatedDashboard />
+                  {/* Corner Neon Glows */}
+                  <motion.div 
+                    animate={{ 
+                      backgroundColor: [theme.rawColor, "#FFFFFF", theme.rawColor],
+                      opacity: [0.35, 0.12, 0.35],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
+                    className="absolute -top-20 -left-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
+                  />
+                  <motion.div 
+                    animate={{ 
+                      backgroundColor: ["#FFFFFF", theme.rawColor, "#FFFFFF"],
+                      opacity: [0.12, 0.35, 0.12],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: index * 1.2 }}
+                    className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[60px] pointer-events-none"
+                  />
+
+                  <div className="relative z-10 h-full flex flex-col lg:flex-row gap-6 lg:gap-8">
+                    <div className="flex flex-col flex-1">
+                      <div 
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110"
+                        style={{
+                          backgroundColor: `${theme.rawColor}15`,
+                          border: `1px solid ${theme.rawColor}70`,
+                          boxShadow: `0 0 16px ${theme.rawColor}60, inset 0 0 8px ${theme.rawColor}30`,
+                          color: theme.rawColor
+                        }}
+                      >
+                        {benefit.icon}
+                      </div>
+                      
+                      <h3 className="text-xl md:text-2xl font-heading text-white mb-4 tracking-tight transition-all duration-300">
+                        {benefit.title.split(" ").slice(0, -1).join(" ")}{" "}
+                        <span 
+                          style={{
+                            color: theme.rawColor,
+                            textShadow: `0 0 12px ${theme.rawColor}80`
+                          }}
+                        >
+                          {benefit.title.split(" ").slice(-1)}
+                        </span>
+                      </h3>
+                      
+                      {benefit.description && (
+                        <p className={`hidden md:block ${index === 0 ? '' : 'lg:hidden'} text-[#CFCFD4]/70 font-body text-sm leading-relaxed mb-6 font-light`}>
+                          {benefit.description}
+                        </p>
+                      )}
+                      
+                      <ul className={`space-y-3 mt-4 ${index === 0 ? 'lg:mt-auto' : 'md:mt-auto'}`}>
+                        {benefit.bullets.map((bullet, i) => (
+                          <li key={i} className="flex items-start gap-3 text-[#CFCFD4]/80 font-body text-sm md:text-base leading-relaxed font-light">
+                            <div 
+                              className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0"
+                              style={{
+                                backgroundColor: theme.rawColor,
+                                boxShadow: `0 0 8px ${theme.rawColor}`
+                              }}
+                            ></div>
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  )}
-                </div>
+
+                    {index === 0 && (
+                      <div className="flex flex-col w-full lg:w-[42%] xl:w-[360px] shrink-0 relative min-h-[280px] max-h-[360px] mt-6 lg:mt-0 xl:ml-auto">
+                        <AnimatedDashboard />
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
 
       </div>
