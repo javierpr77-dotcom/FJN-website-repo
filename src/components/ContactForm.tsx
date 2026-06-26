@@ -65,6 +65,39 @@ const ContactForm = () => {
     "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM", "06:00 PM"
   ];
 
+  const getAvailableTimeSlots = (date: Date | null) => {
+    if (!date) return [];
+    const isToday = isSameDay(date, new Date());
+    if (!isToday) return timeSlots;
+
+    const now = new Date();
+    const currentHours = now.getHours();
+    const currentMinutes = now.getMinutes();
+
+    return timeSlots.filter(slot => {
+      const match = slot.match(/^(\d{2}):(\d{2})\s*(AM|PM)$/i);
+      if (!match) return true;
+
+      let hours = parseInt(match[1], 10);
+      const minutes = parseInt(match[2], 10);
+      const ampm = match[3].toUpperCase();
+
+      if (ampm === "PM" && hours !== 12) {
+        hours += 12;
+      } else if (ampm === "AM" && hours === 12) {
+        hours = 0;
+      }
+
+      if (currentHours > hours) {
+        return false;
+      }
+      if (currentHours === hours && currentMinutes >= minutes) {
+        return false;
+      }
+      return true;
+    });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -661,24 +694,30 @@ const ContactForm = () => {
                         {language === 'es' ? 'Horas disponibles (' : 'Available times ('}{format(selectedDate, 'MMM d', { locale: language === 'es' ? es : enUS })})
                       </label>
                       <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5 overflow-y-auto max-h-[75px] pr-1 pb-1 custom-scrollbar">
-                        {timeSlots.map((time, i) => {
-                          const selected = selectedTime === time;
-                          return (
-                            <button
-                              key={i}
-                              type="button"
-                              onClick={() => setSelectedTime(time)}
-                              className={`
-                                py-1.5 px-1 rounded-lg text-[10px] font-body transition-all duration-300 border
-                                ${selected 
-                                  ? 'bg-[#145BFF] border-[#3B7BFF] text-white shadow-[0_0_10px_rgba(20,91,255,0.4)]' 
-                                  : 'bg-white/5 border-white/5 text-white/70 hover:bg-white/10 hover:border-white/20 hover:text-white hover:shadow-[0_0_8px_rgba(255,255,255,0.3)]'}
-                              `}
-                            >
-                              {time}
-                            </button>
-                          );
-                        })}
+                        {getAvailableTimeSlots(selectedDate).length === 0 ? (
+                          <div className="col-span-full py-3 text-center text-white/40 text-xs font-body">
+                            {language === 'es' ? 'No quedan horarios disponibles para hoy' : 'No available times left for today'}
+                          </div>
+                        ) : (
+                          getAvailableTimeSlots(selectedDate).map((time, i) => {
+                            const selected = selectedTime === time;
+                            return (
+                              <button
+                                key={i}
+                                type="button"
+                                onClick={() => setSelectedTime(time)}
+                                className={`
+                                  py-1.5 px-1 rounded-lg text-[10px] font-body transition-all duration-300 border
+                                  ${selected 
+                                    ? 'bg-[#145BFF] border-[#3B7BFF] text-white shadow-[0_0_10px_rgba(20,91,255,0.4)]' 
+                                    : 'bg-white/5 border-white/5 text-white/70 hover:bg-white/10 hover:border-white/20 hover:text-white hover:shadow-[0_0_8px_rgba(255,255,255,0.3)]'}
+                                `}
+                              >
+                                {time}
+                              </button>
+                            );
+                          })
+                        )}
                       </div>
                     </motion.div>
                   )}
