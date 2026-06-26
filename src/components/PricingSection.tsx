@@ -109,7 +109,7 @@ const PricingSection = () => {
       id: "plan-landing",
       name: language === 'es' ? "Premium Landing Page" : "Premium Landing Page",
       titleIcon: <Sparkles className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "1,500",
+      price: "1,800",
       idealForBullets: language === 'es' ? [
         <>Empresas y compañías que necesitan capturar leads calificados con un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">embudo de alta conversión</span>.</>,
         <>Profesionales independientes que buscan automatizar la adquisición de prospectos mediante un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">túnel de conversión élite</span>.</>,
