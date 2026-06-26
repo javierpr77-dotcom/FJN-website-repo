@@ -120,6 +120,8 @@ const PricingSection = () => {
         <>Brands and projects requiring an ultra-polished single page <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">focused strictly on results</span>.</>
       ],
       features: language === 'es' ? [
+        "Diseño 100% personalizado, sin plantillas",
+        "Diseño responsivo y adaptado para celulares",
         "Landing page de una sola página premium",
         "Estructurada en un túnel de conversión estratégico",
         "Copywriting persuasivo y optimizado para leads",
@@ -127,9 +129,10 @@ const PricingSection = () => {
         "Sección sobre tu negocio y propuesta de valor",
         "Sección de tus servicios, beneficios claves o soluciones",
         "Optimización de velocidad de carga ultra rápida de nivel élite",
-        "Optimización de SEO técnico inicial",
-        "Diseño 100% responsivo y adaptado para celulares"
+        "Optimización de SEO técnico inicial"
       ] : [
+        "100% personalized design, zero templates",
+        "Fully responsive design optimized for mobile devices",
         "Premium single-page landing page",
         "Structured as a strategic conversion tunnel",
         "Persuasive copywriting optimized for leads",
@@ -137,14 +140,13 @@ const PricingSection = () => {
         "About your business & value proposition sections",
         "Services, core benefits or solutions modules",
         "Elite ultra-fast loading speed optimization",
-        "Initial onpage technical SEO setup",
-        "100% responsive design optimized for mobile"
+        "Initial onpage technical SEO setup"
       ],
       addons: language === 'es' ? [
         { name: "Sección adicional (layout moderno)", price: "150" },
         { name: "Página adicional estratégica / de soporte", price: "150" },
         { name: "Copywriting profesional persuasivo avanzado", price: "200" },
-        { name: "Recepcionista AI / Agente IA conversacional avanzada", price: "380" },
+        { name: "Recepcionista AI / Agente IA / Conversacional avanzada", price: "500" },
         { name: "Sincronización directa con CRM comercial", price: "225" },
         { name: "Integración avanzada con plataforma de Email Marketing", price: "180" },
         { name: "Bilingüe manual (Español / Inglés)", price: "180" },
@@ -156,7 +158,7 @@ const PricingSection = () => {
         { name: "Additional section (modern layout)", price: "150" },
         { name: "Additional strategic / support page", price: "150" },
         { name: "Advanced persuasive professional copywriting", price: "200" },
-        { name: "AI Receptionist / Advanced Conversation Agent", price: "380" },
+        { name: "AI Receptionist / AI Agent / Advanced Conversational System", price: "500" },
         { name: "Direct commercial CRM synchronization", price: "225" },
         { name: "Advanced setup with Email Marketing platform", price: "180" },
         { name: "Manual bilingual version (Spanish / English)", price: "180" },
