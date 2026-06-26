@@ -109,7 +109,7 @@ const Navbar = () => {
     } else if (itemKey === "planes") {
       targetPath = language === "es" ? "/planes" : "/pricing";
     } else if (itemKey === "resenas") {
-      targetPath = language === "es" ? "/casos de éxito" : "/success stories";
+      targetPath = language === "es" ? "/casos de éxitos" : "/success stories";
     } else if (itemKey === "consultas") {
       targetPath = language === "es" ? "/consultas" : "/contact";
     } else if (itemKey === "servicios") {
@@ -273,7 +273,7 @@ const Navbar = () => {
                   filter: "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
                 }}
               >
-                {language === 'es' ? 'Consulta' : 'Consultation'}
+                {language === 'es' ? 'Consultas' : 'Consultations'}
               </motion.button>
             )}
           </AnimatePresence>

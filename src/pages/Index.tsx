@@ -38,8 +38,11 @@ const Index = () => {
       decodedPath === "/reseñas" ||
       decodedPath === "/reviews" ||
       decodedPath === "/casos-de-exito" ||
+      decodedPath === "/casos-de-exitos" ||
       decodedPath === "/casos de éxito" ||
+      decodedPath === "/casos de éxitos" ||
       decodedPath === "/casos de exito" ||
+      decodedPath === "/casos de exitos" ||
       decodedPath === "/success-stories" ||
       decodedPath === "/success stories"
     ) {
