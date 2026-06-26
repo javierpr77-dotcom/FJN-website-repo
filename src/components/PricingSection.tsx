@@ -233,7 +233,7 @@ const PricingSection = () => {
     },
     {
       id: "plan-website",
-      name: language === 'es' ? "Website Premium" : "Websites Premium",
+      name: language === 'es' ? "Website Élite" : "Elite Website",
       titleIcon: <Crown className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
       price: "3,249",
       idealForBullets: language === 'es' ? [
