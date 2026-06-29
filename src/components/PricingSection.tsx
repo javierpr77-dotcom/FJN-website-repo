@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Check, ArrowRight, Shield, Zap, Target, Crown, Sparkles, Briefcase, TrendingUp, Diamond, Plus, User, Mail, Phone, ArrowLeft, CheckCircle2, Puzzle } from "lucide-react";
+import { Check, ArrowRight, Shield, Zap, Target, Crown, Sparkles, Briefcase, TrendingUp, Diamond, Plus, User, Mail, Phone, ArrowLeft, CheckCircle2, Puzzle, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -235,7 +235,7 @@ const PricingSection = () => {
       id: "plan-website",
       name: language === 'es' ? "Website Élite" : "Elite Website",
       titleIcon: <Crown className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
-      price: "3,249",
+      price: "3,549",
       idealForBullets: language === 'es' ? [
         <>Compañías y marcas corporativas con servicios múltiples que exigen un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">website de nivel internacional</span>.</>,
         <>Empresas consolidadas en Puerto Rico y EE.UU. enfocadas en <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">liderar su categoría con máxima autoridad</span>.</>,
@@ -286,6 +286,69 @@ const PricingSection = () => {
         { name: "Advanced metrics with Google Analytics 4 and Microsoft Clarity", price: "225" }
       ],
       notIncluded: language === 'es' ? "No incluye integraciones de software a la medida complejo externo, ni pasarelas de pago de comercio electrónico transaccional (cubierto en el plan E-commerce)." : "Does not include complex enterprise custom software integration, or checkout billing gateways (covered fully in our Custom E-commerce plan).",
+      popular: false
+    },
+    {
+      id: "plan-accommodation",
+      name: language === 'es' ? "Alojamiento Élite (tipo Airbnb)" : "Elite Accommodation (Airbnb-style)",
+      titleIcon: <Home className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
+      price: "4,500",
+      idealForBullets: language === 'es' ? [
+        <>Propietarios de <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">villas, paradores y propiedades premium</span> que buscan independizarse de comisiones de plataformas externas.</>,
+        <>Empresas de <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">short-term rentals y property management</span> de alto nivel en Puerto Rico.</>,
+        <>Inversionistas de real estate que desean un <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">túnel de reservas directas automatizado</span>.</>
+      ] : [
+        <>Owners of <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">villas, boutique hotels, and luxury properties</span> aiming to escape third-party platform commissions.</>,
+        <>Elite <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">short-term rental and property management</span> companies in Puerto Rico and USA.</>,
+        <>Real estate investors wanting a <span className="text-[#3B7BFF] font-medium drop-shadow-[0_0_8px_rgba(59,123,255,0.8)]">fully autonomous direct booking tunnel</span>.</>
+      ],
+      features: language === 'es' ? [
+        "Diseño totalmente personalizado",
+        "Narrativa de marca estratégica y funnel de reserva integrado",
+        "Galería visual premium interactiva",
+        "Secciones de experiencias y atractivos cercanos",
+        "Módulos de testimonios de huéspedes",
+        "Llamados a la acción (CTAs) estratégicos",
+        "Formulario de leads o solicitud de disponibilidad",
+        "Optimización de velocidad certificada",
+        "Estructura bilingüe integrada (Inglés y Español)",
+        "Integración visual con la marca principal",
+        "SEO avanzado"
+      ] : [
+        "Fully customized design",
+        "Strategic brand storytelling & integrated booking funnel",
+        "Premium interactive visual gallery",
+        "Experiences & nearby attractions sections",
+        "Guest testimonials & social proof modules",
+        "Strategic Call-to-Actions (CTAs)",
+        "Leads capture or availability request forms",
+        "Certified fast loading speed optimization",
+        "Bilingual integrated architecture (English & Spanish)",
+        "Visual integration with your main brand",
+        "Advanced SEO setup"
+      ],
+      addons: language === 'es' ? [
+        { name: "Perfil de usuario con Login", price: "1500" },
+        { name: "SEO profesional especializado en GEO y AIO", price: "2500" },
+        { name: "Recepcionista virtual con Inteligencia Artificial", price: "2000" },
+        { name: "Agente SEO con IA (destinado)", price: "3500" },
+        { name: "Auto identificador de multi lenguajes", price: "500" },
+        { name: "Sincronización en tiempo real de calendario iCal (Airbnb, VRBO)", price: "350" },
+        { name: "Sistema de analítica de tráfico (configuración)", price: "350" },
+        { name: "Indexación y verificación de dominio por Google", price: "250" },
+        { name: "Pasarela de cobro directa (Stripe / ATH Móvil)", price: "450" }
+      ] : [
+        { name: "User Profile with Secure Login", price: "1500" },
+        { name: "Professional SEO specialized in GEO and AIO", price: "2500" },
+        { name: "AI Virtual Receptionist with Conversational AI", price: "2000" },
+        { name: "AI SEO Agent (targeted)", price: "3500" },
+        { name: "Auto multi-language detector", price: "500" },
+        { name: "Real-time iCal calendar synchronization (Airbnb, VRBO)", price: "350" },
+        { name: "Traffic and conversion analytics setup", price: "350" },
+        { name: "Google domain verification & search indexing", price: "250" },
+        { name: "Direct checkout gateway integration (Stripe / ATH Movil)", price: "450" }
+      ],
+      notIncluded: language === 'es' ? "No incluye suscripciones mensuales de plataformas externas de PMS, ni comisiones de pasarela de pago transaccional." : "Does not include third-party PMS platform subscription fees or checkout transactional processing fees.",
       popular: false
     }
   ];
@@ -362,7 +425,7 @@ const PricingSection = () => {
         </div>
 
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto">
           {plans.map((plan, index) => (
             <div 
               key={plan.id}
