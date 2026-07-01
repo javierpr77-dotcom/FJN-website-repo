@@ -290,7 +290,7 @@ const PricingSection = () => {
     },
     {
       id: "plan-accommodation",
-      name: language === 'es' ? "Alojamiento Élite (tipo Airbnb)" : "Elite Accommodation (Airbnb-style)",
+      name: language === 'es' ? "Alojamiento Elegance (tipo Airbnb)" : "Elegance Accommodation (Airbnb-style)",
       titleIcon: <Home className="w-6 h-6 text-[#145BFF] drop-shadow-[0_0_10px_rgba(20,91,255,0.6)]" style={{ animation: 'floatIcon 3s ease-in-out infinite' }} />,
       price: "4,500",
       idealForBullets: language === 'es' ? [
@@ -333,6 +333,7 @@ const PricingSection = () => {
         { name: "Recepcionista virtual con Inteligencia Artificial", price: "2000" },
         { name: "Agente SEO con IA (destinado)", price: "3500" },
         { name: "Auto identificador de multi lenguajes", price: "500" },
+        { name: "Booking personalizado (calendario, disponibilidad y proceso de reserva)", price: "450" },
         { name: "Sincronización en tiempo real de calendario iCal (Airbnb, VRBO)", price: "350" },
         { name: "Sistema de analítica de tráfico (configuración)", price: "350" },
         { name: "Indexación y verificación de dominio por Google", price: "250" },
@@ -343,6 +344,7 @@ const PricingSection = () => {
         { name: "AI Virtual Receptionist with Conversational AI", price: "2000" },
         { name: "AI SEO Agent (targeted)", price: "3500" },
         { name: "Auto multi-language detector", price: "500" },
+        { name: "Custom Booking System (calendar, availability & reservation flow)", price: "450" },
         { name: "Real-time iCal calendar synchronization (Airbnb, VRBO)", price: "350" },
         { name: "Traffic and conversion analytics setup", price: "350" },
         { name: "Google domain verification & search indexing", price: "250" },
