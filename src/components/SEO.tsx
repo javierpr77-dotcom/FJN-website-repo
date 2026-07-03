@@ -18,11 +18,22 @@ const SEO = ({
 }: SEOProps) => {
   const { language } = useLanguage();
 
-  // Dynamically resolve the canonical URL based on current pathname to match crawler expectations
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-  const canonicalUrl = url === 'https://fjndigitalmedia.com'
-    ? `https://fjndigitalmedia.com${currentPath === '/' ? '' : currentPath}`
-    : url;
+  // Dynamically resolve the canonical URL and normalize it to match sitemap expectations exactly
+  const getNormalizedCanonical = () => {
+    if (typeof window === 'undefined') {
+      return 'https://fjndigitalmedia.com/';
+    }
+    const pathname = window.location.pathname;
+    // For root path, normalize to trailing slash to match sitemap.xml: <loc>https://fjndigitalmedia.com/</loc>
+    if (pathname === '/' || !pathname) {
+      return 'https://fjndigitalmedia.com/';
+    }
+    // For other paths, strip any trailing slash so they match sitemap.xml (e.g. /servicios)
+    const cleanPath = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+    return `https://fjndigitalmedia.com${cleanPath}`;
+  };
+
+  const canonicalUrl = url === 'https://fjndigitalmedia.com' ? getNormalizedCanonical() : url;
 
   // Default SEO texts based on language
   const defaultTitle = language === 'es' 
