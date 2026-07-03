@@ -2,21 +2,24 @@ import { motion } from "framer-motion";
 import { Activity, TrendingUp, Bot, ArrowUpRight, Cpu, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const AnimatedDashboard = () => {
   const { language } = useLanguage();
+  const isMobile = useIsMobile();
   const [conversion, setConversion] = useState(59.3);
   const [agents, setAgents] = useState(11);
   const [leads, setLeads] = useState(1284);
 
   useEffect(() => {
+    if (isMobile) return;
     const interval = setInterval(() => {
       setConversion((prev) => +(prev + (Math.random() * 1.5 - 0.2)).toFixed(1));
       setAgents((prev) => Math.max(8, prev + Math.floor(Math.random() * 3 - 1)));
       setLeads((prev) => prev + Math.floor(Math.random() * 4));
     }, 2500);
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   return (
     <div className="w-full h-full relative bg-[#0A0A0C]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col shadow-[0_0_30px_rgba(20,91,255,0.2)] overflow-hidden">
@@ -75,7 +78,7 @@ const AnimatedDashboard = () => {
                 className="flex-1 bg-gradient-to-t from-[#145BFF] to-[#00D4FF] rounded-t-sm shadow-[0_0_8px_rgba(0,212,255,0.6)]"
                 initial={{ height: "10%" }}
                 animate={{ height: `${h}%` }}
-                transition={{
+                transition={isMobile ? { duration: 0.1 } : {
                   duration: 2,
                   repeat: Infinity,
                   repeatType: "reverse",
@@ -109,7 +112,7 @@ const AnimatedDashboard = () => {
               {agents}
             </motion.span>
             <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5 shrink-0 mb-0.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400/80"></span>
+              <span className={`absolute inline-flex h-full w-full rounded-full bg-purple-400/80 ${isMobile ? '' : 'animate-ping'}`}></span>
               <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,1)]"></span>
             </span>
           </div>
@@ -117,14 +120,14 @@ const AnimatedDashboard = () => {
           {/* Radar / Node visual */}
           <div className="mt-1 relative w-full h-8 flex items-center justify-center">
              <motion.div 
-               animate={{ rotate: 360 }} 
-               transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+               animate={isMobile ? {} : { rotate: 360 }} 
+               transition={isMobile ? {} : { duration: 8, repeat: Infinity, ease: "linear" }}
                className="absolute w-10 h-10 flex items-center justify-center"
              >
-                <div className="w-full h-full border border-purple-500/30 rounded-full border-dashed animate-[spin_10s_linear_infinite_reverse]" />
-                <div className="absolute w-2 h-2 bg-[#A855F7] rounded-full top-0 shadow-[0_0_10px_rgba(168,85,247,1)] animate-pulse" />
-                <div className="absolute w-1.5 h-1.5 bg-[#00D4FF] rounded-full bottom-1 right-1 shadow-[0_0_10px_rgba(0,212,255,1)] animate-pulse" style={{ animationDelay: '0.3s'}} />
-                <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-2 left-0 shadow-[0_0_10px_rgba(255,255,255,0.8)] animate-pulse" style={{ animationDelay: '0.7s'}} />
+                <div className={`w-full h-full border border-purple-500/30 rounded-full border-dashed ${isMobile ? '' : 'animate-[spin_10s_linear_infinite_reverse]'}`} />
+                <div className={`absolute w-2 h-2 bg-[#A855F7] rounded-full top-0 shadow-[0_0_10px_rgba(168,85,247,1)] ${isMobile ? '' : 'animate-pulse'}`} />
+                <div className={`absolute w-1.5 h-1.5 bg-[#00D4FF] rounded-full bottom-1 right-1 shadow-[0_0_10px_rgba(0,212,255,1)] ${isMobile ? '' : 'animate-pulse'}`} style={{ animationDelay: '0.3s'}} />
+                <div className={`absolute w-1.5 h-1.5 bg-white rounded-full top-2 left-0 shadow-[0_0_10px_rgba(255,255,255,0.8)] ${isMobile ? '' : 'animate-pulse'}`} style={{ animationDelay: '0.7s'}} />
              </motion.div>
           </div>
         </motion.div>
@@ -160,20 +163,24 @@ const AnimatedDashboard = () => {
            {/* Flow lines */}
            {[...Array(3)].map((_, i) => (
              <div key={i} className="w-full h-1.5 bg-white/5 rounded-full relative overflow-hidden">
-               <motion.div
-                  className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-transparent via-[#FCD34D] to-[#F59E0B] rounded-full shadow-[0_0_8px_rgba(250,204,21,0.8)]"
-                  initial={{ width: "0%", x: "-100%" }}
-                  animate={{ 
-                    width: ["0%", "50%", "100%", "0%"],
-                    x: ["-100%", "0%", "100%", "200%"]
-                  }}
-                  transition={{ 
-                    duration: 2.5, 
-                    repeat: Infinity, 
-                    ease: "linear", 
-                    delay: i * 0.7 
-                  }}
-               />
+               {isMobile ? (
+                 <div className="absolute left-[20%] top-0 bottom-0 w-[60%] bg-gradient-to-r from-transparent via-[#FCD34D]/60 to-[#F59E0B]/80 rounded-full" />
+               ) : (
+                 <motion.div
+                    className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-transparent via-[#FCD34D] to-[#F59E0B] rounded-full shadow-[0_0_8px_rgba(250,204,21,0.8)]"
+                    initial={{ width: "0%", x: "-100%" }}
+                    animate={{ 
+                      width: ["0%", "50%", "100%", "0%"],
+                      x: ["-100%", "0%", "100%", "200%"]
+                    }}
+                    transition={{ 
+                      duration: 2.5, 
+                      repeat: Infinity, 
+                      ease: "linear", 
+                      delay: i * 0.7 
+                    }}
+                 />
+               )}
              </div>
            ))}
         </div>
@@ -181,9 +188,9 @@ const AnimatedDashboard = () => {
 
       {/* Footer bar */}
       <div className="bg-white/[0.02] rounded-lg p-2.5 flex items-center justify-between border border-white/5 relative overflow-hidden z-10 mt-3 shrink-0">
-         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#145BFF]/10 to-transparent -translate-x-[100%] animate-[shimmer_2.5s_infinite]" />
+         <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#145BFF]/10 to-transparent -translate-x-[100%] ${isMobile ? '' : 'animate-[shimmer_2.5s_infinite]'}`} />
          <div className="flex items-center gap-2">
-           <Activity className="w-3 h-3 text-[#145BFF] animate-pulse" />
+           <Activity className={`w-3 h-3 text-[#145BFF] ${isMobile ? '' : 'animate-pulse'}`} />
            <span className="text-[9px] text-[#CFCFD4]/70 uppercase tracking-widest font-mono shrink-0">
              {language === 'es' ? 'Análisis en tiempo real' : 'Real-time analysis'}
            </span>
@@ -193,10 +200,10 @@ const AnimatedDashboard = () => {
              <motion.div
                key={i}
                className="w-[3px] bg-[#145BFF] rounded-full shadow-[0_0_5px_rgba(20,91,255,0.6)] shrink-0"
-               animate={{ 
+               animate={isMobile ? { height: `${20 + (i % 4) * 20}%` } : { 
                  height: ["20%", `${Math.random() * 80 + 20}%`, "20%"]
                }}
-               transition={{
+               transition={isMobile ? { duration: 0.1 } : {
                  duration: 1 + Math.random(),
                  repeat: Infinity,
                  ease: "easeInOut"

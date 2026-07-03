@@ -1,18 +1,22 @@
 import { useMemo } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const AnimatedBackground = () => {
+  const isMobile = useIsMobile();
+  const particlesCount = isMobile ? 30 : 150;
+
   const particles = useMemo(() => {
-    return Array.from({ length: 150 }).map((_, i) => ({
+    return Array.from({ length: particlesCount }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
-      size: Math.random() * 2.5 + 0.5, // 0.5px to 3px
+      size: Math.random() * (isMobile ? 1.2 : 2.5) + 0.5, // 0.5px to 1.7px on mobile, lighter rendering
       duration: Math.random() * 15 + 10, // 10s to 25s
       delay: Math.random() * -30, 
-      opacity: Math.random() * 0.7 + 0.1, 
-      isStar: Math.random() > 0.4 
+      opacity: Math.random() * (isMobile ? 0.4 : 0.7) + 0.1, 
+      isStar: isMobile ? true : Math.random() > 0.4 // Only twinkling stars on mobile (no expensive drifting particles)
     }));
-  }, []);
+  }, [isMobile, particlesCount]);
 
   return (
     <>
@@ -41,7 +45,7 @@ const AnimatedBackground = () => {
         <div className="absolute inset-0">
           {/* Large Cobalt Orb - Top Left */}
           <div 
-            className="absolute w-[500px] h-[500px] rounded-full animate-float-slow -top-20 -left-40 opacity-40"
+            className={`absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full -top-20 -left-40 opacity-40 ${isMobile ? '' : 'animate-float-slow'}`}
             style={{
               background: 'radial-gradient(circle, rgba(11,63,191,0.5) 0%, rgba(11,63,191,0.15) 40%, transparent 70%)'
             }}
@@ -49,28 +53,32 @@ const AnimatedBackground = () => {
           
           {/* Electric Blue Orb - Center Right */}
           <div 
-            className="absolute w-[400px] h-[400px] rounded-full animate-float-medium top-1/3 -right-20 opacity-30"
+            className={`absolute w-[250px] h-[250px] md:w-[400px] md:h-[400px] rounded-full top-1/3 -right-20 opacity-30 ${isMobile ? '' : 'animate-float-medium'}`}
             style={{
               background: 'radial-gradient(circle, rgba(20,91,255,0.45) 0%, rgba(20,91,255,0.1) 45%, transparent 70%)'
             }}
           ></div>
           
-          {/* Small Electric Blue - Bottom Left */}
-          <div 
-            className="absolute w-[300px] h-[300px] rounded-full animate-float-fast bottom-1/4 left-1/4 opacity-25"
-            style={{
-              background: 'radial-gradient(circle, rgba(20,91,255,0.4) 0%, rgba(11,63,191,0.15) 50%, transparent 70%)'
-            }}
-          ></div>
+          {!isMobile && (
+            <>
+              {/* Small Electric Blue - Bottom Left */}
+              <div 
+                className="absolute w-[300px] h-[300px] rounded-full animate-float-fast bottom-1/4 left-1/4 opacity-25"
+                style={{
+                  background: 'radial-gradient(circle, rgba(20,91,255,0.4) 0%, rgba(11,63,191,0.15) 50%, transparent 70%)'
+                }}
+              ></div>
 
-          {/* Subtle Cobalt Accent - Bottom Right */}
-          <div 
-            className="absolute w-[250px] h-[250px] rounded-full animate-float-slow bottom-10 right-1/4 opacity-20"
-            style={{
-              background: 'radial-gradient(circle, rgba(11,63,191,0.5) 0%, rgba(20,91,255,0.1) 50%, transparent 70%)',
-              animationDelay: '3s'
-            }}
-          ></div>
+              {/* Subtle Cobalt Accent - Bottom Right */}
+              <div 
+                className="absolute w-[250px] h-[250px] rounded-full animate-float-slow bottom-10 right-1/4 opacity-20"
+                style={{
+                  background: 'radial-gradient(circle, rgba(11,63,191,0.5) 0%, rgba(20,91,255,0.1) 50%, transparent 70%)',
+                  animationDelay: '3s'
+                }}
+              ></div>
+            </>
+          )}
         </div>
 
         {/* Deep Space Particles / Starfield Extracted to Global Level */}
@@ -85,19 +93,19 @@ const AnimatedBackground = () => {
                 width: `${p.size}px`,
                 height: `${p.size}px`,
                 opacity: p.opacity,
-                boxShadow: p.isStar ? '0 0 4px 1px rgba(255,255,255,0.4)' : '0 0 12px 3px rgba(20,91,255,0.8)',
+                boxShadow: isMobile ? 'none' : (p.isStar ? '0 0 4px 1px rgba(255,255,255,0.4)' : '0 0 12px 3px rgba(20,91,255,0.8)'),
                 animation: p.isStar 
                   ? `twinkle-global ${p.duration}s ease-in-out infinite alternate`
                   : `drift-global ${p.duration * 2}s linear infinite`,
                 animationDelay: `${p.delay}s`,
-                willChange: 'transform, opacity'
+                willChange: isMobile ? 'auto' : 'transform, opacity'
               }}
             />
           ))}
         </div>
         
         {/* Noise texture overlay for depth */}
-        <div className="absolute inset-0 opacity-[0.03] z-20" style={{
+        <div className="absolute inset-0 opacity-[0.02] z-20" style={{
           backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")',
           backgroundSize: '128px 128px'
         }}></div>

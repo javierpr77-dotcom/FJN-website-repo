@@ -12,11 +12,17 @@ interface SEOProps {
 const SEO = ({
   title,
   description,
-  image = 'https://midomain.com/og-image.jpg', // Replace with an actual OpenGraph image URL later
-  url = 'https://midomain.com',
+  image = 'https://fjndigitalmedia.com/logo.jpg',
+  url = 'https://fjndigitalmedia.com',
   type = 'website'
 }: SEOProps) => {
   const { language } = useLanguage();
+
+  // Dynamically resolve the canonical URL based on current pathname to match crawler expectations
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  const canonicalUrl = url === 'https://fjndigitalmedia.com'
+    ? `https://fjndigitalmedia.com${currentPath === '/' ? '' : currentPath}`
+    : url;
 
   // Default SEO texts based on language
   const defaultTitle = language === 'es' 
@@ -237,20 +243,20 @@ const SEO = ({
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
-      <meta property="og:url" content={url} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={seoTitle} />
       <meta property="og:description" content={seoDescription} />
       <meta property="og:image" content={image} />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:url" content={url} />
+      <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={seoTitle} />
       <meta name="twitter:description" content={seoDescription} />
       <meta name="twitter:image" content={image} />
       
       {/* Canonical Link */}
-      <link rel="canonical" href={url} />
+      <link rel="canonical" href={canonicalUrl} />
       
       {/* JSON-LD Structured Data - Local business & services */}
       <script type="application/ld+json">

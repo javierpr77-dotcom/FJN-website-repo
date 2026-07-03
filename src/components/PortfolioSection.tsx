@@ -214,6 +214,23 @@ const PortfolioVideoPlayer = ({ sources, isMuted, isActive, onVideoRef, language
     }
   };
 
+  if (!isActive) {
+    return (
+      <div className="w-full h-full bg-[#050507] relative select-none flex flex-col items-center justify-center p-6 text-center overflow-hidden">
+        {/* Sleek integrated geometric wireframe & gradient deck background */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#145BFF]/10 via-[#050507] to-[#A855F7]/5" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(20,91,255,0.08),transparent)]" />
+        
+        <div className="relative z-10 w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+          <Play className="w-5 h-5 text-white/50 fill-white/10 ml-0.5" />
+        </div>
+        <span className="relative z-10 text-stone-400 font-heading text-xs font-light tracking-widest uppercase">
+          {language === 'es' ? 'Ver Previsualización' : 'View Preview'}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full bg-[#050507] relative select-none">
       {!hasVideoError && activeSource ? (
@@ -226,9 +243,10 @@ const PortfolioVideoPlayer = ({ sources, isMuted, isActive, onVideoRef, language
           src={activeSource}
           className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.02]"
           playsInline
-          muted={isMuted || !isActive}
+          muted={isMuted}
           loop
-          autoPlay={isActive}
+          autoPlay
+          preload="auto"
           onContextMenu={(e) => e.preventDefault()}
           onError={handleVideoError}
         >

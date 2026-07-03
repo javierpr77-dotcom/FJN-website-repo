@@ -48,6 +48,16 @@ const checkIsAdmin = (): boolean => {
   }
 };
 
+// Detect search bots, crawlers, and automated site scanners (e.g., Googlebot, Lighthouse)
+const isSearchBot = (): boolean => {
+  try {
+    const ua = navigator.userAgent?.toLowerCase() || '';
+    return /bot|google|baidu|bing|msn|duckduckgo|teoma|slurp|yandex|crawler|spider|lighthouse|inspection|pagespeed/i.test(ua);
+  } catch (e) {
+    return false;
+  }
+};
+
 export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   const [sessions, setSessions] = useState<VisitorSession[]>([]);
   const [currentSession, setCurrentSession] = useState<VisitorSession | null>(null);
@@ -239,6 +249,9 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
   // Load existing sessions or seed them
   useEffect(() => {
+    if (isSearchBot()) {
+      return;
+    }
     let saved: VisitorSession[] = [];
     try {
       const data = localStorage.getItem('fjn_analytics_sessions');
@@ -378,7 +391,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
   // Track manual clicks (useful if triggered programmatically)
   const trackClick = (buttonText: string, sectionId?: string) => {
-    if (!buttonText) return;
+    if (!buttonText || isSearchBot()) return;
     
     // Dynamic Admin Click Exemption
     if (checkIsAdmin()) {
@@ -418,7 +431,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
   const trackSectionView = (sectionId: string, durationSec: number) => {
     // Dynamic Admin Exemption
-    if (checkIsAdmin()) {
+    if (checkIsAdmin() || isSearchBot()) {
       return;
     }
 
