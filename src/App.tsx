@@ -10,6 +10,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DesignResearch from "./pages/DesignResearch";
 import FAQ from "./pages/FAQ";
+import Admin from "./pages/Admin";
+import { AnalyticsProvider } from "@/contexts/AnalyticsContext";
 
 import { HelmetProvider } from "react-helmet-async";
 
@@ -20,12 +22,14 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <LanguageProvider>
-          <MouseFollower />
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
+          <AnalyticsProvider>
+            <MouseFollower />
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/" element={<Index />} />
               <Route path="/portfolio" element={<Index />} />
               <Route path="/portafolio" element={<Index />} />
               <Route path="/planes" element={<Index />} />
@@ -53,6 +57,7 @@ const App = () => (
             </Routes>
           </BrowserRouter>
           <LanguageSwitcher />
+          </AnalyticsProvider>
         </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>

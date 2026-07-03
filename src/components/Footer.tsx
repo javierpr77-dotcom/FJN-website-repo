@@ -82,6 +82,12 @@ const Footer = () => {
              <span className="font-body text-[#CFCFD4]/40 text-xs">
                 © {new Date().getFullYear()} {language === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}
              </span>
+             <Link 
+               to="/admin" 
+               className="font-mono text-[10px] text-[#CFCFD4]/20 hover:text-[#00D4FF] hover:drop-shadow-[0_0_6px_rgba(0,212,255,0.6)] transition-all duration-300 ml-2"
+             >
+               admin
+             </Link>
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-1 md:gap-2">
