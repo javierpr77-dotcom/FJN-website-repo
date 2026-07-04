@@ -100,8 +100,9 @@ const Admin = () => {
 
   // Load auth state
   useEffect(() => {
-    const isAuthed = sessionStorage.getItem("fjn_admin_authed");
-    if (isAuthed === "true") {
+    const isAuthedSession = sessionStorage.getItem("fjn_admin_authed");
+    const isAuthedLocal = localStorage.getItem("fjn_admin_authed");
+    if (isAuthedSession === "true" || isAuthedLocal === "true") {
       setIsAuthenticated(true);
     }
   }, []);
@@ -112,6 +113,8 @@ const Admin = () => {
       setIsAuthenticated(true);
       setAuthError(false);
       sessionStorage.setItem("fjn_admin_authed", "true");
+      localStorage.setItem("fjn_admin_authed", "true");
+      localStorage.setItem("fjn_is_admin_device", "true");
       triggerToast("Acceso Concedido. Consola Cuántica FJN en línea.");
     } else {
       setAuthError(true);
@@ -124,6 +127,7 @@ const Admin = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem("fjn_admin_authed");
+    localStorage.removeItem("fjn_admin_authed");
   };
 
   const triggerToast = (msg: string) => {

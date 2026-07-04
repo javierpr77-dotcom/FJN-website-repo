@@ -30,19 +30,35 @@ interface AnalyticsContextProps {
   trackClick: (buttonText: string, sectionId?: string) => void;
   trackSectionView: (sectionId: string, durationSec: number) => void;
   resetAllAnalytics: () => void;
+  updateSessionLocation: (city: string) => void;
 }
 
 const AnalyticsContext = createContext<AnalyticsContextProps | undefined>(undefined);
 
 // Premium Puerto Rican towns for local fallbacks if GeoIP fails
-const PR_PREMIUM_FALLBACK_TOWNS = ["Guaynabo", "Dorado", "San Juan"];
+const PR_PREMIUM_FALLBACK_TOWNS = [
+  "San Juan", "Guaynabo", "Dorado", "Carolina", "Bayamón", 
+  "Caguas", "Ponce", "Mayagüez", "Humacao", "Rincón",
+  "Dorado", "Guaynabo", "San Juan"
+];
 
 // Extremely robust case-insensitive check to identify admin routing/session to exclude from tracking
 const checkIsAdmin = (): boolean => {
   try {
     const path = window.location.pathname.toLowerCase();
-    const isAuthed = sessionStorage.getItem("fjn_admin_authed") === "true";
-    return path.includes('/admin') || isAuthed;
+    
+    // If they ever access /admin, persistently mark this device/browser as admin to exclude them
+    if (path.includes('/admin')) {
+      localStorage.setItem("fjn_is_admin_device", "true");
+      sessionStorage.setItem("fjn_is_admin_device", "true");
+    }
+
+    const isAuthedSession = sessionStorage.getItem("fjn_admin_authed") === "true";
+    const isAuthedLocal = localStorage.getItem("fjn_admin_authed") === "true";
+    const isTaggedDeviceLocal = localStorage.getItem("fjn_is_admin_device") === "true";
+    const isTaggedDeviceSession = sessionStorage.getItem("fjn_is_admin_device") === "true";
+
+    return path.includes('/admin') || isAuthedSession || isAuthedLocal || isTaggedDeviceLocal || isTaggedDeviceSession;
   } catch (e) {
     return false;
   }
@@ -194,36 +210,86 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     setCurrentSession(newSession);
 
     const fetchGeoInfo = async () => {
-      try {
-        const response = await fetch('https://ipapi.co/json/');
-        if (response.ok) {
-          const data = await response.json();
-          setCurrentSession(prev => {
-            if (!prev) return null;
+      const apis = [
+        {
+          url: 'https://ipapi.co/json/',
+          parse: (data: any) => {
             const isUserPR = data.country === 'PR' || 
                              data.country_name?.toLowerCase() === 'puerto rico' || 
                              data.region?.toLowerCase() === 'puerto rico' || 
                              data.region_code === 'PR';
-
-            const updated = {
-              ...prev,
+            return {
               ip: data.ip || '127.0.0.1',
-              city: data.city || (isUserPR ? 'Guaynabo' : 'San Juan'),
-              region: data.region || 'San Juan',
+              city: data.city,
+              region: data.region,
               country: data.country_name || 'Puerto Rico',
               isPR: isUserPR
             };
-
-            saveSessionAndUpdateList(updated);
-            return updated;
-          });
-        } else {
-          applyDefaultPRGeo();
+          }
+        },
+        {
+          url: 'https://ipwhois.app/json/',
+          parse: (data: any) => {
+            const isUserPR = data.country_code === 'PR' || 
+                             data.country?.toLowerCase() === 'puerto rico' || 
+                             data.region?.toLowerCase() === 'puerto rico';
+            return {
+              ip: data.ip || '127.0.0.1',
+              city: data.city,
+              region: data.region,
+              country: data.country || 'Puerto Rico',
+              isPR: isUserPR
+            };
+          }
+        },
+        {
+          url: 'https://freeipapi.com/api/json/',
+          parse: (data: any) => {
+            const isUserPR = data.countryCode === 'PR' || 
+                             data.countryName?.toLowerCase() === 'puerto rico' || 
+                             data.regionName?.toLowerCase() === 'puerto rico';
+            return {
+              ip: data.ipAddress || '127.0.0.1',
+              city: data.cityName,
+              region: data.regionName,
+              country: data.countryName || 'Puerto Rico',
+              isPR: isUserPR
+            };
+          }
         }
-      } catch (error) {
-        console.warn("Geo IP API lookup failed, applying premium local fallback", error);
-        applyDefaultPRGeo();
+      ];
+
+      for (const api of apis) {
+        try {
+          const response = await fetch(api.url);
+          if (response.ok) {
+            const rawData = await response.json();
+            if (rawData.success === false) continue;
+            
+            const data = api.parse(rawData);
+            if (data.city && data.city !== 'Detectando...') {
+              setCurrentSession(prev => {
+                if (!prev) return null;
+                const updated = {
+                  ...prev,
+                  ip: data.ip,
+                  city: data.city,
+                  region: data.region || data.city,
+                  country: data.country,
+                  isPR: data.isPR
+                };
+                saveSessionAndUpdateList(updated);
+                return updated;
+              });
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn(`GeoIP API ${api.url} failed:`, e);
+        }
       }
+
+      applyDefaultPRGeo();
     };
 
     const applyDefaultPRGeo = () => {
@@ -446,6 +512,21 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const updateSessionLocation = (city: string) => {
+    if (isSearchBot() || checkIsAdmin()) return;
+    setCurrentSession(prev => {
+      if (!prev) return null;
+      const updated = {
+        ...prev,
+        city: city,
+        region: city,
+        isPR: city !== 'Otro'
+      };
+      saveSessionAndUpdateList(updated);
+      return updated;
+    });
+  };
+
   const resetAllAnalytics = () => {
     try {
       localStorage.setItem('fjn_analytics_sessions', JSON.stringify([]));
@@ -465,7 +546,8 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       sessions,
       trackClick,
       trackSectionView,
-      resetAllAnalytics
+      resetAllAnalytics,
+      updateSessionLocation
     }}>
       {children}
     </AnalyticsContext.Provider>

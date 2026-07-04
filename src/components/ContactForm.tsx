@@ -2,18 +2,32 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Sparkles, ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, X, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAnalytics } from "@/contexts/AnalyticsContext";
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, getDay, isBefore, startOfDay } from 'date-fns';
 import { enUS, es } from 'date-fns/locale';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import confetti from "canvas-confetti";
 
+const PR_TOWNS_LIST = [
+  "Adjuntas", "Aguada", "Aguadilla", "Aguas Buenas", "Aibonito", "Añasco", "Arecibo", "Arroyo", "Barceloneta", "Barranquitas",
+  "Bayamón", "Cabo Rojo", "Caguas", "Camuy", "Canóvanas", "Carolina", "Cataño", "Cayey", "Ceiba", "Ciales",
+  "Cidra", "Coamo", "Comerío", "Corozal", "Culebra", "Dorado", "Fajardo", "Florida", "Guánica", "Guayama",
+  "Guayanilla", "Guaynabo", "Gurabo", "Hatillo", "Hormigueros", "Humacao", "Isabela", "Jayuya", "Juana Díaz", "Juncos",
+  "Lajas", "Lares", "Las Marías", "Las Piedras", "Loíza", "Luquillo", "Manatí", "Maricao", "Maunabo", "Mayagüez",
+  "Moca", "Morovis", "Naguabo", "Naranjito", "Orocovis", "Patillas", "Peñuelas", "Ponce", "Quebradillas", "Rincón",
+  "Río Grande", "Sabana Grande", "Salinas", "San Germán", "San Juan", "San Lorenzo", "San Sebastián", "Santa Isabel", "Toa Alta", "Toa Baja",
+  "Trujillo Alto", "Utuado", "Vega Alta", "Vega Baja", "Vieques", "Villalba", "Yabucoa", "Yauco"
+];
+
 const ContactForm = () => {
   const { language } = useLanguage();
+  const { updateSessionLocation } = useAnalytics();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
-    goal: ""
+    goal: "",
+    town: ""
   });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -135,7 +149,7 @@ const ContactForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const { name, phone, email, goal } = formData;
+    const { name, phone, email, goal, town } = formData;
     
     const dateFormatted = selectedDate ? format(selectedDate, 'PPP', { locale: language === 'es' ? es : enUS }) : (language === 'es' ? 'No seleccionada' : 'Not selected');
     const timeFormatted = selectedTime || (language === 'es' ? 'No seleccionada' : 'Not selected');
@@ -150,6 +164,7 @@ const ContactForm = () => {
         phone,
         email,
         goal,
+        town,
         date: dateFormatted,
         time: timeFormatted
       }).toString()
@@ -166,6 +181,7 @@ const ContactForm = () => {
         phone,
         email,
         goal,
+        town,
         date: dateFormatted,
         time: timeFormatted
       })
@@ -211,6 +227,60 @@ const ContactForm = () => {
                   placeholder={language === 'es' ? "Ej. +1 234 567 8900" : "Ex. +1 234 567 8900"}
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300"
                 />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="font-body text-sm text-white/70 ml-1 text-left">
+                  {language === 'es' ? 'Tu Correo Electrónico' : 'Your Email'}
+                </label>
+                <input 
+                  type="email" 
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="ejemplo@correo.com"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="font-body text-sm text-white/70 ml-1 text-left">
+                  {language === 'es' ? 'Tu Pueblo / Municipio' : 'Your Town / Municipality'}
+                </label>
+                <div className="relative">
+                  <select 
+                    name="town"
+                    required
+                    value={formData.town}
+                    onChange={(e) => {
+                      setFormData({ ...formData, town: e.target.value });
+                      if (updateSessionLocation) {
+                        updateSessionLocation(e.target.value);
+                      }
+                    }}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/30 font-body hover:border-white/10 hover:shadow-[0_0_15px_rgba(20,91,255,0.4)] focus:outline-none focus:border-white/10 focus:shadow-[0_0_20px_rgba(20,91,255,0.6)] focus:ring-0 transition-all duration-300 appearance-none cursor-pointer"
+                    style={{ colorScheme: 'dark' }}
+                  >
+                    <option value="" disabled className="bg-[#0c0f1d] text-white/35">
+                      {language === 'es' ? '-- Selecciona un pueblo --' : '-- Select a town --'}
+                    </option>
+                    {PR_TOWNS_LIST.map(town => (
+                      <option key={town} value={town} className="bg-[#0c0f1d] text-white">
+                        {town}
+                      </option>
+                    ))}
+                    <option value="Otro" className="bg-[#0c0f1d] text-white">
+                      {language === 'es' ? 'Otro (Fuera de PR)' : 'Other (Outside PR)'}
+                    </option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-white/45">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -323,7 +393,7 @@ const ContactForm = () => {
             <button
               onClick={() => {
                 setIsSubmitted(false);
-                setFormData({ name: "", phone: "", email: "", goal: "" });
+                setFormData({ name: "", phone: "", email: "", goal: "", town: "" });
                 setSelectedDate(null);
                 setSelectedTime(null);
                 if (isModalLayout) {
