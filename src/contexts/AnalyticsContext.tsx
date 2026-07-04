@@ -178,11 +178,51 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     return { deviceType, os };
   };
 
+  const cleanUpAdminSession = () => {
+    try {
+      const mySessionId = sessionStorage.getItem("fjn_my_current_session_id") || localStorage.getItem("fjn_my_current_session_id");
+      const activeId = currentSessionIdRef.current;
+      
+      const idsToRemove = new Set<string>();
+      if (mySessionId) idsToRemove.add(mySessionId);
+      if (activeId) idsToRemove.add(activeId);
+
+      if (idsToRemove.size > 0) {
+        const data = localStorage.getItem('fjn_analytics_sessions');
+        if (data) {
+          const parsed = JSON.parse(data) as VisitorSession[];
+          const filtered = parsed.filter(s => s.id && !idsToRemove.has(s.id));
+          
+          if (parsed.length !== filtered.length) {
+            localStorage.setItem('fjn_analytics_sessions', JSON.stringify(filtered));
+            setSessions(filtered);
+          }
+        }
+        
+        sessionStorage.removeItem("fjn_my_current_session_id");
+        localStorage.removeItem("fjn_my_current_session_id");
+        if (currentSessionIdRef.current) {
+          currentSessionIdRef.current = null;
+        }
+        setCurrentSession(null);
+      }
+    } catch (e) {
+      console.warn("Error cleaning up admin session:", e);
+    }
+  };
+
   const startNewVisitorSession = () => {
     const deviceInfo = detectDeviceInfo();
     const uniqueSessionId = `session-live-${Math.random().toString(36).substr(2, 9)}`;
     currentSessionIdRef.current = uniqueSessionId;
     sessionTimerRef.current = 0;
+
+    try {
+      sessionStorage.setItem("fjn_my_current_session_id", uniqueSessionId);
+      localStorage.setItem("fjn_my_current_session_id", uniqueSessionId);
+    } catch (e) {
+      console.warn(e);
+    }
 
     const newSession: VisitorSession = {
       id: uniqueSessionId,
@@ -338,6 +378,8 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     const isAdmin = checkIsAdmin();
     if (!isAdmin) {
       startNewVisitorSession();
+    } else {
+      cleanUpAdminSession();
     }
 
     // 1-second interval tracker for session duration and emphasized areas
@@ -346,21 +388,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
       // Dynamic Admin Exemption Check
       if (isAdminCheck) {
-        // Exempt admin - completely delete and filter out our current session
-        if (currentSessionIdRef.current) {
-          const sid = currentSessionIdRef.current;
-          currentSessionIdRef.current = null;
-          setCurrentSession(null);
-          setSessions(all => {
-            const filtered = all.filter(s => s.id !== sid);
-            try {
-              localStorage.setItem('fjn_analytics_sessions', JSON.stringify(filtered));
-            } catch (e) {
-              console.warn(e);
-            }
-            return filtered;
-          });
-        }
+        cleanUpAdminSession();
         return;
       }
 
@@ -461,6 +489,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     
     // Dynamic Admin Click Exemption
     if (checkIsAdmin()) {
+      cleanUpAdminSession();
       return;
     }
 
@@ -498,6 +527,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   const trackSectionView = (sectionId: string, durationSec: number) => {
     // Dynamic Admin Exemption
     if (checkIsAdmin() || isSearchBot()) {
+      cleanUpAdminSession();
       return;
     }
 
@@ -513,7 +543,10 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateSessionLocation = (city: string) => {
-    if (isSearchBot() || checkIsAdmin()) return;
+    if (isSearchBot() || checkIsAdmin()) {
+      cleanUpAdminSession();
+      return;
+    }
     setCurrentSession(prev => {
       if (!prev) return null;
       const updated = {
