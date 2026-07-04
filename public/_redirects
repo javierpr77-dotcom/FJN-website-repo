@@ -1,1 +1,7 @@
-/*    /index.html   200
+# Explicit rules for crawlers and static assets to prevent HTML redirection
+/sitemap.xml    /sitemap.xml    200
+/robots.txt     /robots.txt     200
+/logo.png       /logo.png       200
+
+# Fallback for Single Page Application client-side routing
+/*              /index.html     200
