@@ -19,6 +19,9 @@ Hemos construido un motor de enrutamiento híbrido para Single Page Applications
     *   `diseño web pr` (Alta búsqueda rápida local)
     *   `seo local puerto rico` (Posicionamiento comercial)
     *   `desarrollo a medida` y `optimización de velocidad web` (Ventaja competitiva)
+    *   `crear tienda online puerto rico` y `desarrollo e-commerce puerto rico` (Comercio electrónico / Tiendas virtuales)
+    *   `alojamiento web puerto rico` y `hosting rapido puerto rico` (Servicio de Alojamiento de Servidores)
+    *   `diseño web para alojamiento puerto rico` y `sistema de reservas directas puerto rico` (Propiedades tipo Airbnb, Paradores y Hoteles)
 *   **En Inglés (Mercado internacional):**
     *   `web design puerto rico`
     *   `digital marketing agency puerto rico`
@@ -26,6 +29,8 @@ Hemos construido un motor de enrutamiento híbrido para Single Page Applications
     *   `custom software development puerto rico`
     *   `seo services san juan`
     *   `website cost puerto rico`
+    *   `custom online store development puerto rico` y `e-commerce web design puerto rico` (Online stores and checkout setup)
+    *   `web hosting puerto rico` y `direct booking website design puerto rico` (Airbnb-style custom properties and hosting performance)
 
 #### B. Frases Conversacionales y Palabras Clave Largas (Conversational Long-Tail & AEO/GEO Focus):
 Hoy en día, las búsquedas son dictadas por voz y consultas detalladas a modelos de lenguaje (ChatGPT, Gemini, Google Search Generative Experience). Las personas escriben problemas completos y buscan respuestas exactas. Seleccionamos e implementamos estructuralmente las siguientes:
@@ -35,11 +40,18 @@ Hoy en día, las búsquedas son dictadas por voz y consultas detalladas a modelo
     *   *¿Cómo posicionar un negocio número uno en las búsquedas locales de Google en Puerto Rico?*
     *   *agencia que haga páginas web modernas y optimizadas para seo en pr*
     *   *servicios profesionales de seo y marketing digital de alto nivel en puerto rico*
+    *   *¿Cómo crear una tienda virtual con Stripe o ATH Móvil en Puerto Rico?*
+    *   *¿Cómo crear una página web de reservas directas para mi alojamiento en Puerto Rico?*
+    *   *¿Cuál es el mejor alojamiento web y hosting rápido en Puerto Rico para mi sitio?*
+    *   *¿Cómo evitar comisiones de Airbnb creando mi propia web de reservas en Puerto Rico?*
 *   **En Inglés (Global):**
     *   *Which is the best professional web design and digital marketing agency in Puerto Rico?*
     *   *How do I optimize my local business website to rank first in search engines in Puerto Rico?*
     *   *strategic web systems for e-commerce and local business growth*
     *   *how to increase sales with custom landing pages in puerto rico*
+    *   *How to build a direct booking website for a rental property in Puerto Rico?*
+    *   *Where can I find premium web hosting and fast server support in Puerto Rico?*
+    *   *How to bypass Airbnb fees by building your own booking page in Puerto Rico?*
 
 ---
 

@@ -31,6 +31,18 @@ const FAQSection = () => {
     {
       question: "¿Si mi negocio contrata un sistema web avanzado, podré editar el contenido fácilmente en el futuro?",
       answer: "Totalmente. Aunque la ingeniería interna es de nivel corporativo, su administración es sumamente amigable. Integramos sistemas de gestión de contenido (CMS) simplificados y personalizados en la nube para que tu equipo pueda actualizar textos, portafolio, servicios o fotografías en segundos sin el riesgo de alterar o romper el código fuente."
+    },
+    {
+      question: "¿Cómo puedo crear una tienda online o e-commerce de alta conversión en Puerto Rico?",
+      answer: "Para crear una tienda online (e-commerce) exitosa en Puerto Rico, FJN Digital Media diseña sistemas a la medida con React 18, integrando pasarelas de pago populares como Stripe, PayPal y ATH Móvil de forma nativa. Optimizamos el catálogo de productos con buscadores rápidos y filtros dinámicos, garantizando velocidades de carga menores a 1.2 segundos para maximizar el retorno de inversión y elevar el ticket promedio de compra sin pagar mensualidades a Shopify."
+    },
+    {
+      question: "¿Cómo puedo crear una página web de reservas directas para mi alojamiento vacacional (tipo Airbnb) en Puerto Rico?",
+      answer: "FJN Digital Media desarrolla sistemas de reservas directas personalizados bajo el Plan Alojamiento Elegance. Este sistema te permite independizarte de las altas comisiones de Airbnb o VRBO. Incluye calendarios interactivos sincronizados por iCal en tiempo real, gestión automática de disponibilidad, pasarelas para cobros de depósitos de seguridad y una narrativa visual de alto nivel que impulsa a los huéspedes a reservar directamente en tu sitio web."
+    },
+    {
+      question: "¿Qué es el alojamiento web (hosting) premium y por qué es fundamental para rankear en Google en Puerto Rico?",
+      answer: "El alojamiento web (hosting) premium de FJN Digital Media utiliza servidores Edge CDN de alta velocidad para servir tu sitio web en milisegundos desde el nodo físico más cercano al usuario en Puerto Rico o EE.UU. Un hosting rápido garantiza un tiempo de primer byte (TTFB) menor a 200ms, lo cual es un factor de ranking crítico en el algoritmo Core Web Vitals de Google, protegiendo tu sitio contra caídas de tráfico y aumentando las conversiones de leads."
     }
   ] : [
     {
@@ -56,6 +68,18 @@ const FAQSection = () => {
     {
       question: "If we implement a custom advanced web system, will my team be able to edit content without breaking code?",
       answer: "Absolutely. While the core under-the-hood engineering is high-performance React and Vite, the administrative panel is incredibly simple. We deploy localized, custom cloud CMS solutions, allowing your marketing team to edit services, text, and portfolio galleries in seconds without touching a single line of code."
+    },
+    {
+      question: "How can I build a high-performance custom e-commerce store with local checkout in Puerto Rico?",
+      answer: "To launch a successful online store (e-commerce) in Puerto Rico, FJN Digital Media engineers custom React web applications integrated with local and global payment gateways including Stripe, PayPal, and ATH Móvil. We structure catalogs with immediate server-side rendering (SSR) and custom filters, creating loading speeds under 1.2s to boost sales conversion rates and maximize customer lifetime value without template constraints."
+    },
+    {
+      question: "How do I build a direct booking website for my vacation rental or hotel in Puerto Rico to bypass Airbnb commissions?",
+      answer: "Through our Elegance Accommodation Plan, FJN Digital Media builds fully autonomous booking engines for luxury villas, paradores, and short-term rentals. Our systems integrate real-time iCal calendar sync with third-party channels (like Airbnb & Booking.com), automatic check-in configurations, damage deposit processing via Stripe/ATH Móvil, and conversion-focused designs that drive commission-free direct bookings."
+    },
+    {
+      question: "What is premium web hosting, and why is it crucial for search engine rankings in Puerto Rico?",
+      answer: "Premium web hosting delivers your digital files through decentralized Edge CDN servers, minimizing load latency (under 200ms% TTFB). In Puerto Rico, high-performance hosting ensures your website loads instantly on mobile devices, which directly satisfies Google's Core Web Vitals and Helpful Content algorithms, raising your search position and retaining warm prospective buyers."
     }
   ];
 

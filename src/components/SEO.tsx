@@ -49,8 +49,8 @@ const SEO = ({
 
   // Selected Short-tail and Conversational Long-tail keywords based on extensive search habit analysis in PR & internationally
   const keywordsList = language === 'es'
-    ? 'paginas web puerto rico, páginas web puerto rico, diseño de páginas web puerto rico, diseño de paginas web puerto rico, crear pagina web puerto rico, crear página web puerto rico, diseño web puerto rico, desarrollo web puerto rico, paginas de internet puerto rico, páginas de internet puerto rico, agencia de diseño web puerto rico, diseño de paginas web en puerto rico, diseñador web puerto rico, diseñador web pr, diseño web pr, seo puerto rico, seo local puerto rico, desarrollo de paginas web puerto rico, agencia seo puerto rico, programador de paginas web puerto rico, hacer paginas web puerto rico, paginas web san juan puerto rico, agencia marketing digital puerto rico, tienda online puerto rico, desarrollo e-commerce puerto rico, quien hace paginas de internet en puerto rico, mejores agencias de diseño web en puerto rico, paginas web para medicos puerto rico, paginas web para abogados puerto rico, paginas web para negocios puerto rico, ¿cuál es la mejor agencia de diseño de páginas web en puerto rico?, ¿cuánto cuesta delegar nuestro marketing digital y diseño de páginas web?, cómo posicionar un negocio local número uno en búsquedas de google en puerto rico, contratar desarrolladores profesionales speed web puerto rico, servicios profesionales de seo y marketing digital de alto nivel en puerto rico, agencia que haga páginas web modernas y optimizadas para seo en pr'
-    : 'web design puerto rico, puerto rico web design, website design puerto rico, puerto rico web developer, web development puerto rico, custom web design puerto rico, san juan web design, web designers puerto rico, create website puerto rico, e-commerce puerto rico, seo agency puerto rico, digital marketing puerto rico, best web design agency puerto rico, professional website puerto rico, local seo san juan, cheap web design puerto rico, wordpress alternative puerto rico, high conversion web systems puerto rico, website cost puerto rico, strategic sales funnels, best digital marketing and professional web design agency in puerto rico, strategic web systems for e-commerce and local business growth, how to increase sales with custom landing pages in puerto rico, top web developers san juan puerto rico, search optimization for local agencies and startups';
+    ? 'paginas web puerto rico, páginas web puerto rico, diseño de páginas web puerto rico, diseño de paginas web puerto rico, crear pagina web puerto rico, crear página web puerto rico, diseño web puerto rico, desarrollo web puerto rico, paginas de internet puerto rico, páginas de internet puerto rico, agencia de diseño web puerto rico, diseño de paginas web en puerto rico, diseñador web puerto rico, diseñador web pr, diseño web pr, seo puerto rico, seo local puerto rico, desarrollo de paginas web puerto rico, agencia seo puerto rico, programador de paginas web puerto rico, hacer paginas web puerto rico, paginas web san juan puerto rico, agencia marketing digital puerto rico, tienda online puerto rico, desarrollo e-commerce puerto rico, crear tienda online puerto rico, diseño e-commerce puerto rico, desarrollo de tiendas online puerto rico, vender por internet puerto rico, tienda virtual puerto rico, diseño web ecommerce puerto rico, planes de tienda online pr, pasarela de pago puerto rico, diseño web para alojamiento puerto rico, crear pagina web de reservas puerto rico, pagina web para rentas a corto plazo puerto rico, alojamiento web puerto rico, hosting rapido puerto rico, servidores de alojamiento web pr, sistema de reservas directas puerto rico, pagina web airbnb puerto rico, diseño web villas y hoteles puerto rico, quien hace paginas de internet en puerto rico, mejores agencias de diseño web en puerto rico, paginas web para medicos puerto rico, paginas web para abogados puerto rico, paginas web para negocios puerto rico, ¿cuál es la mejor agencia de diseño de páginas web en puerto rico?, ¿cuánto cuesta delegar nuestro marketing digital y diseño de páginas web?, cómo posicionar un negocio local número uno en búsquedas de google en puerto rico, contratar desarrolladores profesionales speed web puerto rico, servicios profesionales de seo y marketing digital de alto nivel en puerto rico, agencia que haga páginas web modernas y optimizadas para seo en pr, ¿cuál es el costo de crear una tienda online personalizada en puerto rico?, ¿cómo crear una tienda virtual con stripe o ath móvil en puerto rico?, agencia experta en desarrollo e-commerce y tiendas online a medida en puerto rico, planes para crear una tienda online y vender por internet en pr, el mejor sistema de comercio electrónico de alta conversión para negocios locales, ¿cómo crear una página web de reservas directas para mi alojamiento en puerto rico?, ¿cuál es el mejor alojamiento web y hosting rápido en puerto rico para mi sitio?, ¿cómo evitar comisiones de airbnb creando mi propia web de reservas en puerto rico?, agencia para hacer páginas web de alquiler vacacional y paradores en pr, planes de alojamiento web premium con soporte local en puerto rico'
+    : 'web design puerto rico, puerto rico web design, website design puerto rico, puerto rico web developer, web development puerto rico, custom web design puerto rico, san juan web design, web designers puerto rico, create website puerto rico, e-commerce puerto rico, seo agency puerto rico, digital marketing puerto rico, best web design agency puerto rico, professional website puerto rico, local seo san juan, cheap web design puerto rico, wordpress alternative puerto rico, high conversion web systems puerto rico, website cost puerto rico, strategic sales funnels, e-commerce web design puerto rico, custom online store development puerto rico, ecommerce developers puerto rico, shopify alternative puerto rico, stripe integration puerto rico, ath movil checkout website, web design for short term rentals puerto rico, direct booking website design puerto rico, vacation rental web development puerto rico, boutique hotel web design san juan, web hosting puerto rico, fast server hosting pr, best digital marketing and professional web design agency in puerto rico, strategic web systems for e-commerce and local business growth, how to increase sales with custom landing pages in puerto rico, top web developers san juan puerto rico, search optimization for local agencies and startups, how much does a custom e-commerce website cost in puerto rico?, best agency to build a custom online store with stripe in puerto rico?, high-converting e-commerce web systems for local businesses, how to build a direct booking website for a rental property in puerto rico?, where can I find premium web hosting and fast server support in puerto rico?, how to bypass airbnb fees by building your own booking page in puerto rico?';
 
   // Schema.org JSON-LD for advanced GEO / GIO optimization
   const structuredData = {
@@ -125,14 +125,38 @@ const SEO = ({
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "E-Commerce & Strategic Web Services",
+      "name": "E-Commerce, Hosting & Strategic Web Services",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Strategic Web System (E-commerce / Landing)",
-            "description": "Custom coded React web systems optimized for 30%+ conversions, built with modern UI and smooth 60fps animations."
+            "name": "Premium Landing Page & Sales Funnels",
+            "description": "High-converting, single-page custom systems built with React and Vite, designed to capture leads and drive over 30% conversion rates."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Custom E-commerce & Online Stores",
+            "description": "Bespoke online stores with secure checkout (Stripe, PayPal, ATH Móvil), advanced catalog search, inventory systems, and zero-template designs."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Elite Multi-page Corporate Website",
+            "description": "Premium multi-page custom business websites with advanced local SEO, persuasive copywriting, and custom integrations to build absolute local authority."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Elegance Accommodation Booking & Premium Web Hosting",
+            "description": "Autonomous booking systems for short-term rentals and boutique hotels to escape OTA fees, paired with ultra-fast local server hosting and 200ms TTFB."
           }
         },
         {
@@ -200,6 +224,30 @@ const SEO = ({
           "@type": "Answer",
           "text": "Para automatizar la atracción de leads altamente calificados, implementamos sistemas avanzados de embudo de conversión (sales funnels) combinados con landing pages de alto impacto táctico. Capturamos la información del cliente mediante registros asincrónicos directos a bases de datos y enrutamiento dual a WhatsApp directo, incrementando la conversión en un 55% y asegurando que ningún contacto de negocio se pierda en el proceso."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo puedo crear una tienda online o e-commerce de alta conversión en Puerto Rico?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Para crear una tienda online (e-commerce) exitosa en Puerto Rico, FJN Digital Media diseña sistemas a la medida con React 18, integrando pasarelas de pago populares como Stripe, PayPal y ATH Móvil de forma nativa. Optimizamos el catálogo de productos con buscadores rápidos y filtros dinámicos, garantizando velocidades de carga menores a 1.2 segundos para maximizar el retorno de inversión y elevar el ticket promedio de compra sin pagar mensualidades a Shopify."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo puedo crear una página web de reservas directas para mi alojamiento vacacional (tipo Airbnb) en Puerto Rico?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "FJN Digital Media desarrolla sistemas de reservas directas personalizados bajo el Plan Alojamiento Elegance. Este sistema te permite independizarte de las altas comisiones de Airbnb o VRBO. Incluye calendarios interactivos sincronizados por iCal en tiempo real, gestión automática de disponibilidad, pasarelas para cobros de depósitos de seguridad y una narrativa visual de alto nivel que impulsa a los huéspedes a reservar directamente en tu sitio web."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué es el alojamiento web (hosting) premium y por qué es fundamental para rankear en Google en Puerto Rico?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El alojamiento web (hosting) premium de FJN Digital Media utiliza servidores Edge CDN de alta velocidad para servir tu sitio web en milisegundos desde el nodo físico más cercano al usuario en Puerto Rico o EE.UU. Un hosting rápido garantiza un tiempo de primer byte (TTFB) menor a 200ms, lo cual es un factor de ranking crítico en el algoritmo Core Web Vitals de Google, protegiendo tu sitio contra caídas de tráfico y aumentando las conversiones de leads."
+        }
       }
     ] : [
       {
@@ -240,6 +288,30 @@ const SEO = ({
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "The most effective way is through localized sales funnels, high-relevance landing pages, and automated WhatsApp contact capture systems. FJN Digital Media implements dual-stage capture funnels that back up client data securely before routing them instantly to chat channels, maximizing contact rates by over 55%."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can I build a high-performance custom e-commerce store with local checkout in Puerto Rico?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To launch a successful online store (e-commerce) in Puerto Rico, FJN Digital Media engineers custom React web applications integrated with local and global payment gateways including Stripe, PayPal, and ATH Móvil. We structure catalogs with immediate server-side rendering (SSR) and custom filters, creating loading speeds under 1.2s to boost sales conversion rates and maximize customer lifetime value without template constraints."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I build a direct booking website for my vacation rental or hotel in Puerto Rico to bypass Airbnb commissions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Through our Elegance Accommodation Plan, FJN Digital Media builds fully autonomous booking engines for luxury villas, paradores, and short-term rentals. Our systems integrate real-time iCal calendar sync with third-party channels (like Airbnb & Booking.com), automatic check-in configurations, damage deposit processing via Stripe/ATH Móvil, and conversion-focused designs that drive commission-free direct bookings."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is premium web hosting, and why is it crucial for search engine rankings in Puerto Rico?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Premium web hosting delivers your digital files through decentralized Edge CDN servers, minimizing load latency (under 200ms TTFB). In Puerto Rico, high-performance hosting ensures your website loads instantly on mobile devices, which directly satisfies Google's Core Web Vitals and Helpful Content algorithms, raising your search position and retaining warm prospective buyers."
         }
       }
     ]
