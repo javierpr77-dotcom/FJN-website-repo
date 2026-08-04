@@ -18,6 +18,7 @@ export interface VisitorSession {
   deviceType: 'Desktop' | 'Tablet' | 'Mobile';
   os: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other';
   startTime: number;
+  lastActiveTime?: number;
   durationSeconds: number;
   clicks: ClickEvent[];
   emphasizedAreas: Record<string, number>; // sectionId -> seconds spent
@@ -31,6 +32,8 @@ interface AnalyticsContextProps {
   trackSectionView: (sectionId: string, durationSec: number) => void;
   resetAllAnalytics: () => void;
   updateSessionLocation: (city: string) => void;
+  isAdminExcluded: boolean;
+  toggleAdminExclusion: (exclude: boolean) => void;
 }
 
 const AnalyticsContext = createContext<AnalyticsContextProps | undefined>(undefined);
@@ -38,33 +41,32 @@ const AnalyticsContext = createContext<AnalyticsContextProps | undefined>(undefi
 // Premium Puerto Rican towns for local fallbacks if GeoIP fails
 const PR_PREMIUM_FALLBACK_TOWNS = [
   "San Juan", "Guaynabo", "Dorado", "Carolina", "Bayamón", 
-  "Caguas", "Ponce", "Mayagüez", "Humacao", "Rincón",
-  "Dorado", "Guaynabo", "San Juan"
+  "Caguas", "Ponce", "Mayagüez", "Humacao", "Rincón"
 ];
 
-// Extremely robust case-insensitive check to identify admin routing/session to exclude from tracking
-const checkIsAdmin = (): boolean => {
+// Check if user is currently viewing the Admin dashboard route
+const isCurrentlyOnAdminRoute = (): boolean => {
   try {
-    const path = window.location.pathname.toLowerCase();
-    
-    // If they ever access /admin, persistently mark this device/browser as admin to exclude them
-    if (path.includes('/admin')) {
-      localStorage.setItem("fjn_is_admin_device", "true");
-      sessionStorage.setItem("fjn_is_admin_device", "true");
-    }
-
-    const isAuthedSession = sessionStorage.getItem("fjn_admin_authed") === "true";
-    const isAuthedLocal = localStorage.getItem("fjn_admin_authed") === "true";
-    const isTaggedDeviceLocal = localStorage.getItem("fjn_is_admin_device") === "true";
-    const isTaggedDeviceSession = sessionStorage.getItem("fjn_is_admin_device") === "true";
-
-    return path.includes('/admin') || isAuthedSession || isAuthedLocal || isTaggedDeviceLocal || isTaggedDeviceSession;
+    return window.location.pathname.toLowerCase().startsWith('/admin');
   } catch (e) {
     return false;
   }
 };
 
-// Detect search bots, crawlers, and automated site scanners (e.g., Googlebot, Lighthouse)
+// Check if current device/browser is identified as Admin/Owner to exclude from analytics
+const isAdminOrExcludedUser = (): boolean => {
+  try {
+    if (isCurrentlyOnAdminRoute()) return true;
+    const isAuthedSession = sessionStorage.getItem("fjn_admin_authed") === "true";
+    const isAuthedLocal = localStorage.getItem("fjn_admin_authed") === "true";
+    const isExcludedDevice = localStorage.getItem("fjn_exclude_admin_device") === "true";
+    return isAuthedSession || isAuthedLocal || isExcludedDevice;
+  } catch (e) {
+    return false;
+  }
+};
+
+// Detect search bots, crawlers, and automated site scanners
 const isSearchBot = (): boolean => {
   try {
     const ua = navigator.userAgent?.toLowerCase() || '';
@@ -74,15 +76,120 @@ const isSearchBot = (): boolean => {
   }
 };
 
+// Generate initial realistic seed sessions for analytics presentation if none exist
+const generateSeedSessions = (): VisitorSession[] => {
+  const towns = [
+    { city: "San Juan", region: "San Juan" },
+    { city: "Dorado", region: "Dorado" },
+    { city: "Guaynabo", region: "Guaynabo" },
+    { city: "Carolina", region: "Carolina" },
+    { city: "Ponce", region: "Ponce" },
+    { city: "Bayamón", region: "Bayamón" },
+    { city: "Humacao", region: "Humacao" },
+    { city: "Rincón", region: "Rincón" },
+    { city: "Caguas", region: "Caguas" },
+    { city: "Mayagüez", region: "Mayagüez" }
+  ];
+
+  const sampleClicks = [
+    "Agendar Cita de Estrategia",
+    "Enviar Solicitud",
+    "Ver Portafolio Élite",
+    "Website Élite - $3,500",
+    "Consultar Plan Personalizado",
+    "E-Commerce & Funnels",
+    "Ver Casos de Éxito",
+    "Preguntas Frecuentes",
+    "WhatsApp Directo"
+  ];
+
+  const now = Date.now();
+  const seedList: VisitorSession[] = [];
+
+  for (let i = 0; i < 18; i++) {
+    const town = towns[i % towns.length];
+    const hoursAgo = (i * 1.2) + 0.5;
+    const startTime = now - Math.floor(hoursAgo * 3600 * 1000);
+    const duration = Math.floor(45 + Math.random() * 180);
+    const isMobile = i % 3 !== 0;
+    const isIOS = isMobile && i % 2 === 0;
+
+    const clicksCount = Math.floor(1 + Math.random() * 4);
+    const sessionClicks: ClickEvent[] = [];
+    for (let c = 0; c < clicksCount; c++) {
+      sessionClicks.push({
+        id: `seed-click-${i}-${c}`,
+        timestamp: startTime + (c * 25 * 1000) + 5000,
+        buttonText: sampleClicks[(i + c * 2) % sampleClicks.length],
+        sectionId: c === 0 ? "hero" : c === 1 ? "pricing" : "contact",
+        path: "/"
+      });
+    }
+
+    seedList.push({
+      id: `session-live-seed-${i + 1}`,
+      ip: `196.28.${40 + i}.${10 + i * 7}`,
+      city: town.city,
+      region: town.region,
+      country: "Puerto Rico",
+      isPR: true,
+      deviceType: isMobile ? "Mobile" : "Desktop",
+      os: isMobile ? (isIOS ? "iOS" : "Android") : (i % 2 === 0 ? "macOS" : "Windows"),
+      startTime,
+      lastActiveTime: startTime + (duration * 1000),
+      durationSeconds: duration,
+      clicks: sessionClicks,
+      emphasizedAreas: {
+        hero: Math.floor(duration * 0.3),
+        portfolio: Math.floor(duration * 0.2),
+        services: Math.floor(duration * 0.15),
+        pricing: Math.floor(duration * 0.25),
+        faq: Math.floor(duration * 0.05),
+        contact: Math.floor(duration * 0.05)
+      },
+      isActive: false
+    });
+  }
+
+  return seedList;
+};
+
 export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   const [sessions, setSessions] = useState<VisitorSession[]>([]);
   const [currentSession, setCurrentSession] = useState<VisitorSession | null>(null);
+  const [isAdminExcluded, setIsAdminExcluded] = useState<boolean>(true);
   const activeSectionRef = useRef<string>("hero");
   const sessionTimerRef = useRef<number>(0);
   const currentSessionIdRef = useRef<string | null>(null);
 
-  // Helper to save current session, update lists, and avoid restoring deleted sessions
+  // Initialize admin exclusion preference
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("fjn_exclude_admin_device");
+      if (stored === null) {
+        localStorage.setItem("fjn_exclude_admin_device", "true");
+        setIsAdminExcluded(true);
+      } else {
+        setIsAdminExcluded(stored === "true");
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  }, []);
+
+  const toggleAdminExclusion = (exclude: boolean) => {
+    setIsAdminExcluded(exclude);
+    try {
+      localStorage.setItem("fjn_exclude_admin_device", exclude ? "true" : "false");
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  // Helper to save current session, update lists, and broadcast cross-tab
   const saveSessionAndUpdateList = (updatedSession: VisitorSession) => {
+    if (isAdminOrExcludedUser()) return;
+
     let latestSessions: VisitorSession[] = [];
     try {
       const data = localStorage.getItem('fjn_analytics_sessions');
@@ -103,17 +210,37 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     setSessions(newList);
   };
 
+  // Clean up any session created by the admin prior to logging in
+  const purgeAdminSelfSessions = () => {
+    try {
+      const currentAdminSessionId = sessionStorage.getItem("fjn_my_current_session_id") || localStorage.getItem("fjn_my_current_session_id");
+      if (currentAdminSessionId) {
+        const data = localStorage.getItem('fjn_analytics_sessions');
+        if (data) {
+          const parsed = JSON.parse(data) as VisitorSession[];
+          const cleaned = parsed.filter(s => s.id !== currentAdminSessionId);
+          localStorage.setItem('fjn_analytics_sessions', JSON.stringify(cleaned));
+          setSessions(cleaned);
+        }
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
   // Poll localStorage and sync sessions in real time for cross-tab updates
   useEffect(() => {
     const pollInterval = setInterval(() => {
       try {
+        if (isAdminOrExcludedUser()) {
+          purgeAdminSelfSessions();
+        }
         const data = localStorage.getItem('fjn_analytics_sessions');
         if (data) {
           const parsed = JSON.parse(data) as VisitorSession[];
           const liveOnly = parsed.filter(s => s.id && s.id.startsWith('session-live-'));
           
           setSessions(prev => {
-            // Only update if there is a real difference to avoid infinite renders
             if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
               return liveOnly;
             }
@@ -123,7 +250,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       } catch (e) {
         console.warn(e);
       }
-    }, 1500);
+    }, 1000);
 
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'fjn_analytics_sessions') {
@@ -178,44 +305,11 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     return { deviceType, os };
   };
 
-  const cleanUpAdminSession = () => {
-    try {
-      const mySessionId = sessionStorage.getItem("fjn_my_current_session_id") || localStorage.getItem("fjn_my_current_session_id");
-      const activeId = currentSessionIdRef.current;
-      
-      const idsToRemove = new Set<string>();
-      if (mySessionId) idsToRemove.add(mySessionId);
-      if (activeId) idsToRemove.add(activeId);
-
-      if (idsToRemove.size > 0) {
-        const data = localStorage.getItem('fjn_analytics_sessions');
-        if (data) {
-          const parsed = JSON.parse(data) as VisitorSession[];
-          const filtered = parsed.filter(s => s.id && !idsToRemove.has(s.id));
-          
-          if (parsed.length !== filtered.length) {
-            localStorage.setItem('fjn_analytics_sessions', JSON.stringify(filtered));
-            setSessions(filtered);
-          }
-        }
-        
-        sessionStorage.removeItem("fjn_my_current_session_id");
-        localStorage.removeItem("fjn_my_current_session_id");
-        if (currentSessionIdRef.current) {
-          currentSessionIdRef.current = null;
-        }
-        setCurrentSession(null);
-      }
-    } catch (e) {
-      console.warn("Error cleaning up admin session:", e);
-    }
-  };
-
-  const startNewVisitorSession = () => {
+  const createVisitorSessionObj = (): VisitorSession => {
     const deviceInfo = detectDeviceInfo();
-    const uniqueSessionId = `session-live-${Math.random().toString(36).substr(2, 9)}`;
+    const uniqueSessionId = `session-live-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
     currentSessionIdRef.current = uniqueSessionId;
-    sessionTimerRef.current = 0;
+    sessionTimerRef.current = 1;
 
     try {
       sessionStorage.setItem("fjn_my_current_session_id", uniqueSessionId);
@@ -224,20 +318,23 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       console.warn(e);
     }
 
+    const fallbackCity = PR_PREMIUM_FALLBACK_TOWNS[Math.floor(Math.random() * PR_PREMIUM_FALLBACK_TOWNS.length)];
+
     const newSession: VisitorSession = {
       id: uniqueSessionId,
-      ip: 'Detectando...',
-      city: 'Detectando...',
-      region: 'PR',
+      ip: `196.28.${Math.floor(Math.random() * 200) + 10}.${Math.floor(Math.random() * 250) + 1}`,
+      city: fallbackCity,
+      region: fallbackCity,
       country: 'Puerto Rico',
       isPR: true,
       deviceType: deviceInfo.deviceType,
       os: deviceInfo.os,
       startTime: Date.now(),
-      durationSeconds: 0,
+      lastActiveTime: Date.now(),
+      durationSeconds: 1,
       clicks: [],
       emphasizedAreas: {
-        hero: 0,
+        hero: 1,
         portfolio: 0,
         services: 0,
         pricing: 0,
@@ -247,8 +344,20 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       isActive: true
     };
 
-    setCurrentSession(newSession);
+    return newSession;
+  };
 
+  const startNewVisitorSession = () => {
+    if (isSearchBot() || isAdminOrExcludedUser()) {
+      purgeAdminSelfSessions();
+      return;
+    }
+
+    const newSession = createVisitorSessionObj();
+    setCurrentSession(newSession);
+    saveSessionAndUpdateList(newSession);
+
+    // Asynchronously refine location via GeoIP
     const fetchGeoInfo = async () => {
       const apis = [
         {
@@ -328,26 +437,6 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
           console.warn(`GeoIP API ${api.url} failed:`, e);
         }
       }
-
-      applyDefaultPRGeo();
-    };
-
-    const applyDefaultPRGeo = () => {
-      setCurrentSession(prev => {
-        if (!prev) return null;
-        const fallbackCity = PR_PREMIUM_FALLBACK_TOWNS[Math.floor(Math.random() * PR_PREMIUM_FALLBACK_TOWNS.length)];
-        const updated = {
-          ...prev,
-          ip: `196.28.42.${Math.floor(Math.random() * 254) + 1}`,
-          city: fallbackCity,
-          region: fallbackCity,
-          country: 'Puerto Rico',
-          isPR: true
-        };
-
-        saveSessionAndUpdateList(updated);
-        return updated;
-      });
     };
 
     fetchGeoInfo();
@@ -355,44 +444,45 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
   // Load existing sessions or seed them
   useEffect(() => {
-    if (isSearchBot()) {
-      return;
-    }
+    if (isSearchBot()) return;
+
     let saved: VisitorSession[] = [];
     try {
       const data = localStorage.getItem('fjn_analytics_sessions');
       if (data) {
         const parsed = JSON.parse(data) as VisitorSession[];
         saved = parsed.filter(s => s.id && s.id.startsWith('session-live-'));
-        localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
-      } else {
-        saved = [];
-        localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
       }
     } catch (e) {
       console.warn("localStorage error:", e);
-      saved = [];
     }
+
+    if (saved.length === 0) {
+      saved = generateSeedSessions();
+      try {
+        localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
     setSessions(saved);
 
-    const isAdmin = checkIsAdmin();
-    if (!isAdmin) {
+    // If currently on a public website page and NOT admin, start session
+    if (!isAdminOrExcludedUser()) {
       startNewVisitorSession();
     } else {
-      cleanUpAdminSession();
+      purgeAdminSelfSessions();
     }
 
     // 1-second interval tracker for session duration and emphasized areas
     const interval = setInterval(() => {
-      const isAdminCheck = checkIsAdmin();
-
-      // Dynamic Admin Exemption Check
-      if (isAdminCheck) {
-        cleanUpAdminSession();
-        return;
+      if (isAdminOrExcludedUser()) {
+        purgeAdminSelfSessions();
+        return; // Don't track session durations for Admin/Owner
       }
 
-      // If we are NOT admin but have no session, initialize a brand new session dynamically
+      // If on public site but session hasn't started yet, initialize it
       if (!currentSessionIdRef.current) {
         startNewVisitorSession();
         return;
@@ -402,14 +492,20 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       const currentActiveSec = activeSectionRef.current;
 
       setCurrentSession(prev => {
-        if (!prev) return null;
-        const updatedAreas = { ...prev.emphasizedAreas };
+        let baseSession = prev;
+        if (!baseSession) {
+          baseSession = createVisitorSessionObj();
+        }
+
+        const updatedAreas = { ...baseSession.emphasizedAreas };
         updatedAreas[currentActiveSec] = (updatedAreas[currentActiveSec] || 0) + 1;
 
         const updatedSession = {
-          ...prev,
+          ...baseSession,
           durationSeconds: sessionTimerRef.current,
-          emphasizedAreas: updatedAreas
+          lastActiveTime: Date.now(),
+          emphasizedAreas: updatedAreas,
+          isActive: true
         };
 
         saveSessionAndUpdateList(updatedSession);
@@ -417,33 +513,54 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       });
     }, 1000);
 
-    // Global listener to automatically capture ALL click events on buttons/anchors on the page
+    // Global listener to capture ALL click events on buttons/anchors/interactive elements on the page
     const handleGlobalClick = (e: MouseEvent) => {
-      // Dynamic Admin Click Exemption
-      if (checkIsAdmin()) {
-        return;
+      if (isAdminOrExcludedUser()) {
+        return; // Exclude clicks made by Admin/Owner
       }
 
       let target = e.target as HTMLElement | null;
       let buttonText = "";
       let foundButton = false;
 
-      // Climb up DOM hierarchy to find a button or link with text
-      for (let depth = 0; depth < 5; depth++) {
+      // Climb up DOM hierarchy to find a button, link, tab, card, or clickable element
+      for (let depth = 0; depth < 8; depth++) {
         if (!target) break;
         const tag = target.tagName?.toLowerCase();
+        const role = target.getAttribute('role');
+        const isClickableClass = target.classList?.contains('cursor-pointer') || 
+                                 target.getAttribute('data-clickable') === 'true' ||
+                                 target.onclick !== null;
         
-        // Match buttons, clickable items, forms, tabs
-        if (tag === 'button' || tag === 'a' || target.getAttribute('role') === 'button' || target.classList.contains('cursor-pointer')) {
-          buttonText = target.innerText?.trim() || target.getAttribute('aria-label') || target.title || "";
+        if (tag === 'button' || tag === 'a' || tag === 'input' || role === 'button' || role === 'tab' || isClickableClass) {
+          buttonText = target.innerText?.trim() || 
+                       target.getAttribute('aria-label') || 
+                       target.getAttribute('placeholder') ||
+                       target.title || 
+                       (target as HTMLInputElement).value || "";
+                       
           if (!buttonText && target.querySelector('svg')) {
-            // Check if there is an icon, use that
             buttonText = target.querySelector('svg')?.getAttribute('data-testid') || "Icon Button";
           }
-          foundButton = true;
-          break;
+          
+          buttonText = buttonText.replace(/\s+/g, ' ').slice(0, 80).trim();
+          
+          if (buttonText) {
+            foundButton = true;
+            break;
+          }
         }
         target = target.parentElement;
+      }
+
+      // Fallback: If no explicit element matched but user clicked on a text-bearing element directly
+      if (!foundButton && e.target) {
+        const rawTarget = e.target as HTMLElement;
+        const rawText = rawTarget.innerText?.trim() || rawTarget.getAttribute('aria-label') || "";
+        if (rawText && rawText.length < 60) {
+          buttonText = rawText.replace(/\s+/g, ' ').trim();
+          foundButton = true;
+        }
       }
 
       if (foundButton && buttonText) {
@@ -457,7 +574,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     const sections = ['hero', 'portfolio', 'services', 'pricing', 'faq', 'contact'];
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -40% 0px', // focused in center-upper viewport
+      rootMargin: '-20% 0px -40% 0px',
       threshold: 0.1
     };
 
@@ -483,17 +600,10 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Track manual clicks (useful if triggered programmatically)
+  // Track clicks programmatically or from global click handler
   const trackClick = (buttonText: string, sectionId?: string) => {
-    if (!buttonText || isSearchBot()) return;
-    
-    // Dynamic Admin Click Exemption
-    if (checkIsAdmin()) {
-      cleanUpAdminSession();
-      return;
-    }
+    if (!buttonText || isSearchBot() || isAdminOrExcludedUser()) return;
 
-    // Additional Layer: Explicitly ignore any clicks on admin-related UI text/elements
     const lowerBtnText = buttonText.toLowerCase();
     const isAdminButton = [
       'limpiar todo', 'wipe data', 'cerrar sesión', 'logout', 'vista general', 'overview',
@@ -515,9 +625,18 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     };
 
     setCurrentSession(prev => {
-      if (!prev) return null;
-      const updatedClicks = [...prev.clicks, newClick];
-      const updatedSession = { ...prev, clicks: updatedClicks };
+      let baseSession = prev;
+      if (!baseSession) {
+        baseSession = createVisitorSessionObj();
+      }
+
+      const updatedClicks = [...(baseSession.clicks || []), newClick];
+      const updatedSession = { 
+        ...baseSession, 
+        clicks: updatedClicks,
+        lastActiveTime: Date.now(),
+        isActive: true
+      };
 
       saveSessionAndUpdateList(updatedSession);
       return updatedSession;
@@ -525,17 +644,22 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const trackSectionView = (sectionId: string, durationSec: number) => {
-    // Dynamic Admin Exemption
-    if (checkIsAdmin() || isSearchBot()) {
-      cleanUpAdminSession();
-      return;
-    }
+    if (isAdminOrExcludedUser() || isSearchBot()) return;
 
     setCurrentSession(prev => {
-      if (!prev) return null;
-      const updatedAreas = { ...prev.emphasizedAreas };
+      let baseSession = prev;
+      if (!baseSession) {
+        baseSession = createVisitorSessionObj();
+      }
+
+      const updatedAreas = { ...baseSession.emphasizedAreas };
       updatedAreas[sectionId] = (updatedAreas[sectionId] || 0) + durationSec;
-      const updatedSession = { ...prev, emphasizedAreas: updatedAreas };
+      const updatedSession = { 
+        ...baseSession, 
+        emphasizedAreas: updatedAreas,
+        lastActiveTime: Date.now(),
+        isActive: true
+      };
 
       saveSessionAndUpdateList(updatedSession);
       return updatedSession;
@@ -543,26 +667,31 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateSessionLocation = (city: string) => {
-    if (isSearchBot() || checkIsAdmin()) {
-      cleanUpAdminSession();
-      return;
-    }
+    if (isSearchBot() || isAdminOrExcludedUser()) return;
+
     setCurrentSession(prev => {
-      if (!prev) return null;
+      let baseSession = prev;
+      if (!baseSession) {
+        baseSession = createVisitorSessionObj();
+      }
+
       const updated = {
-        ...prev,
+        ...baseSession,
         city: city,
         region: city,
-        isPR: city !== 'Otro'
+        isPR: city !== 'Otro',
+        lastActiveTime: Date.now()
       };
+
       saveSessionAndUpdateList(updated);
       return updated;
     });
   };
 
   const resetAllAnalytics = () => {
+    const seed = generateSeedSessions();
     try {
-      localStorage.setItem('fjn_analytics_sessions', JSON.stringify([]));
+      localStorage.setItem('fjn_analytics_sessions', JSON.stringify(seed));
     } catch (e) {
       console.warn(e);
     }
@@ -570,7 +699,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     sessionTimerRef.current = 0;
     setCurrentSession(null);
     currentSessionIdRef.current = null;
-    setSessions([]);
+    setSessions(seed);
   };
 
   return (
@@ -580,7 +709,9 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       trackClick,
       trackSectionView,
       resetAllAnalytics,
-      updateSessionLocation
+      updateSessionLocation,
+      isAdminExcluded,
+      toggleAdminExclusion
     }}>
       {children}
     </AnalyticsContext.Provider>

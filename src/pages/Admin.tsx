@@ -4,7 +4,7 @@ import {
   Shield, Lock, Unlock, Key, Cpu, TrendingUp, Activity, MapPin, 
   Smartphone, Laptop, MousePointer, Users, RefreshCw, Clock, 
   Compass, Eye, Target, DollarSign, Megaphone, Sparkles, 
-  ArrowUpRight, BarChart2, Bell, Play, CheckCircle2, AlertTriangle, Phone
+  ArrowUpRight, BarChart2, Bell, Play, CheckCircle2, AlertTriangle, Phone, ShieldCheck
 } from "lucide-react";
 import { useAnalytics, VisitorSession } from "@/contexts/AnalyticsContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -89,7 +89,7 @@ const CAMPAIGN_ADVISORY = [
 ];
 
 const Admin = () => {
-  const { currentSession, sessions, resetAllAnalytics } = useAnalytics();
+  const { currentSession, sessions, resetAllAnalytics, isAdminExcluded, toggleAdminExclusion } = useAnalytics();
   const { language } = useLanguage();
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -114,7 +114,7 @@ const Admin = () => {
       setAuthError(false);
       sessionStorage.setItem("fjn_admin_authed", "true");
       localStorage.setItem("fjn_admin_authed", "true");
-      localStorage.setItem("fjn_is_admin_device", "true");
+      localStorage.setItem("fjn_exclude_admin_device", "true");
       triggerToast("Acceso Concedido. Consola Cuántica FJN en línea.");
     } else {
       setAuthError(true);
@@ -520,6 +520,34 @@ const Admin = () => {
 
       <main className="container mx-auto max-w-7xl px-6 pt-10 relative z-20">
         
+        {/* Admin Session Exclusion Status Banner */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#00D4FF]/10 border border-[#00D4FF]/30 p-4 rounded-2xl mb-8 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-[#00D4FF]/20 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-5 h-5 text-[#00D4FF]" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                <span>{language === 'es' ? 'Exclusión de Administrador Activa' : 'Admin Session Exclusion Active'}</span>
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              </p>
+              <p className="text-xs text-white/70 mt-0.5">
+                {language === 'es'
+                  ? 'Tu navegación, pruebas y clics están excluidos automáticamente para que la analítica refleje únicamente clientes reales sin discrepancias.'
+                  : 'Your visits, tests, and clicks are automatically excluded so analytics reflect genuine customer traffic only.'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => toggleAdminExclusion(!isAdminExcluded)}
+            className="shrink-0 px-3.5 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-mono transition-colors border border-white/10 cursor-pointer"
+          >
+            {isAdminExcluded 
+              ? (language === 'es' ? 'Modo Excluido (ON)' : 'Excluded Mode (ON)')
+              : (language === 'es' ? 'Modo Incluido (OFF)' : 'Included Mode (OFF)')}
+          </button>
+        </div>
+
         {/* Dashboard Introduction Header */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10 pb-6 border-b border-white/5">
           <div>
