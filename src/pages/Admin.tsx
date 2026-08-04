@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Shield, Lock, Unlock, Key, Cpu, TrendingUp, Activity, MapPin, 
   Smartphone, Laptop, MousePointer, Users, RefreshCw, Clock, 
   Compass, Eye, Target, DollarSign, Megaphone, Sparkles, 
-  ArrowUpRight, BarChart2, Bell, Play, CheckCircle2, AlertTriangle, Phone, ShieldCheck
+  ArrowUpRight, BarChart2, Bell, Play, CheckCircle2, AlertTriangle, Phone, ShieldCheck, Calendar
 } from "lucide-react";
 import { useAnalytics, VisitorSession } from "@/contexts/AnalyticsContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -14,6 +14,8 @@ import {
   PieChart, Pie, Cell, AreaChart, Area, RadarChart, PolarGrid, 
   PolarAngleAxis, PolarRadiusAxis, Radar 
 } from "recharts";
+
+export type TimeRange = 'today' | '7d' | '14d' | '30d' | '90d' | 'all';
 
 // Password required
 const ADMIN_PASSWORD = "fjnEstilo82";
@@ -97,6 +99,32 @@ const Admin = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMsg, setNotificationMsg] = useState("");
   const [activeTab, setActiveTab] = useState<'overview' | 'towns' | 'live' | 'marketing'>('overview');
+  const [timeRange, setTimeRange] = useState<TimeRange>('today');
+
+  const filteredSessions = useMemo(() => {
+    const now = Date.now();
+    if (timeRange === 'today') {
+      const past24h = now - (24 * 60 * 60 * 1000);
+      return sessions.filter(s => s.startTime >= past24h);
+    }
+    if (timeRange === '7d') {
+      const past7d = now - (7 * 24 * 60 * 60 * 1000);
+      return sessions.filter(s => s.startTime >= past7d);
+    }
+    if (timeRange === '14d') {
+      const past14d = now - (14 * 24 * 60 * 60 * 1000);
+      return sessions.filter(s => s.startTime >= past14d);
+    }
+    if (timeRange === '30d') {
+      const past30d = now - (30 * 24 * 60 * 60 * 1000);
+      return sessions.filter(s => s.startTime >= past30d);
+    }
+    if (timeRange === '90d') {
+      const past90d = now - (90 * 24 * 60 * 60 * 1000);
+      return sessions.filter(s => s.startTime >= past90d);
+    }
+    return sessions; // 'all'
+  }, [sessions, timeRange]);
 
   // Load auth state
   useEffect(() => {
@@ -274,15 +302,15 @@ const Admin = () => {
   }
 
   // --- COMPILING ANALYTICS CALCULATIONS ---
-  const totalVisits = sessions.length;
+  const totalVisits = filteredSessions.length;
   
   // Calculate active live users (visited in the last 1.5 minutes)
   const oneMinuteAgo = Date.now() - (90 * 1000);
-  const activeSessions = sessions.filter(s => s.startTime > oneMinuteAgo || s.isActive);
+  const activeSessions = filteredSessions.filter(s => s.startTime > oneMinuteAgo || s.isActive);
   const liveUsers = activeSessions.length;
 
   // Order sessions oldest first to get deterministic numbering
-  const sortedSessionsOldestFirst = [...sessions].sort((a, b) => a.startTime - b.startTime);
+  const sortedSessionsOldestFirst = [...filteredSessions].sort((a, b) => a.startTime - b.startTime);
 
   const getSessionUserNumber = (sessionId: string) => {
     const idx = sortedSessionsOldestFirst.findIndex(s => s.id === sessionId);
@@ -290,14 +318,14 @@ const Admin = () => {
   };
 
   // Bounce Rate calculation: 0 clicks and duration < 12 seconds
-  const bouncedSessionsCount = sessions.filter(s => (s.clicks?.length || 0) === 0 && s.durationSeconds < 12).length;
-  const siteBounceRate = sessions.length > 0 
-    ? Math.round((bouncedSessionsCount / sessions.length) * 100) 
+  const bouncedSessionsCount = filteredSessions.filter(s => (s.clicks?.length || 0) === 0 && s.durationSeconds < 12).length;
+  const siteBounceRate = filteredSessions.length > 0 
+    ? Math.round((bouncedSessionsCount / filteredSessions.length) * 100) 
     : 0;
 
   // Town breakdowns
   const townCounts: Record<string, number> = {};
-  sessions.forEach(s => {
+  filteredSessions.forEach(s => {
     if (s.city) {
       townCounts[s.city] = (townCounts[s.city] || 0) + 1;
     }
@@ -313,7 +341,7 @@ const Admin = () => {
   let desktopCount = 0;
   let tabletCount = 0;
   let mobileCount = 0;
-  sessions.forEach(s => {
+  filteredSessions.forEach(s => {
     if (s.deviceType === 'Desktop') desktopCount++;
     else if (s.deviceType === 'Tablet') tabletCount++;
     else if (s.deviceType === 'Mobile') mobileCount++;
@@ -329,7 +357,7 @@ const Admin = () => {
   let iosCount = 0;
   let androidCount = 0;
   let desktopOSCount = 0;
-  sessions.forEach(s => {
+  filteredSessions.forEach(s => {
     if (s.os === 'iOS') iosCount++;
     else if (s.os === 'Android') androidCount++;
     else desktopOSCount++;
@@ -350,7 +378,7 @@ const Admin = () => {
     contact: 0
   };
 
-  sessions.forEach(s => {
+  filteredSessions.forEach(s => {
     if (s.emphasizedAreas) {
       Object.entries(s.emphasizedAreas).forEach(([sec, val]) => {
         sectionVisits[sec] = (sectionVisits[sec] || 0) + val;
@@ -385,7 +413,7 @@ const Admin = () => {
   // Detailed click breakdown by actual exact button name/label clicked
   const exactButtonClickCounts: Record<string, number> = {};
 
-  sessions.forEach(s => {
+  filteredSessions.forEach(s => {
     s.clicks?.forEach(c => {
       const txt = c.buttonText;
       if (!txt) return;
@@ -424,7 +452,7 @@ const Admin = () => {
 
   // Extract recent actions list with user identification numbers
   const recentActions: { session: VisitorSession; userNumber: number; text: string; time: number }[] = [];
-  sessions.slice(0, 15).forEach(s => {
+  filteredSessions.slice(0, 15).forEach(s => {
     const userNumber = getSessionUserNumber(s.id);
     s.clicks?.forEach(c => {
       const lowerTxt = c.buttonText?.toLowerCase() || '';
@@ -579,6 +607,44 @@ const Admin = () => {
           </div>
         </div>
 
+        {/* Time Range Selector Toolbar */}
+        <div className="bg-white/[0.02] border border-white/5 p-4 rounded-2xl mb-8 backdrop-blur-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4.5 h-4.5 text-[#00D4FF]" />
+            <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+              {language === 'es' ? 'Filtro de Tiempo:' : 'Time Window:'}
+            </span>
+            <span className="text-xs text-white/50 font-mono">
+              ({filteredSessions.length} {language === 'es' ? (filteredSessions.length === 1 ? 'visita' : 'visitas') : (filteredSessions.length === 1 ? 'visit' : 'visits')})
+            </span>
+          </div>
+
+          <div className="flex items-center flex-wrap gap-1.5 w-full md:w-auto">
+            {(
+              [
+                { id: 'today', labelEs: 'Hoy (24h)', labelEn: 'Today (24h)' },
+                { id: '7d', labelEs: '7 Días', labelEn: '7 Days' },
+                { id: '14d', labelEs: '14 Días', labelEn: '14 Days' },
+                { id: '30d', labelEs: '30 Días', labelEn: '30 Days' },
+                { id: '90d', labelEs: '90 Días', labelEn: '90 Days' },
+                { id: 'all', labelEs: 'Todo', labelEn: 'All Time' },
+              ] as const
+            ).map((range) => (
+              <button
+                key={range.id}
+                onClick={() => setTimeRange(range.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer ${
+                  timeRange === range.id
+                    ? 'bg-[#145BFF] text-white font-bold shadow-[0_0_12px_rgba(20,91,255,0.5)] border border-[#00D4FF]/40'
+                    : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5'
+                }`}
+              >
+                {language === 'es' ? range.labelEs : range.labelEn}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Dashboard Primary Metrics Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <motion.div 
@@ -605,7 +671,7 @@ const Admin = () => {
             </div>
             <span className="text-[10px] text-white/40 font-mono uppercase tracking-widest">{language === 'es' ? 'Clics en Botones' : 'Button Clicks'}</span>
             <span className="text-2xl sm:text-3xl font-bold font-mono text-white">
-              {sessions.reduce((acc, s) => {
+              {filteredSessions.reduce((acc, s) => {
                 const nonAdminClicks = s.clicks?.filter(c => {
                   const lowerTxt = c.buttonText?.toLowerCase() || '';
                   return ![
@@ -647,7 +713,7 @@ const Admin = () => {
             </div>
             <span className="text-[10px] text-white/40 font-mono uppercase tracking-widest">{language === 'es' ? 'Tiempos Promedio' : 'Average Session'}</span>
             <span className="text-2xl sm:text-3xl font-bold font-mono text-white">
-              {Math.floor(sessions.reduce((acc, s) => acc + s.durationSeconds, 0) / (totalVisits || 1))}s
+              {Math.floor(filteredSessions.reduce((acc, s) => acc + s.durationSeconds, 0) / (totalVisits || 1))}s
             </span>
             <span className="text-[10px] text-green-400 bg-green-500/10 self-start px-1.5 py-0.5 rounded">
               Estadía del cliente

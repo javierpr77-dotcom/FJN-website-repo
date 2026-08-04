@@ -166,12 +166,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     try {
       const stored = localStorage.getItem("fjn_exclude_admin_device");
-      if (stored === null) {
-        localStorage.setItem("fjn_exclude_admin_device", "true");
-        setIsAdminExcluded(true);
-      } else {
-        setIsAdminExcluded(stored === "true");
-      }
+      setIsAdminExcluded(stored === "true");
     } catch (e) {
       console.warn(e);
     }
@@ -219,8 +214,10 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
         if (data) {
           const parsed = JSON.parse(data) as VisitorSession[];
           const cleaned = parsed.filter(s => s.id !== currentAdminSessionId);
-          localStorage.setItem('fjn_analytics_sessions', JSON.stringify(cleaned));
-          setSessions(cleaned);
+          if (cleaned.length !== parsed.length) {
+            localStorage.setItem('fjn_analytics_sessions', JSON.stringify(cleaned));
+            setSessions(cleaned);
+          }
         }
       }
     } catch (e) {
@@ -442,7 +439,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     fetchGeoInfo();
   };
 
-  // Load existing sessions or seed them
+  // Load existing real sessions
   useEffect(() => {
     if (isSearchBot()) return;
 
@@ -455,15 +452,6 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (e) {
       console.warn("localStorage error:", e);
-    }
-
-    if (saved.length === 0) {
-      saved = generateSeedSessions();
-      try {
-        localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
-      } catch (e) {
-        console.warn(e);
-      }
     }
 
     setSessions(saved);
@@ -689,9 +677,8 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const resetAllAnalytics = () => {
-    const seed = generateSeedSessions();
     try {
-      localStorage.setItem('fjn_analytics_sessions', JSON.stringify(seed));
+      localStorage.setItem('fjn_analytics_sessions', JSON.stringify([]));
     } catch (e) {
       console.warn(e);
     }
@@ -699,7 +686,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     sessionTimerRef.current = 0;
     setCurrentSession(null);
     currentSessionIdRef.current = null;
-    setSessions(seed);
+    setSessions([]);
   };
 
   return (
