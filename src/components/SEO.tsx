@@ -18,19 +18,24 @@ const SEO = ({
 }: SEOProps) => {
   const { language } = useLanguage();
 
-  // Dynamically resolve the canonical URL and normalize it to match sitemap expectations exactly
+  // Dynamically resolve the canonical URL: standalone pages get their own canonicals,
+  // while section shortcut routes (/portafolio, /servicios, /planes, /contact, etc.) resolve to the primary domain https://fjndigitalmedia.com/
   const getNormalizedCanonical = () => {
     if (typeof window === 'undefined') {
       return 'https://fjndigitalmedia.com/';
     }
-    const pathname = window.location.pathname;
-    // For root path, normalize to trailing slash to match sitemap.xml: <loc>https://fjndigitalmedia.com/</loc>
-    if (pathname === '/' || !pathname) {
-      return 'https://fjndigitalmedia.com/';
+    const pathname = window.location.pathname.toLowerCase();
+    
+    // Standalone pages with distinct unique content
+    if (pathname.startsWith('/faq')) {
+      return 'https://fjndigitalmedia.com/faq';
     }
-    // For other paths, strip any trailing slash so they match sitemap.xml (e.g. /servicios)
-    const cleanPath = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-    return `https://fjndigitalmedia.com${cleanPath}`;
+    if (pathname.startsWith('/design-research')) {
+      return 'https://fjndigitalmedia.com/design-research';
+    }
+
+    // All shortcut/alias routes that render the main page (<Index />) point to the primary root canonical
+    return 'https://fjndigitalmedia.com/';
   };
 
   const canonicalUrl = url === 'https://fjndigitalmedia.com' ? getNormalizedCanonical() : url;

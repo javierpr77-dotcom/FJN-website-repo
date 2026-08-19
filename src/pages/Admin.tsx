@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { 
   Shield, Lock, Unlock, Key, Cpu, TrendingUp, Activity, MapPin, 
   Smartphone, Laptop, MousePointer, Users, RefreshCw, Clock, 
@@ -498,6 +499,11 @@ const Admin = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <Helmet>
+        <title>Consola de Control | Admin</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
 
       {/* Cybernetic Grid & Glows */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#145bff04_1px,transparent_1px),linear-gradient(to_bottom,#145bff04_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_10%,#000_60%,transparent_100%)] pointer-events-none h-full w-full" />
