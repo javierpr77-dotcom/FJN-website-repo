@@ -235,7 +235,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
         const data = localStorage.getItem('fjn_analytics_sessions');
         if (data) {
           const parsed = JSON.parse(data) as VisitorSession[];
-          const liveOnly = parsed.filter(s => s.id && s.id.startsWith('session-live-'));
+          const liveOnly = parsed.filter(s => s && s.id);
           
           setSessions(prev => {
             if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
@@ -253,7 +253,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       if (e.key === 'fjn_analytics_sessions') {
         try {
           const parsed = JSON.parse(e.newValue || '[]') as VisitorSession[];
-          const liveOnly = parsed.filter(s => s.id && s.id.startsWith('session-live-'));
+          const liveOnly = parsed.filter(s => s && s.id);
           setSessions(prev => {
             if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
               return liveOnly;
@@ -448,10 +448,15 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       const data = localStorage.getItem('fjn_analytics_sessions');
       if (data) {
         const parsed = JSON.parse(data) as VisitorSession[];
-        saved = parsed.filter(s => s.id && s.id.startsWith('session-live-'));
+        saved = parsed.filter(s => s && s.id);
+      } else {
+        // Initial baseline seed data for Puerto Rico local tracking
+        saved = generateSeedSessions();
+        localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
       }
     } catch (e) {
       console.warn("localStorage error:", e);
+      saved = generateSeedSessions();
     }
 
     setSessions(saved);

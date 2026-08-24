@@ -1,5 +1,6 @@
 {
   "name": "FJNdigitalmedia",
-  "description": "WEBSITE\n",
-  "requestFramePermissions": []
+  "description": "FJN Digital Media - Estrategia Digital, Desarrollo Web de Alta Conversión y Analíticas en Tiempo Real para Puerto Rico.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

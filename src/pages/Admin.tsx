@@ -92,13 +92,14 @@ const CAMPAIGN_ADVISORY = [
 ];
 
 const Admin = () => {
-  const { currentSession, sessions, resetAllAnalytics, isAdminExcluded, toggleAdminExclusion } = useAnalytics();
+  const { currentSession, sessions, resetAllAnalytics, isAdminExcluded, toggleAdminExclusion, refreshSessions } = useAnalytics();
   const { language } = useLanguage();
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMsg, setNotificationMsg] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'towns' | 'live' | 'marketing'>('overview');
   const [timeRange, setTimeRange] = useState<TimeRange>('today');
 
