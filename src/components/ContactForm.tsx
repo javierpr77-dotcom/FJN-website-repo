@@ -7,6 +7,7 @@ import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterv
 import { enUS, es } from 'date-fns/locale';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import confetti from "canvas-confetti";
+import { LeadsManager } from "@/services/LeadsManager";
 
 const PR_TOWNS_LIST = [
   "Adjuntas", "Aguada", "Aguadilla", "Aguas Buenas", "Aibonito", "Añasco", "Arecibo", "Arroyo", "Barceloneta", "Barranquitas",
@@ -154,7 +155,20 @@ const ContactForm = () => {
     const dateFormatted = selectedDate ? format(selectedDate, 'PPP', { locale: language === 'es' ? es : enUS }) : (language === 'es' ? 'No seleccionada' : 'Not selected');
     const timeFormatted = selectedTime || (language === 'es' ? 'No seleccionada' : 'Not selected');
 
-    // Send to Netlify in the background silently
+    // 1. GUARANTEED LOCAL PERSISTENCE: Save lead to central leads manager immediately
+    LeadsManager.saveLead({
+      type: 'consultation',
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
+      goal: goal.trim(),
+      town: town || 'Puerto Rico',
+      date: dateFormatted,
+      time: timeFormatted,
+      source: 'Formulario de Asesoría Web'
+    });
+
+    // 2. Send to Netlify in the background silently
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -164,7 +178,7 @@ const ContactForm = () => {
         phone,
         email,
         goal,
-        town,
+        town: town || "",
         date: dateFormatted,
         time: timeFormatted
       }).toString()
@@ -172,7 +186,7 @@ const ContactForm = () => {
       .then(() => console.log("Netlify form submission successful"))
       .catch((error) => console.error("Netlify submission error:", error));
 
-    // Send instant email notification using our secure serverless function with Resend
+    // 3. Send instant email notification using our secure serverless function with Resend
     fetch("/.netlify/functions/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -181,7 +195,7 @@ const ContactForm = () => {
         phone,
         email,
         goal,
-        town,
+        town: town || "",
         date: dateFormatted,
         time: timeFormatted
       })
@@ -376,7 +390,7 @@ const ContactForm = () => {
             </p>
             
             {selectedDate && selectedTime && (
-              <div className="bg-[#145BFF]/5 border border-white/5 rounded-2xl p-4 w-full text-left mb-6 relative overflow-hidden">
+              <div className="bg-[#145BFF]/5 border border-white/5 rounded-2xl p-4 w-full text-left mb-5 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-[#145BFF]" />
                 <p className="text-xs font-body text-[#CFCFD4]/60 uppercase tracking-widest mb-1.5">
                   {language === 'es' ? 'Asesoría Agendada' : 'Scheduled Call'}
@@ -390,20 +404,34 @@ const ContactForm = () => {
               </div>
             )}
 
-            <button
-              onClick={() => {
-                setIsSubmitted(false);
-                setFormData({ name: "", phone: "", email: "", goal: "", town: "" });
-                setSelectedDate(null);
-                setSelectedTime(null);
-                if (isModalLayout) {
-                  setIsBookingModalOpen(false);
-                }
-              }}
-              className="py-2.5 px-6 rounded-xl border border-white/10 text-[#CFCFD4]/70 hover:text-white font-body text-xs cursor-pointer hover:bg-white/5 transition-all duration-300"
-            >
-              {language === 'es' ? 'Enviar otro mensaje' : 'Submit another request'}
-            </button>
+            {/* Direct WhatsApp Quick-Chat button for 100% immediate connection */}
+            <div className="w-full flex flex-col gap-3 mb-4">
+              <a
+                href={`https://wa.me/17875550000?text=${encodeURIComponent(
+                  `Hola Francisco, acabo de enviar una solicitud de asesoría en la página web para mi negocio en ${formData.town || 'Puerto Rico'}. Mi nombre es ${formData.name || ''}.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 px-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-body text-xs font-medium flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+              >
+                <span>💬 {language === 'es' ? 'Abrir confirmación por WhatsApp (Opcional)' : 'Open WhatsApp Confirmation (Optional)'}</span>
+              </a>
+
+              <button
+                onClick={() => {
+                  setIsSubmitted(false);
+                  setFormData({ name: "", phone: "", email: "", goal: "", town: "" });
+                  setSelectedDate(null);
+                  setSelectedTime(null);
+                  if (isModalLayout) {
+                    setIsBookingModalOpen(false);
+                  }
+                }}
+                className="py-2.5 px-6 rounded-xl border border-white/10 text-[#CFCFD4]/70 hover:text-white font-body text-xs cursor-pointer hover:bg-white/5 transition-all duration-300"
+              >
+                {language === 'es' ? 'Enviar otro mensaje' : 'Submit another request'}
+              </button>
+            </div>
           </motion.div>
         )}
       </div>

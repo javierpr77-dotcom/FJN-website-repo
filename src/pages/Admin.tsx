@@ -5,7 +5,8 @@ import {
   Shield, Lock, Unlock, Key, Cpu, TrendingUp, Activity, MapPin, 
   Smartphone, Laptop, MousePointer, Users, RefreshCw, Clock, 
   Compass, Eye, Target, DollarSign, Megaphone, Sparkles, 
-  ArrowUpRight, BarChart2, Bell, Play, CheckCircle2, AlertTriangle, Phone, ShieldCheck, Calendar
+  ArrowUpRight, BarChart2, Bell, Play, CheckCircle2, AlertTriangle, Phone, ShieldCheck, Calendar,
+  ShoppingBag, Inbox
 } from "lucide-react";
 import { useAnalytics, VisitorSession } from "@/contexts/AnalyticsContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,6 +16,8 @@ import {
   PieChart, Pie, Cell, AreaChart, Area, RadarChart, PolarGrid, 
   PolarAngleAxis, PolarRadiusAxis, Radar 
 } from "recharts";
+import { LeadsSection } from "@/components/admin/LeadsSection";
+import { LeadsManager } from "@/services/LeadsManager";
 
 export type TimeRange = 'today' | '7d' | '14d' | '30d' | '90d' | 'all';
 
@@ -92,16 +95,32 @@ const CAMPAIGN_ADVISORY = [
 ];
 
 const Admin = () => {
-  const { currentSession, sessions, resetAllAnalytics, isAdminExcluded, toggleAdminExclusion, refreshSessions } = useAnalytics();
+  const { currentSession, sessions, resetAllAnalytics, isAdminExcluded, toggleAdminExclusion } = useAnalytics();
   const { language } = useLanguage();
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMsg, setNotificationMsg] = useState("");
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'towns' | 'live' | 'marketing'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'leads' | 'towns' | 'live' | 'marketing'>('overview');
   const [timeRange, setTimeRange] = useState<TimeRange>('today');
+  const [unreadLeadsCount, setUnreadLeadsCount] = useState(0);
+
+  // Sync leads count
+  useEffect(() => {
+    const updateLeadsBadge = () => {
+      const allLeads = LeadsManager.getLeads();
+      const unread = allLeads.filter(l => l.status === 'new').length;
+      setUnreadLeadsCount(unread);
+    };
+    updateLeadsBadge();
+    window.addEventListener('fjn_leads_updated', updateLeadsBadge);
+    window.addEventListener('fjn_lead_added', updateLeadsBadge);
+    return () => {
+      window.removeEventListener('fjn_leads_updated', updateLeadsBadge);
+      window.removeEventListener('fjn_lead_added', updateLeadsBadge);
+    };
+  }, []);
 
   const filteredSessions = useMemo(() => {
     const now = Date.now();
@@ -732,6 +751,12 @@ const Admin = () => {
         <div className="flex border-b border-white/5 mb-8 gap-4 overflow-x-auto pb-px">
           {[
             { id: 'overview', label: language === 'es' ? 'Vista General' : 'Overview', icon: BarChart2 },
+            { 
+              id: 'leads', 
+              label: language === 'es' ? 'Solicitudes & Órdenes' : 'Leads & Orders', 
+              icon: ShoppingBag,
+              badge: unreadLeadsCount > 0 ? unreadLeadsCount : undefined
+            },
             { id: 'towns', label: language === 'es' ? 'Pueblos de PR' : 'PR Municipalities', icon: MapPin },
             { id: 'live', label: language === 'es' ? 'Consola en Vivo' : 'Live Interaction Feed', icon: Activity },
             { id: 'marketing', label: language === 'es' ? 'Campaña Premium (Target)' : 'Premium Campaign Target Advisor', icon: Megaphone }
@@ -749,7 +774,12 @@ const Admin = () => {
                 }`}
               >
                 <Icon className={`w-4 h-4 ${isSelected ? 'text-[#00D4FF]' : 'text-white/40'}`} />
-                {tab.label}
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span className="ml-1 px-1.5 py-0.2 bg-amber-500 text-black text-[10px] font-mono font-bold rounded-full animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.6)]">
+                    {tab.badge}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -758,6 +788,11 @@ const Admin = () => {
         {/* --- TABS RENDERING --- */}
         <AnimatePresence mode="wait">
           
+          {/* LEADS & ORDERS TAB */}
+          {activeTab === 'leads' && (
+            <LeadsSection language={language} />
+          )}
+
           {/* OVERVIEW TAB */}
           {activeTab === 'overview' && (
             <motion.div

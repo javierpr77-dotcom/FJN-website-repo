@@ -3,6 +3,7 @@ import { Check, ArrowRight, Shield, Zap, Target, Crown, Sparkles, Briefcase, Tre
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { LeadsManager } from "@/services/LeadsManager";
 
 type Addon = { name: string; price: string };
 type Plan = {
@@ -48,15 +49,31 @@ const PricingSection = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Send order to Netlify Forms in the background
+    const formattedTotal = `$${estimatedTotal.toLocaleString()} USD`;
+    const formattedAddons = selectedAddons.join(", ") || "Ninguno/None";
+
+    // 1. GUARANTEED LOCAL PERSISTENCE: Save order to central leads manager immediately
+    LeadsManager.saveLead({
+      type: 'plan_order',
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      email: formData.email.trim(),
+      plan: selectedPlan?.name || "Plan Personalizado",
+      addons: formattedAddons,
+      total: formattedTotal,
+      goal: `Solicitud de orden para plan: ${selectedPlan?.name || ''} con add-ons: ${formattedAddons}`,
+      source: 'Cotizador de Planes Web'
+    });
+
+    // 2. Send order to Netlify Forms in the background
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         "form-name": "pricing-order",
         plan: selectedPlan?.name || "",
-        addons: selectedAddons.join(", ") || "Ninguno/None",
-        total: `$${estimatedTotal.toLocaleString()} USD`,
+        addons: formattedAddons,
+        total: formattedTotal,
         name: formData.name,
         email: formData.email,
         phone: formData.phone
@@ -65,7 +82,7 @@ const PricingSection = () => {
       .then(() => console.log("Netlify pricing order submission successful"))
       .catch((error) => console.error("Netlify submission error:", error));
 
-    // Send email notification via serverless Netlify function using Resend
+    // 3. Send email notification via serverless Netlify function using Resend
     fetch("/.netlify/functions/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -74,8 +91,8 @@ const PricingSection = () => {
         email: formData.email,
         phone: formData.phone,
         plan: selectedPlan?.name || "",
-        addons: selectedAddons.join(", ") || "Ninguno/None",
-        total: `$${estimatedTotal.toLocaleString()} USD`
+        addons: formattedAddons,
+        total: formattedTotal
       })
     })
       .then(response => {
@@ -766,6 +783,17 @@ const PricingSection = () => {
                   {language === 'es' ? 'Gracias ' : 'Thank you '} <span className="text-white font-medium">{formData.name.split(' ')[0]}</span>. {language === 'es' ? 'Hemos recibido tu selección de plan con los datos de contacto suministrados.' : 'We have received your plan selection with the contact details provided.'}
                 </p>
                 <div className="flex flex-col gap-3 w-full">
+                  <a
+                    href={`https://wa.me/17875550000?text=${encodeURIComponent(
+                      `Hola Francisco, acabo de solicitar el ${selectedPlan?.name || 'Plan Web'} por $${estimatedTotal.toLocaleString()} USD en fjndigitalmedia.com. Mi nombre es ${formData.name}.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 px-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-body text-xs font-medium flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                  >
+                    <span>💬 {language === 'es' ? 'Abrir confirmación por WhatsApp (Opcional)' : 'Open WhatsApp Confirmation (Optional)'}</span>
+                  </a>
+
                   <button
                     onClick={() => handleCloseModal(false)}
                     className="w-full py-3 px-6 rounded-xl border border-white/10 text-[#CFCFD4]/70 hover:text-white font-body text-sm hover:bg-white/5 transition-colors"

@@ -37,16 +37,17 @@
 
   <body>
     <!-- Hidden Forms for Netlify Forms Crawler Detection on Single Page App -->
-    <form name="contact" data-netlify="true" hidden>
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="text" name="name" />
       <input type="tel" name="phone" />
       <input type="email" name="email" />
+      <input type="text" name="town" />
       <textarea name="goal"></textarea>
       <input type="text" name="date" />
       <input type="text" name="time" />
     </form>
 
-    <form name="pricing-order" data-netlify="true" hidden>
+    <form name="pricing-order" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="text" name="plan" />
       <input type="text" name="addons" />
       <input type="text" name="total" />
