@@ -404,19 +404,8 @@ const ContactForm = () => {
               </div>
             )}
 
-            {/* Direct WhatsApp Quick-Chat button for 100% immediate connection */}
+            {/* Success Action button */}
             <div className="w-full flex flex-col gap-3 mb-4">
-              <a
-                href={`https://wa.me/17875550000?text=${encodeURIComponent(
-                  `Hola Francisco, acabo de enviar una solicitud de asesoría en la página web para mi negocio en ${formData.town || 'Puerto Rico'}. Mi nombre es ${formData.name || ''}.`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 px-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-body text-xs font-medium flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-              >
-                <span>💬 {language === 'es' ? 'Abrir confirmación por WhatsApp (Opcional)' : 'Open WhatsApp Confirmation (Optional)'}</span>
-              </a>
-
               <button
                 onClick={() => {
                   setIsSubmitted(false);
@@ -427,9 +416,9 @@ const ContactForm = () => {
                     setIsBookingModalOpen(false);
                   }
                 }}
-                className="py-2.5 px-6 rounded-xl border border-white/10 text-[#CFCFD4]/70 hover:text-white font-body text-xs cursor-pointer hover:bg-white/5 transition-all duration-300"
+                className="py-3 px-6 rounded-xl bg-[#145BFF] hover:bg-[#3B7BFF] text-white font-body text-xs font-medium shadow-[0_0_20px_rgba(20,91,255,0.4)] cursor-pointer transition-all duration-300"
               >
-                {language === 'es' ? 'Enviar otro mensaje' : 'Submit another request'}
+                {language === 'es' ? 'Enviar otra solicitud' : 'Submit another request'}
               </button>
             </div>
           </motion.div>

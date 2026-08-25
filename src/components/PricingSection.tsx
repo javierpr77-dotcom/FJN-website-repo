@@ -49,6 +49,10 @@ const PricingSection = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.email.trim()) {
+      return;
+    }
+
     const formattedTotal = `$${estimatedTotal.toLocaleString()} USD`;
     const formattedAddons = selectedAddons.join(", ") || "Ninguno/None";
 
@@ -744,17 +748,42 @@ const PricingSection = () => {
                   <div className="space-y-3">
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFCFD4]/40" />
-                      <input required type="text" placeholder={language === 'es' ? 'Tu nombre completo' : 'Your full name'} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" />
+                      <input 
+                        required 
+                        type="text" 
+                        placeholder={language === 'es' ? 'Tu nombre completo *' : 'Your full name *'} 
+                        value={formData.name} 
+                        onChange={e => setFormData({...formData, name: e.target.value})} 
+                        className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" 
+                      />
                     </div>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFCFD4]/40" />
-                      <input required type="tel" placeholder={language === 'es' ? 'Tu número de teléfono' : 'Your phone number'} value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" />
+                      <input 
+                        required 
+                        type="tel" 
+                        placeholder={language === 'es' ? 'Tu número de teléfono *' : 'Your phone number *'} 
+                        value={formData.phone} 
+                        onChange={e => setFormData({...formData, phone: e.target.value})} 
+                        className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" 
+                      />
+                    </div>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFCFD4]/40" />
+                      <input 
+                        required 
+                        type="email" 
+                        placeholder={language === 'es' ? 'Tu correo electrónico *' : 'Your valid email address *'} 
+                        value={formData.email} 
+                        onChange={e => setFormData({...formData, email: e.target.value})} 
+                        className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-[#CFCFD4]/40 focus:outline-none focus:border-[#145BFF]/50 focus:bg-[#145BFF]/[0.02] transition-all" 
+                      />
                     </div>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 mt-2 rounded-xl font-heading text-white text-sm relative overflow-hidden transition-all duration-500 hover:-translate-y-0.5 shadow-[0_0_20px_rgba(20,91,255,0.3)]"
+                    className="w-full py-3.5 mt-2 rounded-xl font-heading text-white text-sm relative overflow-hidden transition-all duration-500 hover:-translate-y-0.5 shadow-[0_0_20px_rgba(20,91,255,0.3)] cursor-pointer"
                     style={{
                       background: 'linear-gradient(135deg, #145BFF 0%, #7C3AED 50%, #145BFF 100%)',
                       backgroundSize: '200% 200%',
@@ -783,22 +812,11 @@ const PricingSection = () => {
                   {language === 'es' ? 'Gracias ' : 'Thank you '} <span className="text-white font-medium">{formData.name.split(' ')[0]}</span>. {language === 'es' ? 'Hemos recibido tu selección de plan con los datos de contacto suministrados.' : 'We have received your plan selection with the contact details provided.'}
                 </p>
                 <div className="flex flex-col gap-3 w-full">
-                  <a
-                    href={`https://wa.me/17875550000?text=${encodeURIComponent(
-                      `Hola Francisco, acabo de solicitar el ${selectedPlan?.name || 'Plan Web'} por $${estimatedTotal.toLocaleString()} USD en fjndigitalmedia.com. Mi nombre es ${formData.name}.`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-3 px-5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-body text-xs font-medium flex items-center justify-center gap-2 transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                  >
-                    <span>💬 {language === 'es' ? 'Abrir confirmación por WhatsApp (Opcional)' : 'Open WhatsApp Confirmation (Optional)'}</span>
-                  </a>
-
                   <button
                     onClick={() => handleCloseModal(false)}
-                    className="w-full py-3 px-6 rounded-xl border border-white/10 text-[#CFCFD4]/70 hover:text-white font-body text-sm hover:bg-white/5 transition-colors"
+                    className="w-full py-3 px-6 rounded-xl bg-[#145BFF] hover:bg-[#3B7BFF] text-white font-body text-sm font-medium shadow-[0_0_20px_rgba(20,91,255,0.4)] transition-all cursor-pointer"
                   >
-                    {language === 'es' ? 'Cerrar ventana' : 'Close window'}
+                    {language === 'es' ? 'Entendido / Cerrar' : 'Done / Close'}
                   </button>
                 </div>
               </div>
