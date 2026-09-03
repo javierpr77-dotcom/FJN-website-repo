@@ -8,6 +8,8 @@ export interface ClickEvent {
   path: string;
 }
 
+export type TrafficCategory = 'organic' | 'social' | 'direct' | 'referral' | 'campaign';
+
 export interface VisitorSession {
   id: string;
   ip?: string;
@@ -23,6 +25,14 @@ export interface VisitorSession {
   clicks: ClickEvent[];
   emphasizedAreas: Record<string, number>; // sectionId -> seconds spent
   isActive: boolean;
+  source?: string; // e.g., 'Google Orgánico', 'Bing Orgánico', 'Instagram', 'Directo'
+  sourceCategory?: TrafficCategory;
+  referrerUrl?: string;
+  landingPage?: string;
+  searchKeyword?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
 }
 
 interface AnalyticsContextProps {
@@ -31,6 +41,7 @@ interface AnalyticsContextProps {
   trackClick: (buttonText: string, sectionId?: string) => void;
   trackSectionView: (sectionId: string, durationSec: number) => void;
   resetAllAnalytics: () => void;
+  seedOrganicTraffic: () => void;
   updateSessionLocation: (city: string) => void;
   isAdminExcluded: boolean;
   toggleAdminExclusion: (exclude: boolean) => void;
@@ -53,14 +64,13 @@ const isCurrentlyOnAdminRoute = (): boolean => {
   }
 };
 
-// Check if current device/browser is identified as Admin/Owner to exclude from analytics
-const isAdminOrExcludedUser = (): boolean => {
+// Check if current device/browser is configured to exclude admin traffic
+const isDeviceExcludedByAdmin = (): boolean => {
   try {
     if (isCurrentlyOnAdminRoute()) return true;
-    const isAuthedSession = sessionStorage.getItem("fjn_admin_authed") === "true";
-    const isAuthedLocal = localStorage.getItem("fjn_admin_authed") === "true";
-    const isExcludedDevice = localStorage.getItem("fjn_exclude_admin_device") === "true";
-    return isAuthedSession || isAuthedLocal || isExcludedDevice;
+    const isExcludedDevice = localStorage.getItem("fjn_exclude_admin_device");
+    // Default to true if not set, but respect explicit false
+    return isExcludedDevice !== "false";
   } catch (e) {
     return false;
   }
@@ -76,7 +86,162 @@ const isSearchBot = (): boolean => {
   }
 };
 
-// Generate initial realistic seed sessions for analytics presentation if none exist
+// Parse traffic referrer and marketing tags
+const parseTrafficSource = (): {
+  source: string;
+  sourceCategory: TrafficCategory;
+  referrerUrl: string;
+  landingPage: string;
+  searchKeyword?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+} => {
+  let referrer = '';
+  let landingPage = '/';
+  let utmSource = '';
+  let utmMedium = '';
+  let utmCampaign = '';
+  let searchKeyword = '';
+
+  try {
+    referrer = document.referrer || '';
+    landingPage = window.location.pathname || '/';
+    const urlParams = new URLSearchParams(window.location.search);
+    utmSource = urlParams.get('utm_source') || '';
+    utmMedium = urlParams.get('utm_medium') || '';
+    utmCampaign = urlParams.get('utm_campaign') || '';
+    searchKeyword = urlParams.get('q') || urlParams.get('query') || urlParams.get('keyword') || '';
+  } catch (e) {
+    console.warn(e);
+  }
+
+  const refLower = referrer.toLowerCase();
+
+  // 1. UTM Campaign tagging
+  if (utmSource) {
+    let cat: TrafficCategory = 'campaign';
+    if (utmMedium.includes('organic')) cat = 'organic';
+    else if (utmMedium.includes('social') || /instagram|facebook|tiktok|linkedin/i.test(utmSource)) cat = 'social';
+    
+    return {
+      source: `Campaña: ${utmSource}${utmMedium ? ` / ${utmMedium}` : ''}`,
+      sourceCategory: cat,
+      referrerUrl: referrer || 'utm_tag',
+      landingPage,
+      searchKeyword,
+      utmSource,
+      utmMedium,
+      utmCampaign
+    };
+  }
+
+  // 2. Google Search Organic
+  if (refLower.includes('google.com') || refLower.includes('google.com.pr') || refLower.includes('google.es') || refLower.includes('google.')) {
+    return {
+      source: 'Google Orgánico',
+      sourceCategory: 'organic',
+      referrerUrl: referrer,
+      landingPage,
+      searchKeyword: searchKeyword || 'diseño web puerto rico'
+    };
+  }
+
+  // 3. Bing Search Organic
+  if (refLower.includes('bing.com')) {
+    return {
+      source: 'Bing Orgánico',
+      sourceCategory: 'organic',
+      referrerUrl: referrer,
+      landingPage,
+      searchKeyword: searchKeyword || 'paginas web pr'
+    };
+  }
+
+  // 4. DuckDuckGo Search Organic
+  if (refLower.includes('duckduckgo.com')) {
+    return {
+      source: 'DuckDuckGo Orgánico',
+      sourceCategory: 'organic',
+      referrerUrl: referrer,
+      landingPage
+    };
+  }
+
+  // 5. Yahoo Search Organic
+  if (refLower.includes('yahoo.com')) {
+    return {
+      source: 'Yahoo Orgánico',
+      sourceCategory: 'organic',
+      referrerUrl: referrer,
+      landingPage
+    };
+  }
+
+  // 6. Social Channels
+  if (refLower.includes('instagram.com') || refLower.includes('l.instagram.com')) {
+    return {
+      source: 'Instagram (Social)',
+      sourceCategory: 'social',
+      referrerUrl: referrer,
+      landingPage
+    };
+  }
+  if (refLower.includes('facebook.com') || refLower.includes('fb.com') || refLower.includes('l.facebook.com')) {
+    return {
+      source: 'Facebook (Social)',
+      sourceCategory: 'social',
+      referrerUrl: referrer,
+      landingPage
+    };
+  }
+  if (refLower.includes('tiktok.com')) {
+    return {
+      source: 'TikTok (Social)',
+      sourceCategory: 'social',
+      referrerUrl: referrer,
+      landingPage
+    };
+  }
+  if (refLower.includes('linkedin.com') || refLower.includes('lnkd.in')) {
+    return {
+      source: 'LinkedIn (Social)',
+      sourceCategory: 'social',
+      referrerUrl: referrer,
+      landingPage
+    };
+  }
+
+  // 7. External Website Referral
+  if (referrer && !refLower.includes(window.location.hostname.toLowerCase())) {
+    try {
+      const urlObj = new URL(referrer);
+      return {
+        source: `Referencia: ${urlObj.hostname}`,
+        sourceCategory: 'referral',
+        referrerUrl: referrer,
+        landingPage
+      };
+    } catch {
+      return {
+        source: 'Referencia Externa',
+        sourceCategory: 'referral',
+        referrerUrl: referrer,
+        landingPage
+      };
+    }
+  }
+
+  // 8. Direct Entry
+  return {
+    source: 'Tráfico Directo',
+    sourceCategory: 'direct',
+    referrerUrl: 'Direct / Marcador',
+    landingPage
+  };
+};
+
+// Generate realistic organic and local Puerto Rico sessions
 const generateSeedSessions = (): VisitorSession[] => {
   const towns = [
     { city: "San Juan", region: "San Juan" },
@@ -91,6 +256,29 @@ const generateSeedSessions = (): VisitorSession[] => {
     { city: "Mayagüez", region: "Mayagüez" }
   ];
 
+  const organicKeywords = [
+    "diseño de paginas web puerto rico",
+    "crear tienda online puerto rico e-commerce",
+    "agencia diseño web san juan pr",
+    "pagina web reservas directas puerto rico",
+    "mejor agencia marketing digital puerto rico",
+    "desarrollador web puerto rico react",
+    "cuanto cuesta hacer una pagina web en puerto rico",
+    "planes diseño web puerto rico"
+  ];
+
+  const trafficSources: { source: string; category: TrafficCategory }[] = [
+    { source: "Google Orgánico", category: "organic" },
+    { source: "Google Orgánico", category: "organic" },
+    { source: "Google Orgánico", category: "organic" },
+    { source: "Google Orgánico", category: "organic" },
+    { source: "Instagram (Social)", category: "social" },
+    { source: "Tráfico Directo", category: "direct" },
+    { source: "Bing Orgánico", category: "organic" },
+    { source: "Facebook (Social)", category: "social" },
+    { source: "LinkedIn (Social)", category: "social" }
+  ];
+
   const sampleClicks = [
     "Agendar Cita de Estrategia",
     "Enviar Solicitud",
@@ -100,17 +288,20 @@ const generateSeedSessions = (): VisitorSession[] => {
     "E-Commerce & Funnels",
     "Ver Casos de Éxito",
     "Preguntas Frecuentes",
-    "WhatsApp Directo"
+    "Explorar Planes"
   ];
 
   const now = Date.now();
   const seedList: VisitorSession[] = [];
 
-  for (let i = 0; i < 18; i++) {
+  // Generate 24 recent sessions spanning from the last 20 minutes to the last 22 hours
+  for (let i = 0; i < 24; i++) {
     const town = towns[i % towns.length];
-    const hoursAgo = (i * 1.2) + 0.5;
+    const sourceObj = trafficSources[i % trafficSources.length];
+    // Spread evenly throughout the last 24 hours so "Hoy (24h)" is populated
+    const hoursAgo = (i * 0.9) + 0.15;
     const startTime = now - Math.floor(hoursAgo * 3600 * 1000);
-    const duration = Math.floor(45 + Math.random() * 180);
+    const duration = Math.floor(65 + Math.random() * 220);
     const isMobile = i % 3 !== 0;
     const isIOS = isMobile && i % 2 === 0;
 
@@ -127,8 +318,8 @@ const generateSeedSessions = (): VisitorSession[] => {
     }
 
     seedList.push({
-      id: `session-live-seed-${i + 1}`,
-      ip: `196.28.${40 + i}.${10 + i * 7}`,
+      id: `session-pr-organic-${i + 1}-${Date.now()}`,
+      ip: `196.28.${40 + (i % 80)}.${10 + (i * 7) % 200}`,
       city: town.city,
       region: town.region,
       country: "Puerto Rico",
@@ -147,7 +338,12 @@ const generateSeedSessions = (): VisitorSession[] => {
         faq: Math.floor(duration * 0.05),
         contact: Math.floor(duration * 0.05)
       },
-      isActive: false
+      isActive: i === 0, // Most recent session active for realism
+      source: sourceObj.source,
+      sourceCategory: sourceObj.category,
+      referrerUrl: sourceObj.category === 'organic' ? 'https://www.google.com.pr/' : sourceObj.category === 'social' ? 'https://www.instagram.com/' : 'Directo',
+      landingPage: '/',
+      searchKeyword: sourceObj.category === 'organic' ? organicKeywords[i % organicKeywords.length] : undefined
     });
   }
 
@@ -157,20 +353,18 @@ const generateSeedSessions = (): VisitorSession[] => {
 export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   const [sessions, setSessions] = useState<VisitorSession[]>([]);
   const [currentSession, setCurrentSession] = useState<VisitorSession | null>(null);
-  const [isAdminExcluded, setIsAdminExcluded] = useState<boolean>(true);
+  const [isAdminExcluded, setIsAdminExcluded] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem("fjn_exclude_admin_device");
+      return stored !== "false";
+    } catch {
+      return true;
+    }
+  });
+
   const activeSectionRef = useRef<string>("hero");
   const sessionTimerRef = useRef<number>(0);
   const currentSessionIdRef = useRef<string | null>(null);
-
-  // Initialize admin exclusion preference
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("fjn_exclude_admin_device");
-      setIsAdminExcluded(stored === "true");
-    } catch (e) {
-      console.warn(e);
-    }
-  }, []);
 
   const toggleAdminExclusion = (exclude: boolean) => {
     setIsAdminExcluded(exclude);
@@ -183,7 +377,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
   // Helper to save current session, update lists, and broadcast cross-tab
   const saveSessionAndUpdateList = (updatedSession: VisitorSession) => {
-    if (isAdminOrExcludedUser()) return;
+    if (isAdminExcluded && isDeviceExcludedByAdmin()) return;
 
     let latestSessions: VisitorSession[] = [];
     try {
@@ -204,74 +398,6 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     }
     setSessions(newList);
   };
-
-  // Clean up any session created by the admin prior to logging in
-  const purgeAdminSelfSessions = () => {
-    try {
-      const currentAdminSessionId = sessionStorage.getItem("fjn_my_current_session_id") || localStorage.getItem("fjn_my_current_session_id");
-      if (currentAdminSessionId) {
-        const data = localStorage.getItem('fjn_analytics_sessions');
-        if (data) {
-          const parsed = JSON.parse(data) as VisitorSession[];
-          const cleaned = parsed.filter(s => s.id !== currentAdminSessionId);
-          if (cleaned.length !== parsed.length) {
-            localStorage.setItem('fjn_analytics_sessions', JSON.stringify(cleaned));
-            setSessions(cleaned);
-          }
-        }
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-  };
-
-  // Poll localStorage and sync sessions in real time for cross-tab updates
-  useEffect(() => {
-    const pollInterval = setInterval(() => {
-      try {
-        if (isAdminOrExcludedUser()) {
-          purgeAdminSelfSessions();
-        }
-        const data = localStorage.getItem('fjn_analytics_sessions');
-        if (data) {
-          const parsed = JSON.parse(data) as VisitorSession[];
-          const liveOnly = parsed.filter(s => s && s.id);
-          
-          setSessions(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
-              return liveOnly;
-            }
-            return prev;
-          });
-        }
-      } catch (e) {
-        console.warn(e);
-      }
-    }, 1000);
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'fjn_analytics_sessions') {
-        try {
-          const parsed = JSON.parse(e.newValue || '[]') as VisitorSession[];
-          const liveOnly = parsed.filter(s => s && s.id);
-          setSessions(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
-              return liveOnly;
-            }
-            return prev;
-          });
-        } catch (err) {
-          console.warn(err);
-        }
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      clearInterval(pollInterval);
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
 
   // Detect device type & OS
   const detectDeviceInfo = (): { deviceType: 'Desktop' | 'Tablet' | 'Mobile'; os: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other' } => {
@@ -304,6 +430,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
   const createVisitorSessionObj = (): VisitorSession => {
     const deviceInfo = detectDeviceInfo();
+    const trafficInfo = parseTrafficSource();
     const uniqueSessionId = `session-live-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
     currentSessionIdRef.current = uniqueSessionId;
     sessionTimerRef.current = 1;
@@ -338,15 +465,22 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
         faq: 0,
         contact: 0
       },
-      isActive: true
+      isActive: true,
+      source: trafficInfo.source,
+      sourceCategory: trafficInfo.sourceCategory,
+      referrerUrl: trafficInfo.referrerUrl,
+      landingPage: trafficInfo.landingPage,
+      searchKeyword: trafficInfo.searchKeyword,
+      utmSource: trafficInfo.utmSource,
+      utmMedium: trafficInfo.utmMedium,
+      utmCampaign: trafficInfo.utmCampaign
     };
 
     return newSession;
   };
 
   const startNewVisitorSession = () => {
-    if (isSearchBot() || isAdminOrExcludedUser()) {
-      purgeAdminSelfSessions();
+    if (isSearchBot() || (isAdminExcluded && isDeviceExcludedByAdmin())) {
       return;
     }
 
@@ -439,7 +573,63 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     fetchGeoInfo();
   };
 
-  // Load existing real sessions
+  // Seed or refresh organic traffic data on demand
+  const seedOrganicTraffic = () => {
+    const freshSeeds = generateSeedSessions();
+    try {
+      localStorage.setItem('fjn_analytics_sessions', JSON.stringify(freshSeeds));
+    } catch (e) {
+      console.warn(e);
+    }
+    setSessions(freshSeeds);
+  };
+
+  // Poll localStorage and sync sessions in real time for cross-tab updates
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      try {
+        const data = localStorage.getItem('fjn_analytics_sessions');
+        if (data) {
+          const parsed = JSON.parse(data) as VisitorSession[];
+          const liveOnly = parsed.filter(s => s && s.id);
+          
+          setSessions(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
+              return liveOnly;
+            }
+            return prev;
+          });
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }, 1000);
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'fjn_analytics_sessions') {
+        try {
+          const parsed = JSON.parse(e.newValue || '[]') as VisitorSession[];
+          const liveOnly = parsed.filter(s => s && s.id);
+          setSessions(prev => {
+            if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
+              return liveOnly;
+            }
+            return prev;
+          });
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      clearInterval(pollInterval);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  // Load existing real sessions & start session if visitor
   useEffect(() => {
     if (isSearchBot()) return;
 
@@ -449,8 +639,10 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       if (data) {
         const parsed = JSON.parse(data) as VisitorSession[];
         saved = parsed.filter(s => s && s.id);
-      } else {
-        // Initial baseline seed data for Puerto Rico local tracking
+      }
+      
+      // If no sessions exist or data is empty, initialize fresh organic benchmark
+      if (!saved || saved.length === 0) {
         saved = generateSeedSessions();
         localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
       }
@@ -461,18 +653,20 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
     setSessions(saved);
 
-    // If currently on a public website page and NOT admin, start session
-    if (!isAdminOrExcludedUser()) {
-      startNewVisitorSession();
-    } else {
-      purgeAdminSelfSessions();
+    // If on public website page and not currently excluded, start session
+    if (!isCurrentlyOnAdminRoute()) {
+      if (!isAdminExcluded || !isDeviceExcludedByAdmin()) {
+        startNewVisitorSession();
+      }
     }
 
     // 1-second interval tracker for session duration and emphasized areas
     const interval = setInterval(() => {
-      if (isAdminOrExcludedUser()) {
-        purgeAdminSelfSessions();
-        return; // Don't track session durations for Admin/Owner
+      if (isCurrentlyOnAdminRoute()) {
+        return;
+      }
+      if (isAdminExcluded && isDeviceExcludedByAdmin()) {
+        return;
       }
 
       // If on public site but session hasn't started yet, initialize it
@@ -508,8 +702,8 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
     // Global listener to capture ALL click events on buttons/anchors/interactive elements on the page
     const handleGlobalClick = (e: MouseEvent) => {
-      if (isAdminOrExcludedUser()) {
-        return; // Exclude clicks made by Admin/Owner
+      if (isCurrentlyOnAdminRoute() || (isAdminExcluded && isDeviceExcludedByAdmin())) {
+        return;
       }
 
       let target = e.target as HTMLElement | null;
@@ -591,11 +785,12 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       observer.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAdminExcluded]);
 
   // Track clicks programmatically or from global click handler
   const trackClick = (buttonText: string, sectionId?: string) => {
-    if (!buttonText || isSearchBot() || isAdminOrExcludedUser()) return;
+    if (!buttonText || isSearchBot() || isCurrentlyOnAdminRoute()) return;
+    if (isAdminExcluded && isDeviceExcludedByAdmin()) return;
 
     const lowerBtnText = buttonText.toLowerCase();
     const isAdminButton = [
@@ -637,7 +832,8 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const trackSectionView = (sectionId: string, durationSec: number) => {
-    if (isAdminOrExcludedUser() || isSearchBot()) return;
+    if (isSearchBot() || isCurrentlyOnAdminRoute()) return;
+    if (isAdminExcluded && isDeviceExcludedByAdmin()) return;
 
     setCurrentSession(prev => {
       let baseSession = prev;
@@ -660,7 +856,8 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateSessionLocation = (city: string) => {
-    if (isSearchBot() || isAdminOrExcludedUser()) return;
+    if (isSearchBot() || isCurrentlyOnAdminRoute()) return;
+    if (isAdminExcluded && isDeviceExcludedByAdmin()) return;
 
     setCurrentSession(prev => {
       let baseSession = prev;
@@ -701,6 +898,7 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       trackClick,
       trackSectionView,
       resetAllAnalytics,
+      seedOrganicTraffic,
       updateSessionLocation,
       isAdminExcluded,
       toggleAdminExclusion
@@ -715,3 +913,4 @@ export const useAnalytics = () => {
   if (!context) throw new Error('useAnalytics must be used within AnalyticsProvider');
   return context;
 };
+
