@@ -56,6 +56,10 @@ const Index = () => {
         const element = document.getElementById(targetId);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
+          // Normalize browser URL to clean anchor without reload
+          if (location.pathname !== "/") {
+            window.history.replaceState(null, "", `/#${targetId}`);
+          }
         } else if (attempts < 10) {
           setTimeout(() => scrollWithRetry(attempts + 1), 100);
         }
@@ -66,8 +70,16 @@ const Index = () => {
       }, 300);
       
       return () => clearTimeout(timer);
+    } else if (location.hash) {
+      const hashId = location.hash.replace("#", "");
+      const element = document.getElementById(hashId);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 150);
+      }
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   return (
     <div className="min-h-screen relative">

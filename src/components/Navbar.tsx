@@ -101,32 +101,15 @@ const Navbar = () => {
       window.dispatchEvent(new CustomEvent("open-booking-modal"));
       return;
     }
-    
-    // Determine proper router path based on itemKey and language
-    let targetPath = "/" + itemKey;
-    if (itemKey === "portfolio") {
-      targetPath = language === "es" ? "/portafolio" : "/portfolio";
-    } else if (itemKey === "planes") {
-      targetPath = language === "es" ? "/planes" : "/pricing";
-    } else if (itemKey === "resenas") {
-      targetPath = language === "es" ? "/casos de éxitos" : "/success stories";
-    } else if (itemKey === "consultas") {
-      targetPath = language === "es" ? "/consultas" : "/contact";
-    } else if (itemKey === "servicios") {
-      targetPath = language === "es" ? "/servicios" : "/services";
-    }
 
-    let decodedCurrentPath = "";
-    try {
-      decodedCurrentPath = decodeURIComponent(location.pathname);
-    } catch (e) {
-      decodedCurrentPath = location.pathname;
-    }
-
-    if (decodedCurrentPath === targetPath) {
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+    if (location.pathname === "/") {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        window.history.replaceState(null, "", `/#${sectionId}`);
+      }
     } else {
-      navigate(targetPath);
+      navigate(`/#${sectionId}`);
     }
   };
 

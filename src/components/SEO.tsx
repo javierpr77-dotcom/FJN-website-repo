@@ -13,14 +13,18 @@ const SEO = ({
   title,
   description,
   image = 'https://fjndigitalmedia.com/logo.png',
-  url = 'https://fjndigitalmedia.com',
+  url,
   type = 'website'
 }: SEOProps) => {
   const { language } = useLanguage();
 
-  // Dynamically resolve the canonical URL: standalone pages get their own canonicals,
-  // while section shortcut routes (/portafolio, /servicios, /planes, /contact, etc.) resolve to the primary domain https://fjndigitalmedia.com/
-  const getNormalizedCanonical = () => {
+  // Dynamically resolve the canonical URL:
+  // - Standalone pages (/faq, /design-research) get their own unique canonical URL
+  // - The root homepage and section shortcuts resolve strictly to https://fjndigitalmedia.com/
+  const getNormalizedCanonical = (): string => {
+    if (url && url !== 'https://fjndigitalmedia.com' && url !== 'https://fjndigitalmedia.com/') {
+      return url;
+    }
     if (typeof window === 'undefined') {
       return 'https://fjndigitalmedia.com/';
     }
@@ -38,7 +42,7 @@ const SEO = ({
     return 'https://fjndigitalmedia.com/';
   };
 
-  const canonicalUrl = url === 'https://fjndigitalmedia.com' ? getNormalizedCanonical() : url;
+  const canonicalUrl = getNormalizedCanonical();
 
   // Default SEO texts based on language
   const defaultTitle = language === 'es' 
