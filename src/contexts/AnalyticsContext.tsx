@@ -241,113 +241,19 @@ const parseTrafficSource = (): {
   };
 };
 
-// Generate realistic organic and local Puerto Rico sessions
-const generateSeedSessions = (): VisitorSession[] => {
-  const towns = [
-    { city: "San Juan", region: "San Juan" },
-    { city: "Dorado", region: "Dorado" },
-    { city: "Guaynabo", region: "Guaynabo" },
-    { city: "Carolina", region: "Carolina" },
-    { city: "Ponce", region: "Ponce" },
-    { city: "Bayamón", region: "Bayamón" },
-    { city: "Humacao", region: "Humacao" },
-    { city: "Rincón", region: "Rincón" },
-    { city: "Caguas", region: "Caguas" },
-    { city: "Mayagüez", region: "Mayagüez" }
-  ];
-
-  const organicKeywords = [
-    "diseño de paginas web puerto rico",
-    "crear tienda online puerto rico e-commerce",
-    "agencia diseño web san juan pr",
-    "pagina web reservas directas puerto rico",
-    "mejor agencia marketing digital puerto rico",
-    "desarrollador web puerto rico react",
-    "cuanto cuesta hacer una pagina web en puerto rico",
-    "planes diseño web puerto rico"
-  ];
-
-  const trafficSources: { source: string; category: TrafficCategory }[] = [
-    { source: "Google Orgánico", category: "organic" },
-    { source: "Google Orgánico", category: "organic" },
-    { source: "Google Orgánico", category: "organic" },
-    { source: "Google Orgánico", category: "organic" },
-    { source: "Instagram (Social)", category: "social" },
-    { source: "Tráfico Directo", category: "direct" },
-    { source: "Bing Orgánico", category: "organic" },
-    { source: "Facebook (Social)", category: "social" },
-    { source: "LinkedIn (Social)", category: "social" }
-  ];
-
-  const sampleClicks = [
-    "Agendar Cita de Estrategia",
-    "Enviar Solicitud",
-    "Ver Portafolio Élite",
-    "Website Élite - $3,500",
-    "Consultar Plan Personalizado",
-    "E-Commerce & Funnels",
-    "Ver Casos de Éxito",
-    "Preguntas Frecuentes",
-    "Explorar Planes"
-  ];
-
-  const now = Date.now();
-  const seedList: VisitorSession[] = [];
-
-  // Generate 24 recent sessions spanning from the last 20 minutes to the last 22 hours
-  for (let i = 0; i < 24; i++) {
-    const town = towns[i % towns.length];
-    const sourceObj = trafficSources[i % trafficSources.length];
-    // Spread evenly throughout the last 24 hours so "Hoy (24h)" is populated
-    const hoursAgo = (i * 0.9) + 0.15;
-    const startTime = now - Math.floor(hoursAgo * 3600 * 1000);
-    const duration = Math.floor(65 + Math.random() * 220);
-    const isMobile = i % 3 !== 0;
-    const isIOS = isMobile && i % 2 === 0;
-
-    const clicksCount = Math.floor(1 + Math.random() * 4);
-    const sessionClicks: ClickEvent[] = [];
-    for (let c = 0; c < clicksCount; c++) {
-      sessionClicks.push({
-        id: `seed-click-${i}-${c}`,
-        timestamp: startTime + (c * 25 * 1000) + 5000,
-        buttonText: sampleClicks[(i + c * 2) % sampleClicks.length],
-        sectionId: c === 0 ? "hero" : c === 1 ? "pricing" : "contact",
-        path: "/"
-      });
-    }
-
-    seedList.push({
-      id: `session-pr-organic-${i + 1}-${Date.now()}`,
-      ip: `196.28.${40 + (i % 80)}.${10 + (i * 7) % 200}`,
-      city: town.city,
-      region: town.region,
-      country: "Puerto Rico",
-      isPR: true,
-      deviceType: isMobile ? "Mobile" : "Desktop",
-      os: isMobile ? (isIOS ? "iOS" : "Android") : (i % 2 === 0 ? "macOS" : "Windows"),
-      startTime,
-      lastActiveTime: startTime + (duration * 1000),
-      durationSeconds: duration,
-      clicks: sessionClicks,
-      emphasizedAreas: {
-        hero: Math.floor(duration * 0.3),
-        portfolio: Math.floor(duration * 0.2),
-        services: Math.floor(duration * 0.15),
-        pricing: Math.floor(duration * 0.25),
-        faq: Math.floor(duration * 0.05),
-        contact: Math.floor(duration * 0.05)
-      },
-      isActive: i === 0, // Most recent session active for realism
-      source: sourceObj.source,
-      sourceCategory: sourceObj.category,
-      referrerUrl: sourceObj.category === 'organic' ? 'https://www.google.com.pr/' : sourceObj.category === 'social' ? 'https://www.instagram.com/' : 'Directo',
-      landingPage: '/',
-      searchKeyword: sourceObj.category === 'organic' ? organicKeywords[i % organicKeywords.length] : undefined
-    });
+// Helper to filter out any remnant or legacy fake seed sessions
+const isRealSession = (s: any): s is VisitorSession => {
+  if (!s || !s.id) return false;
+  const id = String(s.id);
+  if (id.startsWith('session-pr-organic') || id.startsWith('seed-') || id.startsWith('session-dummy')) {
+    return false;
   }
+  return true;
+};
 
-  return seedList;
+// No dummy or fake data - purely real organic & user sessions
+const generateSeedSessions = (): VisitorSession[] => {
+  return [];
 };
 
 export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
@@ -378,12 +284,13 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   // Helper to save current session, update lists, and broadcast cross-tab
   const saveSessionAndUpdateList = (updatedSession: VisitorSession) => {
     if (isAdminExcluded && isDeviceExcludedByAdmin()) return;
+    if (!isRealSession(updatedSession)) return;
 
     let latestSessions: VisitorSession[] = [];
     try {
       const data = localStorage.getItem('fjn_analytics_sessions');
       if (data) {
-        latestSessions = JSON.parse(data) as VisitorSession[];
+        latestSessions = (JSON.parse(data) as VisitorSession[]).filter(isRealSession);
       }
     } catch (e) {
       console.warn(e);
@@ -397,6 +304,13 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       console.warn(e);
     }
     setSessions(newList);
+
+    // Sync real session with central server
+    fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedSession)
+    }).catch(() => {});
   };
 
   // Detect device type & OS
@@ -573,49 +487,50 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     fetchGeoInfo();
   };
 
-  // Seed or refresh organic traffic data on demand
-  const seedOrganicTraffic = () => {
-    const freshSeeds = generateSeedSessions();
+  // Synchronize real sessions from backend server on demand
+  const seedOrganicTraffic = async () => {
     try {
-      localStorage.setItem('fjn_analytics_sessions', JSON.stringify(freshSeeds));
+      const res = await fetch('/api/analytics/sessions');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.sessions)) {
+          const real = data.sessions.filter(isRealSession);
+          setSessions(real);
+          localStorage.setItem('fjn_analytics_sessions', JSON.stringify(real));
+        }
+      }
     } catch (e) {
-      console.warn(e);
+      console.warn("Error fetching server analytics sessions:", e);
     }
-    setSessions(freshSeeds);
   };
 
-  // Poll localStorage and sync sessions in real time for cross-tab updates
+  // Poll server & localStorage to sync real sessions in real time for cross-tab and cross-device
   useEffect(() => {
-    const pollInterval = setInterval(() => {
+    const fetchRealSessions = async () => {
       try {
-        const data = localStorage.getItem('fjn_analytics_sessions');
-        if (data) {
-          const parsed = JSON.parse(data) as VisitorSession[];
-          const liveOnly = parsed.filter(s => s && s.id);
-          
-          setSessions(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
-              return liveOnly;
-            }
-            return prev;
-          });
+        const res = await fetch('/api/analytics/sessions');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.sessions)) {
+            const real = data.sessions.filter(isRealSession);
+            setSessions(real);
+            try {
+              localStorage.setItem('fjn_analytics_sessions', JSON.stringify(real));
+            } catch {}
+          }
         }
-      } catch (e) {
-        console.warn(e);
-      }
-    }, 1000);
+      } catch {}
+    };
+
+    fetchRealSessions();
+    const pollInterval = setInterval(fetchRealSessions, 3000);
 
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'fjn_analytics_sessions') {
         try {
           const parsed = JSON.parse(e.newValue || '[]') as VisitorSession[];
-          const liveOnly = parsed.filter(s => s && s.id);
-          setSessions(prev => {
-            if (JSON.stringify(prev) !== JSON.stringify(liveOnly)) {
-              return liveOnly;
-            }
-            return prev;
-          });
+          const liveOnly = parsed.filter(isRealSession);
+          setSessions(liveOnly);
         } catch (err) {
           console.warn(err);
         }
@@ -638,20 +553,27 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       const data = localStorage.getItem('fjn_analytics_sessions');
       if (data) {
         const parsed = JSON.parse(data) as VisitorSession[];
-        saved = parsed.filter(s => s && s.id);
+        saved = parsed.filter(isRealSession);
       }
-      
-      // If no sessions exist or data is empty, initialize fresh organic benchmark
-      if (!saved || saved.length === 0) {
-        saved = generateSeedSessions();
-        localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
-      }
+      localStorage.setItem('fjn_analytics_sessions', JSON.stringify(saved));
     } catch (e) {
       console.warn("localStorage error:", e);
-      saved = generateSeedSessions();
+      saved = [];
     }
 
     setSessions(saved);
+
+    // Initial server fetch to get current global sessions
+    fetch('/api/analytics/sessions')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data.sessions)) {
+          const real = data.sessions.filter(isRealSession);
+          setSessions(real);
+          localStorage.setItem('fjn_analytics_sessions', JSON.stringify(real));
+        }
+      })
+      .catch(() => {});
 
     // If on public website page and not currently excluded, start session
     if (!isCurrentlyOnAdminRoute()) {
@@ -878,9 +800,17 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const resetAllAnalytics = () => {
+  const resetAllAnalytics = async () => {
+    try {
+      await fetch('/api/analytics/clear', { method: 'POST' });
+    } catch (e) {
+      console.warn(e);
+    }
+
     try {
       localStorage.setItem('fjn_analytics_sessions', JSON.stringify([]));
+      sessionStorage.removeItem("fjn_my_current_session_id");
+      localStorage.removeItem("fjn_my_current_session_id");
     } catch (e) {
       console.warn(e);
     }

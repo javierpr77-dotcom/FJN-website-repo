@@ -24,6 +24,7 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
     details?: any;
   } | null>(null);
   
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
   const [manualForm, setManualForm] = useState({
     name: "",
@@ -36,16 +37,33 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
     total: "$1,800 USD"
   });
 
-  const loadLeads = () => {
-    setLeads(LeadsManager.getLeads());
+  const loadLeads = async () => {
+    setIsRefreshing(true);
+    try {
+      const serverLeads = await LeadsManager.fetchLeadsFromServer();
+      setLeads(serverLeads);
+    } catch (e) {
+      setLeads(LeadsManager.getLeads());
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   useEffect(() => {
     loadLeads();
-    const handleUpdate = () => loadLeads();
+    const handleUpdate = () => {
+      setLeads(LeadsManager.getLeads());
+    };
     window.addEventListener('fjn_leads_updated', handleUpdate);
     window.addEventListener('fjn_lead_added', handleUpdate);
+
+    // Periodic live sync with central server for cross-device visibility
+    const interval = setInterval(() => {
+      LeadsManager.fetchLeadsFromServer();
+    }, 3500);
+
     return () => {
+      clearInterval(interval);
       window.removeEventListener('fjn_leads_updated', handleUpdate);
       window.removeEventListener('fjn_lead_added', handleUpdate);
     };
@@ -62,6 +80,13 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
   const handleDelete = (id: string) => {
     if (window.confirm(language === 'es' ? '¿Eliminar este registro de solicitud permanentemente?' : 'Delete this lead record permanently?')) {
       LeadsManager.deleteLead(id);
+    }
+  };
+
+  const handleClearAll = () => {
+    if (window.confirm(language === 'es' ? '¿Estás seguro de que deseas vaciar todas las solicitudes? Esta acción no se puede deshacer.' : 'Are you sure you want to clear all lead entries? This action cannot be undone.')) {
+      LeadsManager.clearAllLeads();
+      setLeads([]);
     }
   };
 
@@ -379,7 +404,17 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 w-full lg:w-auto justify-end">
+        <div className="flex items-center flex-wrap gap-2.5 w-full lg:w-auto justify-end">
+          <button
+            onClick={loadLeads}
+            disabled={isRefreshing}
+            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-[#00D4FF]/20 border border-white/10 hover:border-[#00D4FF]/30 text-white text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
+            title="Sincronizar con el servidor"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 text-[#00D4FF] ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span>{language === 'es' ? 'Sincronizar' : 'Sync'}</span>
+          </button>
+
           <button
             onClick={() => LeadsManager.exportToCSV()}
             className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
@@ -387,6 +422,15 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
           >
             <Download className="w-3.5 h-3.5 text-cyan-400" />
             <span>CSV</span>
+          </button>
+
+          <button
+            onClick={handleClearAll}
+            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-red-500/20 border border-white/10 hover:border-red-500/30 text-white/70 hover:text-red-400 text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer"
+            title="Vaciar todas las solicitudes"
+          >
+            <Trash2 className="w-3.5 h-3.5 text-red-400" />
+            <span>{language === 'es' ? 'Vaciar' : 'Clear'}</span>
           </button>
 
           <button

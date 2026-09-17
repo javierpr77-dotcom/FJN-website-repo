@@ -1,0 +1,17 @@
+[
+  {
+    "id": "lead-1789666549707-fegkl",
+    "type": "plan_order",
+    "createdAt": 1789666549707,
+    "name": "solo un test administrativo",
+    "phone": "787-555-0199",
+    "email": "negociospr82@gmail.com",
+    "goal": "Verificación de orden de plan en vivo desde servidor central FJN Media",
+    "town": "San Juan",
+    "plan": "Website Corporativo Élite",
+    "addons": "Blog / Artículos SEO, Soporte & Mantenimiento VIP",
+    "total": "$3,500 USD",
+    "status": "new",
+    "source": "Cotizador de Planes"
+  }
+]

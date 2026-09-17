@@ -17,58 +17,97 @@ export interface LeadItem {
   source?: string;
 }
 
-const STORAGE_KEY = 'fjn_leads_store';
-
-// Seed sample leads for immediate verification if empty
-const INITIAL_SEED_LEADS: LeadItem[] = [
-  {
-    id: 'lead-seed-1',
-    type: 'consultation',
-    createdAt: Date.now() - (1000 * 60 * 45), // 45 mins ago
-    name: 'Carlos Rivera - Médico Especialista',
-    phone: '+1 787 555 3829',
-    email: 'carlos.rivera@clinicapr.com',
-    goal: 'Necesito un sistema de reservas y citas automatizadas para mi clínica en Guaynabo y optimizar el posicionamiento local.',
-    town: 'Guaynabo',
-    date: 'Mañana',
-    time: '02:30 PM',
-    status: 'new',
-    source: 'Formulario de Asesoría Web'
-  },
-  {
-    id: 'lead-seed-2',
-    type: 'plan_order',
-    createdAt: Date.now() - (1000 * 60 * 180), // 3 hours ago
-    name: 'Mariana Ortiz - Boutique & Resort',
-    phone: '+1 787 444 8921',
-    email: 'mariana@villasdorado.com',
-    goal: 'Solicitud para desarrollo de plataforma de alojamiento y reservas directas tipo Airbnb.',
-    town: 'Dorado',
-    plan: 'Alojamiento Elegance (tipo Airbnb)',
-    addons: 'Booking personalizado, Sincronización iCal, Pasarela de cobro directa (Stripe / ATH Móvil)',
-    total: '$5,750 USD',
-    status: 'contacted',
-    notes: 'Contactada por WhatsApp. En espera de llamada de seguimiento.',
-    source: 'Cotizador de Planes'
-  }
-];
+const STORAGE_KEY = 'fjn_leads_store_real_v4';
 
 export class LeadsManager {
+  // Pure real leads only - zero dummy data
   static getLeads(): LeadItem[] {
     try {
+      // Clean legacy dummy stores if present
+      localStorage.removeItem('fjn_leads_store');
+      
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_SEED_LEADS));
-        return INITIAL_SEED_LEADS;
+        return [];
       }
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) {
-        return parsed;
+        // Filter out any remnant seed leads with dummy IDs or names
+        return parsed.filter(l => 
+          l && 
+          l.id && 
+          !l.id.startsWith('lead-seed') &&
+          !l.name?.toLowerCase().includes('carlos rivera - médico') &&
+          !l.name?.toLowerCase().includes('mariana ortiz')
+        );
       }
-      return INITIAL_SEED_LEADS;
+      return [];
     } catch (e) {
       console.warn("Error reading leads store from localStorage", e);
-      return INITIAL_SEED_LEADS;
+      return [];
+    }
+  }
+
+  // Fetch real leads from central server
+  static async fetchLeadsFromServer(): Promise<LeadItem[]> {
+    try {
+      const endpoints = ['/api/leads', '/.netlify/functions/leads'];
+      for (const endpoint of endpoints) {
+        try {
+          const res = await fetch(endpoint, {
+            headers: { 'Cache-Control': 'no-cache' }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.leads)) {
+              const serverLeads: LeadItem[] = data.leads.filter((l: any) => 
+                l && 
+                l.id && 
+                !l.id.startsWith('lead-seed') &&
+                !l.name?.toLowerCase().includes('carlos rivera - médico') &&
+                !l.name?.toLowerCase().includes('mariana ortiz')
+              );
+
+              // Merge with any offline local leads
+              const localLeads = this.getLeads();
+              const mergedMap = new Map<string, LeadItem>();
+              
+              // Server leads take priority
+              serverLeads.forEach(l => mergedMap.set(l.id, l));
+              // Add local leads if not in server yet
+              localLeads.forEach(l => {
+                if (!mergedMap.has(l.id)) {
+                  mergedMap.set(l.id, l);
+                  // Push to server in background
+                  this.syncLeadToServer(l);
+                }
+              });
+
+              const merged = Array.from(mergedMap.values()).sort((a, b) => b.createdAt - a.createdAt);
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+              window.dispatchEvent(new CustomEvent('fjn_leads_updated', { detail: merged }));
+              return merged;
+            }
+          }
+        } catch (e) {
+          // Try next endpoint
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to fetch leads from server:", err);
+    }
+    return this.getLeads();
+  }
+
+  private static async syncLeadToServer(lead: LeadItem) {
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead)
+      });
+    } catch {
+      // Ignore background sync errors
     }
   }
 
@@ -76,7 +115,7 @@ export class LeadsManager {
     const existing = this.getLeads();
     const newLead: LeadItem = {
       ...leadData,
-      id: `lead-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+      id: `lead-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       createdAt: Date.now(),
       status: leadData.status || 'new',
     };
@@ -85,9 +124,25 @@ export class LeadsManager {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       window.dispatchEvent(new CustomEvent('fjn_lead_added', { detail: newLead }));
+      window.dispatchEvent(new CustomEvent('fjn_leads_updated', { detail: updated }));
     } catch (e) {
       console.error("Error saving lead to localStorage", e);
     }
+
+    // Persist to central server immediately
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newLead)
+    }).catch(err => {
+      console.warn("Could not save lead to /api/leads, trying fallback...", err);
+      fetch('/.netlify/functions/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newLead)
+      }).catch(e => console.error("Central lead sync failed:", e));
+    });
+
     return newLead;
   }
 
@@ -99,12 +154,20 @@ export class LeadsManager {
     existing[index].status = status;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
-      window.dispatchEvent(new CustomEvent('fjn_leads_updated'));
-      return true;
+      window.dispatchEvent(new CustomEvent('fjn_leads_updated', { detail: existing }));
     } catch (e) {
       console.error("Error updating lead status", e);
       return false;
     }
+
+    // Sync status with server
+    fetch(`/api/leads/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    }).catch(e => console.warn("Could not update lead status on server:", e));
+
+    return true;
   }
 
   static updateLeadNotes(id: string, notes: string): boolean {
@@ -115,12 +178,19 @@ export class LeadsManager {
     existing[index].notes = notes;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
-      window.dispatchEvent(new CustomEvent('fjn_leads_updated'));
-      return true;
+      window.dispatchEvent(new CustomEvent('fjn_leads_updated', { detail: existing }));
     } catch (e) {
       console.error("Error updating lead notes", e);
       return false;
     }
+
+    fetch(`/api/leads/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes })
+    }).catch(e => console.warn("Could not update lead notes on server:", e));
+
+    return true;
   }
 
   static deleteLead(id: string): boolean {
@@ -128,21 +198,31 @@ export class LeadsManager {
     const filtered = existing.filter(l => l.id !== id);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
-      window.dispatchEvent(new CustomEvent('fjn_leads_updated'));
-      return true;
+      window.dispatchEvent(new CustomEvent('fjn_leads_updated', { detail: filtered }));
     } catch (e) {
       console.error("Error deleting lead", e);
       return false;
     }
+
+    fetch(`/api/leads/${id}`, {
+      method: 'DELETE'
+    }).catch(e => console.warn("Could not delete lead on server:", e));
+
+    return true;
   }
 
   static clearAllLeads(): void {
     try {
       localStorage.removeItem(STORAGE_KEY);
-      window.dispatchEvent(new CustomEvent('fjn_leads_updated'));
+      localStorage.removeItem('fjn_leads_store');
+      window.dispatchEvent(new CustomEvent('fjn_leads_updated', { detail: [] }));
     } catch (e) {
       console.error("Error clearing leads", e);
     }
+
+    fetch('/api/leads/clear', {
+      method: 'POST'
+    }).catch(e => console.warn("Could not clear leads on server:", e));
   }
 
   static exportToCSV(): void {
