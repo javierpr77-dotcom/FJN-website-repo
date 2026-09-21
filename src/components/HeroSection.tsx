@@ -48,35 +48,6 @@ const HeroSection = () => {
 
       {/* Main Content */}
       <div className="relative z-20 container mx-auto px-6 text-center max-w-5xl">
-        
-        {/* Badge */}
-        <div className={`transition-all duration-1000 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <motion.div 
-            className="inline-flex items-center justify-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full mb-6 sm:mb-8 mx-auto"
-            animate={{
-              boxShadow: [
-                '0 0 5px rgba(255,255,255,0.2), inset 0 0 2px rgba(255,255,255,0.05)',
-                '0 0 15px rgba(255,255,255,0.5), inset 0 0 5px rgba(255,255,255,0.2)',
-                '0 0 5px rgba(255,255,255,0.2), inset 0 0 2px rgba(255,255,255,0.05)'
-              ]
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            style={{
-              background: 'rgba(255,255,255,0.01)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.3)',
-            }}
-          >
-            <div className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse drop-shadow-[0_0_3px_rgba(255,255,255,0.5)] shrink-0"></div>
-            <span className="text-white/90 font-body text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.25em] uppercase font-light drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
-              {t("hero.badge")}
-            </span>
-          </motion.div>
-        </div>
 
         {/* Headline - Disrupted Paradigm */}
         <div className={`transition-all duration-1000 delay-[400ms] ease-out flex flex-col items-center justify-center w-full ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>

@@ -162,101 +162,65 @@ const Navbar = () => {
           />
         </div>
 
-        {/* Desktop Menu - Centered (Those Four Links) */}
-        <div className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2 z-10">
+        {/* Desktop Menu - Centered (Servicios, Portafolio, Planes, Casos de éxito) */}
+        <div className="hidden md:flex items-center gap-2.5 lg:gap-3 absolute left-1/2 -translate-x-1/2 z-10">
           <AnimatePresence>
             {showNavItems && menuItems.filter(item => item.key !== "consultas").map((item, index) => (
               <motion.button
                 key={item.key}
-                initial={{ opacity: 0, x: 20, y: 0 }}
-                animate={item.key === "portfolio" ? {
-                  opacity: [0.95, 1, 0.95],
-                  x: 0,
-                  y: [0, -3.5, 0],
-                  scale: [1, 1.05, 1],
-                  filter: [
-                    "drop-shadow(0 0 4px rgba(255,255,255,0.7)) drop-shadow(0 0 2px rgba(255,255,255,0.5))",
-                    "drop-shadow(0 0 18px rgba(255,255,255,1)) drop-shadow(0 0 8px rgba(255,255,255,0.9)) drop-shadow(0 0 2px rgba(255,255,255,0.8))",
-                    "drop-shadow(0 0 4px rgba(255,255,255,0.7)) drop-shadow(0 0 2px rgba(255,255,255,0.5))"
-                  ],
-                  backgroundPosition: ["0% 50%", "200% 50%"],
-                  transition: {
-                    scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
-                    filter: { repeat: Infinity, duration: 2, ease: "easeInOut" },
-                    opacity: { repeat: Infinity, duration: 2, ease: "easeInOut" },
-                    x: { duration: 0.4, delay: index * 0.1, ease: "easeOut" },
-                    y: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: index * 0.3 },
-                    backgroundPosition: { duration: 8, repeat: Infinity, ease: "linear" }
-                  }
-                } : { 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ 
                   opacity: 1, 
-                  x: 0,
-                  y: [0, -3.5, 0],
-                  backgroundPosition: ["0% 50%", "200% 50%"],
-                  transition: {
-                    opacity: { duration: 0.4, delay: index * 0.1, ease: "easeOut" },
-                    x: { duration: 0.4, delay: index * 0.1, ease: "easeOut" },
-                    y: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: index * 0.3 },
-                    backgroundPosition: { duration: 8, repeat: Infinity, ease: "linear" }
-                  }
+                  y: 0,
+                  transition: { duration: 0.35, delay: index * 0.08, ease: "easeOut" }
                 }}
                 exit={{ 
                   opacity: 0, 
-                  x: -15,
-                  transition: { 
-                    duration: 0.3, 
-                    delay: index * 0.08, 
-                    ease: "easeIn"
-                  } 
+                  y: -8,
+                  transition: { duration: 0.2, delay: index * 0.05, ease: "easeIn" } 
                 }}
                 onClick={() => handleNavigation(item.key)}
-                className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block cursor-pointer transition-all duration-300"
-                style={{
-                  backgroundImage: item.key === "portfolio"
-                    ? "linear-gradient(90deg, #FFFFFF, #F8FAFC, #FFFFFF)"
-                    : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
-                  backgroundSize: "200% auto",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  filter: item.key === "portfolio" 
-                    ? "drop-shadow(0 0 4px rgba(255,255,255,0.7)) drop-shadow(0 0 2px rgba(255,255,255,0.5))" 
-                    : "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
-                }}
+                className={`group relative px-3.5 py-1.5 lg:px-4 lg:py-2 rounded-xl border backdrop-blur-md transition-all duration-300 cursor-pointer overflow-hidden flex items-center justify-center ${
+                  item.key === "portfolio"
+                    ? "border-white/25 bg-white/[0.06] hover:bg-white/[0.12] hover:border-white/40 shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.18)] hover:shadow-[0_0_22px_rgba(255,255,255,0.25)]"
+                    : "border-white/15 bg-white/[0.04] hover:bg-white/[0.09] hover:border-white/30 shadow-[0_4px_16px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.12)] hover:shadow-[0_0_20px_rgba(20,91,255,0.25)]"
+                } active:scale-95`}
               >
-                {item.label}
+                {/* Subtle sheen highlight on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
+                
+                {item.key === "portfolio" && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/80 mr-2 animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+                )}
+                
+                <span className="relative z-10 font-body text-xs lg:text-[13px] tracking-wider uppercase font-medium text-white/85 group-hover:text-white transition-colors duration-300 whitespace-nowrap">
+                  {item.label}
+                </span>
               </motion.button>
             ))}
           </AnimatePresence>
         </div>
 
-        {/* Desktop CTA (Far Right Corner - Consultation Button) */}
+        {/* Desktop CTA (Far Right Corner - Consultas Tag) */}
         <div className="hidden md:flex items-center gap-5 relative z-10 ml-auto">
           <AnimatePresence>
             {showNavItems && (
               <motion.button
-                initial={{ opacity: 0, x: 10, y: 0 }}
+                initial={{ opacity: 0, x: 10 }}
                 animate={{ 
                   opacity: 1, 
                   x: 0,
-                  y: [0, -3.5, 0]
+                  transition: { duration: 0.4, delay: 0.3 }
                 }}
-                exit={{ opacity: 0, x: 10 }}
-                transition={{ 
-                  opacity: { duration: 0.4 },
-                  x: { duration: 0.4 },
-                  y: { repeat: Infinity, duration: 4, ease: "easeInOut", delay: 1.2 }
-                }}
+                exit={{ opacity: 0, x: 10, transition: { duration: 0.2 } }}
                 onClick={() => handleNavigation("consultas")}
-                className="font-body text-sm tracking-wide font-medium hover:scale-105 inline-block cursor-pointer transition-all duration-300"
-                style={{
-                  backgroundImage: "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
-                  backgroundSize: "200% auto",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  filter: "drop-shadow(0 0 10px rgba(20,91,255,0.8))"
-                }}
+                className="group relative px-4 py-1.5 lg:px-5 lg:py-2 rounded-xl border border-[#145BFF]/35 bg-[#145BFF]/10 hover:bg-[#145BFF]/20 backdrop-blur-md shadow-[0_4px_16px_rgba(20,91,255,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)] hover:shadow-[0_0_24px_rgba(20,91,255,0.45),inset_0_1px_1px_rgba(255,255,255,0.25)] hover:border-[#145BFF]/60 active:scale-95 transition-all duration-300 cursor-pointer overflow-hidden flex items-center justify-center gap-2"
               >
-                {language === 'es' ? 'Consultas' : 'Consultations'}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#145BFF]/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#145BFF] animate-pulse drop-shadow-[0_0_6px_#145BFF]" />
+                <span className="relative z-10 font-body text-xs lg:text-[13px] tracking-wider uppercase font-semibold text-white group-hover:text-white transition-colors duration-300 whitespace-nowrap">
+                  {language === 'es' ? 'Consultas' : 'Consultations'}
+                </span>
               </motion.button>
             )}
           </AnimatePresence>
@@ -293,59 +257,36 @@ const Navbar = () => {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="md:hidden absolute top-full left-0 right-0 bg-[#050507]/95 backdrop-blur-2xl border-b border-white/15 overflow-hidden shadow-2xl"
           >
-            <div className="flex flex-col px-6 py-6 border-t border-white/5">
+            <div className="flex flex-col gap-2.5 px-6 py-6 border-t border-white/10">
               {menuItems.map((item, index) => (
-                <div key={item.key} className={index !== menuItems.length - 1 ? 'border-b border-white/10' : ''}>
-                  <motion.button
-                    initial={{ opacity: 0, x: -20, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: -10, filter: "blur(2px)", transition: { duration: 0.2, delay: 0 } }}
-                    transition={{ 
-                      duration: 0.8, 
-                      delay: 0.2 + (index * 0.1), 
-                      ease: [0.22, 1, 0.36, 1] 
-                    }}
-                    onClick={() => handleNavigation(item.key)}
-                    className="w-full text-left font-body text-lg py-4 font-medium transition-all duration-300"
-                    style={{
-                      backgroundImage: item.key === "portfolio"
-                        ? "linear-gradient(90deg, #FFFFFF, #F8FAFC, #FFFFFF)"
-                        : "linear-gradient(90deg, #145BFF, #FFFFFF, #145BFF)",
-                      backgroundSize: "200% auto",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    <motion.span
-                      animate={item.key === "portfolio" ? {
-                        backgroundPosition: ["0% 50%", "200% 50%"],
-                        scale: [1, 1.02, 1],
-                      } : { 
-                        backgroundPosition: ["0% 50%", "200% 50%"],
-                      }}
-                      transition={item.key === "portfolio" ? { 
-                        scale: { repeat: Infinity, duration: 2, ease: "easeInOut" },
-                        backgroundPosition: { duration: 8, repeat: Infinity, ease: "linear" }
-                      } : {
-                        duration: 8, 
-                        repeat: Infinity,
-                        ease: "linear"
-                      }}
-                      className="w-full inline-block"
-                      style={{
-                        backgroundImage: "inherit",
-                        backgroundSize: "inherit",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        filter: item.key === 'portfolio' 
-                          ? "drop-shadow(0 0 16px rgba(255,255,255,1)) drop-shadow(0 0 4px rgba(255,255,255,0.8))" 
-                          : "drop-shadow(0 0 8px rgba(20,91,255,0.6))"
-                      }}
-                    >
-                      {item.label}
-                    </motion.span>
-                  </motion.button>
-                </div>
+                <motion.button
+                  key={item.key}
+                  initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ 
+                    duration: 0.35, 
+                    delay: 0.1 + (index * 0.06), 
+                    ease: "easeOut" 
+                  }}
+                  onClick={() => handleNavigation(item.key)}
+                  className={`w-full px-4 py-3 rounded-xl border backdrop-blur-md flex items-center justify-between text-left transition-all duration-300 ${
+                    item.key === "consultas"
+                      ? "border-[#145BFF]/40 bg-[#145BFF]/15 text-white shadow-[0_4px_16px_rgba(20,91,255,0.2)]"
+                      : "border-white/15 bg-white/[0.04] active:bg-white/[0.1] text-white/90 shadow-[0_4px_16px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+                  }`}
+                >
+                  <span className="font-body text-sm tracking-wider uppercase font-medium flex items-center gap-2">
+                    {item.key === "consultas" && (
+                      <span className="w-2 h-2 rounded-full bg-[#145BFF] animate-pulse drop-shadow-[0_0_6px_#145BFF]" />
+                    )}
+                    {item.key === "portfolio" && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
+                    )}
+                    {item.label}
+                  </span>
+                  <span className="text-white/40 text-xs font-mono">→</span>
+                </motion.button>
               ))}
             </div>
           </motion.div>
