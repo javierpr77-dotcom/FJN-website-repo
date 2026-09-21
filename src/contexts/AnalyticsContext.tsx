@@ -516,10 +516,16 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
             setSessions(real);
             try {
               localStorage.setItem('fjn_analytics_sessions', JSON.stringify(real));
-            } catch {}
+            } catch (e) {
+              // Ignore local storage quota errors silently
+              void e;
+            }
           }
         }
-      } catch {}
+      } catch (e) {
+        // Ignore network polling errors silently
+        void e;
+      }
     };
 
     fetchRealSessions();

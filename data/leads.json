@@ -1,5 +1,37 @@
 [
   {
+    "id": "lead-test-iphone-real",
+    "type": "plan_order",
+    "createdAt": 1789667691742,
+    "name": "Amigo de Prueba (iPhone)",
+    "phone": "787-345-6789",
+    "email": "amigo.iphone@gmail.com",
+    "town": "Bayamón",
+    "plan": "Landing Page de Alta Conversión",
+    "addons": "WhatsApp CRM Integrado",
+    "total": "$1,800 USD",
+    "status": "new",
+    "source": "Cotizador de Planes",
+    "deviceType": "Mobile",
+    "os": "iOS"
+  },
+  {
+    "id": "lead-1789667676788-zqxjs",
+    "type": "plan_order",
+    "createdAt": 1789667676788,
+    "name": "Prueba Laptop Admin",
+    "phone": "787-888-9999",
+    "email": "laptop.admin@gmail.com",
+    "town": "San Juan",
+    "plan": "Website Corporativo Élite",
+    "addons": "Blog / Artículos SEO",
+    "total": "$3,500 USD",
+    "status": "new",
+    "source": "Cotizador de Planes",
+    "deviceType": "Desktop",
+    "os": "macOS"
+  },
+  {
     "id": "lead-1789666549707-fegkl",
     "type": "plan_order",
     "createdAt": 1789666549707,
@@ -12,6 +44,8 @@
     "addons": "Blog / Artículos SEO, Soporte & Mantenimiento VIP",
     "total": "$3,500 USD",
     "status": "new",
-    "source": "Cotizador de Planes"
+    "source": "Cotizador de Planes",
+    "deviceType": "Desktop",
+    "os": "macOS"
   }
 ]

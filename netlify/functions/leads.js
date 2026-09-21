@@ -39,7 +39,9 @@ exports.handler = async function(event, context) {
         total: data.total,
         status: data.status || "new",
         notes: data.notes,
-        source: data.source || (data.plan ? "Cotizador de Planes" : "Formulario de Asesoría Web")
+        source: data.source || (data.plan ? "Cotizador de Planes" : "Formulario de Asesoría Web"),
+        deviceType: data.deviceType || (event.headers && /Mobi|Android|iPhone/i.test(event.headers["user-agent"] || "") ? "Mobile" : "Desktop"),
+        os: data.os || (event.headers && /iPhone|iPad/i.test(event.headers["user-agent"] || "") ? "iOS" : /Android/i.test(event.headers && event.headers["user-agent"] || "") ? "Android" : "Other")
       };
 
       memoryLeads.unshift(newLead);

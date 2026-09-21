@@ -186,6 +186,8 @@ const ContactForm = () => {
       .then(() => console.log("Netlify form submission successful"))
       .catch((error) => console.error("Netlify submission error:", error));
 
+    const clientDevice = LeadsManager.detectClientDevice();
+
     // 3. Send instant email notification using our secure serverless function with Resend
     fetch("/.netlify/functions/send-email", {
       method: "POST",
@@ -197,7 +199,9 @@ const ContactForm = () => {
         goal,
         town: town || "",
         date: dateFormatted,
-        time: timeFormatted
+        time: timeFormatted,
+        deviceType: clientDevice.deviceType,
+        os: clientDevice.os
       })
     })
       .then((response) => response.json())

@@ -4,7 +4,7 @@ import {
   Mail, Phone, MessageSquare, Calendar, MapPin, Sparkles, 
   CheckCircle2, Clock, AlertTriangle, Trash2, Download, 
   Plus, Search, Send, Check, ShoppingBag, 
-  ShieldCheck, RefreshCw, X, MessageCircle
+  ShieldCheck, RefreshCw, X, MessageCircle, Smartphone, Monitor
 } from "lucide-react";
 import { LeadsManager, LeadItem } from "@/services/LeadsManager";
 
@@ -185,6 +185,8 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
   const newCount = leads.filter(l => l.status === 'new').length;
   const contactedCount = leads.filter(l => l.status === 'contacted' || l.status === 'scheduled').length;
   const closedCount = leads.filter(l => l.status === 'closed').length;
+  const mobileLeadsCount = leads.filter(l => l.deviceType === 'Mobile' || l.os === 'iOS' || l.os === 'Android').length;
+  const desktopLeadsCount = leads.filter(l => l.deviceType === 'Desktop' || l.os === 'macOS' || l.os === 'Windows').length;
 
   return (
     <motion.div
@@ -253,6 +255,24 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
           <span className="text-[10px] text-emerald-300 font-mono mt-1 block">
             {language === 'es' ? 'Proyectos confirmados' : 'Confirmed projects'}
           </span>
+        </div>
+      </div>
+
+      {/* Dispositivos de Origen de Leads */}
+      <div className="bg-white/[0.015] border border-white/5 rounded-xl px-5 py-3 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-white/70">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+          <span className="text-white/40 uppercase tracking-wider text-[10px]">Auditoría de Dispositivos (Leads Reales):</span>
+        </div>
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-1.5 text-cyan-300">
+            <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Móvil (iPhone / Android): <strong className="text-white font-bold">{mobileLeadsCount}</strong></span>
+          </div>
+          <div className="flex items-center gap-1.5 text-blue-300">
+            <Monitor className="w-3.5 h-3.5 text-blue-400" />
+            <span>Computadora (Laptop / PC): <strong className="text-white font-bold">{desktopLeadsCount}</strong></span>
+          </div>
         </div>
       </div>
 
@@ -491,6 +511,23 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
                     <span className="text-xs font-mono text-white/40">
                       {new Date(lead.createdAt).toLocaleString('es-PR', { dateStyle: 'medium', timeStyle: 'short' })}
                     </span>
+
+                    {(lead.deviceType || lead.os) && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white/5 border border-white/10 text-cyan-300">
+                        {lead.deviceType === 'Mobile' ? (
+                          <Smartphone className="w-3 h-3 text-cyan-400" />
+                        ) : (
+                          <Monitor className="w-3 h-3 text-cyan-400" />
+                        )}
+                        <span>
+                          {lead.os === 'iOS' ? 'iPhone (iOS)' : 
+                           lead.os === 'Android' ? 'Android' : 
+                           lead.os === 'macOS' ? 'Mac (Laptop/Desktop)' : 
+                           lead.os === 'Windows' ? 'Windows (PC)' : 
+                           `${lead.deviceType || 'Dispositivo'} (${lead.os || 'Web'})`}
+                        </span>
+                      </span>
+                    )}
                   </div>
 
                   {/* Status Dropdown */}
@@ -542,6 +579,17 @@ export const LeadsSection = ({ language }: LeadsSectionProps) => {
                       <div className="flex items-center gap-2 text-xs font-mono text-amber-300">
                         <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                         <span>{lead.town}</span>
+                      </div>
+                    )}
+
+                    {(lead.deviceType || lead.os) && (
+                      <div className="flex items-center gap-2 text-[11px] font-mono text-cyan-300/80 pt-1">
+                        {lead.deviceType === 'Mobile' ? (
+                          <Smartphone className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        ) : (
+                          <Monitor className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        )}
+                        <span>Dispositivo: <strong className="text-white font-bold">{lead.os === 'iOS' ? 'iPhone (iOS)' : lead.os === 'Android' ? 'Android' : lead.os === 'macOS' ? 'Laptop / Mac' : lead.os === 'Windows' ? 'Laptop / PC (Windows)' : (lead.deviceType || 'Web')}</strong></span>
                       </div>
                     )}
                   </div>

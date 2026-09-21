@@ -15,6 +15,8 @@ export interface LeadItem {
   status: 'new' | 'contacted' | 'scheduled' | 'closed' | 'archived';
   notes?: string;
   source?: string;
+  deviceType?: 'Desktop' | 'Tablet' | 'Mobile';
+  os?: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other';
 }
 
 const STORAGE_KEY = 'fjn_leads_store_real_v4';
@@ -111,13 +113,47 @@ export class LeadsManager {
     }
   }
 
+  static detectClientDevice(): { deviceType: 'Desktop' | 'Tablet' | 'Mobile'; os: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other' } {
+    if (typeof window === 'undefined' || !navigator) {
+      return { deviceType: 'Desktop', os: 'Other' };
+    }
+    const ua = navigator.userAgent || '';
+    let deviceType: 'Desktop' | 'Tablet' | 'Mobile' = 'Desktop';
+    let os: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other' = 'Other';
+
+    if (/Mobi|Android|iPhone|iPod/i.test(ua)) {
+      if (/iPad|tablet/i.test(ua)) {
+        deviceType = 'Tablet';
+      } else {
+        deviceType = 'Mobile';
+      }
+    }
+
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      os = 'iOS';
+    } else if (/Android/i.test(ua)) {
+      os = 'Android';
+    } else if (/Windows/i.test(ua)) {
+      os = 'Windows';
+    } else if (/Macintosh|Mac Intel/i.test(ua)) {
+      os = 'macOS';
+    } else if (/Linux/i.test(ua)) {
+      os = 'Linux';
+    }
+
+    return { deviceType, os };
+  }
+
   static saveLead(leadData: Omit<LeadItem, 'id' | 'createdAt' | 'status'> & { status?: LeadItem['status'] }): LeadItem {
     const existing = this.getLeads();
+    const detected = this.detectClientDevice();
     const newLead: LeadItem = {
       ...leadData,
       id: `lead-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       createdAt: Date.now(),
       status: leadData.status || 'new',
+      deviceType: leadData.deviceType || detected.deviceType,
+      os: leadData.os || detected.os,
     };
 
     const updated = [newLead, ...existing];

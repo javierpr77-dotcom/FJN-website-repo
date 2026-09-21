@@ -106,17 +106,25 @@ const Admin = () => {
   const [timeRange, setTimeRange] = useState<TimeRange>('today');
   const [unreadLeadsCount, setUnreadLeadsCount] = useState(0);
 
-  // Sync leads count
+  // Sync leads count and fetch latest from server
   useEffect(() => {
-    const updateLeadsBadge = () => {
-      const allLeads = LeadsManager.getLeads();
-      const unread = allLeads.filter(l => l.status === 'new').length;
-      setUnreadLeadsCount(unread);
+    const updateLeadsBadge = async () => {
+      try {
+        const serverLeads = await LeadsManager.fetchLeadsFromServer();
+        const unread = serverLeads.filter(l => l.status === 'new').length;
+        setUnreadLeadsCount(unread);
+      } catch {
+        const allLeads = LeadsManager.getLeads();
+        const unread = allLeads.filter(l => l.status === 'new').length;
+        setUnreadLeadsCount(unread);
+      }
     };
     updateLeadsBadge();
+    const interval = setInterval(updateLeadsBadge, 3500);
     window.addEventListener('fjn_leads_updated', updateLeadsBadge);
     window.addEventListener('fjn_lead_added', updateLeadsBadge);
     return () => {
+      clearInterval(interval);
       window.removeEventListener('fjn_leads_updated', updateLeadsBadge);
       window.removeEventListener('fjn_lead_added', updateLeadsBadge);
     };

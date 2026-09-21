@@ -48,6 +48,8 @@ export interface LeadItem {
   status: 'new' | 'contacted' | 'scheduled' | 'closed' | 'archived';
   notes?: string;
   source?: string;
+  deviceType?: 'Desktop' | 'Tablet' | 'Mobile';
+  os?: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other';
 }
 
 // Storage setup
@@ -132,6 +134,35 @@ async function startServer() {
       return realIp.trim();
     }
     return req.socket.remoteAddress || "127.0.0.1";
+  };
+
+  // Helper to parse device info from User-Agent
+  const parseReqDevice = (req: express.Request): { deviceType: 'Desktop' | 'Tablet' | 'Mobile'; os: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other' } => {
+    const ua = req.headers["user-agent"] || "";
+    let deviceType: 'Desktop' | 'Tablet' | 'Mobile' = 'Desktop';
+    let os: 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Other' = 'Other';
+
+    if (/Mobi|Android|iPhone|iPod/i.test(ua)) {
+      if (/iPad|tablet/i.test(ua)) {
+        deviceType = 'Tablet';
+      } else {
+        deviceType = 'Mobile';
+      }
+    }
+
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      os = 'iOS';
+    } else if (/Android/i.test(ua)) {
+      os = 'Android';
+    } else if (/Windows/i.test(ua)) {
+      os = 'Windows';
+    } else if (/Macintosh|Mac Intel/i.test(ua)) {
+      os = 'macOS';
+    } else if (/Linux/i.test(ua)) {
+      os = 'Linux';
+    }
+
+    return { deviceType, os };
   };
 
   // --- ANALYTICS API ENDPOINTS ---
@@ -320,6 +351,8 @@ async function startServer() {
         return res.status(400).json({ error: "Name and phone are required" });
       }
 
+      const clientDevice = parseReqDevice(req);
+
       const newLead: LeadItem = {
         id: data.id || `lead-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
         type: data.type || (data.plan ? "plan_order" : "consultation"),
@@ -336,7 +369,9 @@ async function startServer() {
         total: data.total,
         status: data.status || "new",
         notes: data.notes,
-        source: data.source || (data.plan ? "Cotizador de Planes" : "Formulario de Asesoría Web")
+        source: data.source || (data.plan ? "Cotizador de Planes" : "Formulario de Asesoría Web"),
+        deviceType: data.deviceType || clientDevice.deviceType,
+        os: data.os || clientDevice.os
       };
 
       // Check if already exists by id
@@ -414,6 +449,7 @@ async function startServer() {
       let savedLead: LeadItem | null = null;
       if (!isDiagnosticTest && (name || phone)) {
         const leadId = `lead-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+        const clientDevice = parseReqDevice(req);
         savedLead = {
           id: leadId,
           type: isPlanOrder ? "plan_order" : "consultation",
@@ -429,11 +465,19 @@ async function startServer() {
           addons,
           total,
           status: "new",
-          source: isPlanOrder ? "Cotizador de Planes" : "Formulario de Asesoría Web"
+          source: isPlanOrder ? "Cotizador de Planes" : "Formulario de Asesoría Web",
+          deviceType: data.deviceType || clientDevice.deviceType,
+          os: data.os || clientDevice.os
         };
-        // Avoid duplicate if already tracked
-        const exists = storedLeads.some(l => l.name === savedLead!.name && l.phone === savedLead!.phone && (Date.now() - l.createdAt < 60000));
-        if (!exists) {
+        // Avoid duplicate if already tracked, but enrich deviceType and os if missing
+        const existingLead = storedLeads.find(l => l.name === savedLead!.name && l.phone === savedLead!.phone && (Date.now() - l.createdAt < 60000));
+        if (existingLead) {
+          if (!existingLead.deviceType || !existingLead.os) {
+            existingLead.deviceType = existingLead.deviceType || savedLead.deviceType;
+            existingLead.os = existingLead.os || savedLead.os;
+            persistLeadsToDisk();
+          }
+        } else {
           storedLeads.unshift(savedLead);
           persistLeadsToDisk();
           console.log(`[Auto-Lead Recorded via Email Handler] ${savedLead.name} - ${savedLead.plan || savedLead.type}`);

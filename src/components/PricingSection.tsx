@@ -86,6 +86,8 @@ const PricingSection = () => {
       .then(() => console.log("Netlify pricing order submission successful"))
       .catch((error) => console.error("Netlify submission error:", error));
 
+    const clientDevice = LeadsManager.detectClientDevice();
+
     // 3. Send email notification via serverless Netlify function using Resend
     fetch("/.netlify/functions/send-email", {
       method: "POST",
@@ -96,7 +98,9 @@ const PricingSection = () => {
         phone: formData.phone,
         plan: selectedPlan?.name || "",
         addons: formattedAddons,
-        total: formattedTotal
+        total: formattedTotal,
+        deviceType: clientDevice.deviceType,
+        os: clientDevice.os
       })
     })
       .then(response => {
