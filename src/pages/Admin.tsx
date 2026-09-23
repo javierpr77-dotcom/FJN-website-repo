@@ -18,6 +18,7 @@ import {
 } from "recharts";
 import { LeadsSection } from "@/components/admin/LeadsSection";
 import { LeadsManager } from "@/services/LeadsManager";
+import { TownAnalyticsDashboard } from "@/components/admin/TownAnalyticsDashboard";
 
 export type TimeRange = 'today' | '7d' | '14d' | '30d' | '90d' | 'all';
 
@@ -821,7 +822,12 @@ const Admin = () => {
               icon: ShoppingBag,
               badge: unreadLeadsCount > 0 ? unreadLeadsCount : undefined
             },
-            { id: 'towns', label: language === 'es' ? 'Pueblos de PR' : 'PR Municipalities', icon: MapPin },
+            { 
+              id: 'towns', 
+              label: language === 'es' ? 'Analíticas por Pueblo (Tiempo Real)' : 'Towns Analytics (Real-Time)', 
+              icon: MapPin,
+              badge: '78 PR'
+            },
             { id: 'live', label: language === 'es' ? 'Consola en Vivo' : 'Live Interaction Feed', icon: Activity },
             { id: 'marketing', label: language === 'es' ? 'Campaña Premium (Target)' : 'Premium Campaign Target Advisor', icon: Megaphone }
           ].map(tab => {
@@ -1357,7 +1363,7 @@ const Admin = () => {
             </motion.div>
           )}
 
-          {/* MUNICIPALITIES TAB */}
+          {/* REAL-TIME MUNICIPALITIES & CONVERSIONS DASHBOARD TAB */}
           {activeTab === 'towns' && (
             <motion.div
               key="towns-tab"
@@ -1365,138 +1371,8 @@ const Admin = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.4 }}
-              className="space-y-6"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                {/* Puerto Rico Towns Data Table */}
-                <div className="lg:col-span-6 bg-white/[0.02] border border-white/5 p-6 rounded-2xl backdrop-blur-xl">
-                  <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-                    <div>
-                      <h3 className="font-heading text-lg font-bold text-white flex items-center gap-2">
-                        <MapPin className="w-5 h-5 text-amber-400 animate-bounce" />
-                        {language === 'es' ? 'Pueblos de Origen Detectados (Automático)' : 'Visitor Municipalities'}
-                      </h3>
-                      <p className="text-xs text-white/40 mt-1">
-                        {language === 'es' ? 'Origen de las visitas detectado por IP Geolocation API.' : 'Exact municipality tracked when user enters the platform.'}
-                      </p>
-                    </div>
-                    <span className="text-xs font-mono bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-white">
-                      P.R. Geo IP
-                    </span>
-                  </div>
-
-                  <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1">
-                    {townData.length === 0 ? (
-                      <p className="text-center text-white/40 font-mono py-8 text-xs">
-                        Esperando tráfico de visitantes...
-                      </p>
-                    ) : (
-                      townData.map((town, idx) => {
-                        const isPremium = ["Dorado", "Guaynabo", "San Juan", "Humacao", "Rincón"].includes(town.name);
-                        
-                        // Extract associated users for this town
-                        const townSessions = sessions.filter(s => s.city === town.name);
-                        const userLabels = townSessions.slice(0, 6).map(ts => {
-                          const uNum = getSessionUserNumber(ts.id);
-                          const osLabel = ts.os === 'iOS' ? 'iPhone' : ts.os === 'Android' ? 'Android' : ts.os || 'PC';
-                          return `${language === 'es' ? 'Usuario' : 'User'} ${uNum} (${osLabel})`;
-                        });
-
-                        return (
-                          <div key={town.name} className="flex flex-col gap-1.5 p-3 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 transition-colors duration-300">
-                            <div className="flex items-center justify-between text-sm">
-                              <div className="flex items-center gap-2 font-bold text-white">
-                                <span className="font-mono text-xs text-white/30">#0{idx+1}</span>
-                                <span>{town.name}</span>
-                                {isPremium && (
-                                  <span className="text-[9px] bg-[#145BFF]/10 text-[#00D4FF] border border-[#145BFF]/20 px-1.5 py-0.5 rounded font-mono uppercase tracking-wider scale-95">
-                                    💎 Premium Target
-                                  </span>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-3 font-mono text-xs">
-                                <span className="text-white/40">({town.count} {town.count === 1 ? (language === 'es' ? 'visita' : 'visit') : (language === 'es' ? 'visitas' : 'visits')})</span>
-                                <span className="text-[#00D4FF] font-bold">{town.percentage}%</span>
-                              </div>
-                            </div>
-                            
-                            {/* Graphic progress indicator bar */}
-                            <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden relative">
-                              <div 
-                                className={`h-full rounded-full ${isPremium ? 'bg-gradient-to-r from-[#145BFF] to-purple-600' : 'bg-[#CFCFD4]/30'}`} 
-                                style={{ width: `${town.percentage}%` }} 
-                              />
-                            </div>
-
-                            {/* User list belonging to this town */}
-                            {userLabels.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-1 text-[10px]">
-                                <span className="text-white/35 font-mono self-center mr-1">
-                                  {language === 'es' ? 'Visitantes:' : 'Visitors:'}
-                                </span>
-                                {userLabels.map((lbl, uIdx) => (
-                                  <span key={uIdx} className="bg-white/5 text-white/60 border border-white/5 px-1.5 py-0.5 rounded font-mono text-[9px]">
-                                    {lbl}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                </div>
-
-                {/* Local Town Target Marketing Visual Advisor card */}
-                <div className="lg:col-span-6 bg-white/[0.02] border border-white/5 p-6 rounded-2xl backdrop-blur-xl flex flex-col justify-between gap-6">
-                  <div>
-                    <h3 className="font-heading text-lg font-bold text-white flex items-center gap-2">
-                      <Target className="w-5 h-5 text-purple-400" />
-                      {language === 'es' ? 'Análisis de Densidad de Compra Premium' : 'Premium Purchasing Power Map'}
-                    </h3>
-                    <p className="text-xs text-white/40 mt-1">
-                      {language === 'es' ? 'Por qué Dorado, Guaynabo y San Juan son indispensables para lanzar campañas.' : 'Targeting criteria for local Facebook/Meta campaign launch.'}
-                    </p>
-                  </div>
-
-                  {/* Visual Map / Graphic Radar representation */}
-                  <div className="h-[220px] w-full mt-2 flex items-center justify-center relative">
-                    {/* Animated visual telemetry rings */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-48 h-48 border border-white/5 rounded-full animate-ping duration-3000" />
-                      <div className="w-32 h-32 border border-white/5 rounded-full animate-pulse" />
-                    </div>
-                    
-                    <div className="space-y-4 w-full px-4 relative z-10">
-                      <div className="p-3 bg-[#145BFF]/5 border border-[#145BFF]/10 rounded-xl flex items-center justify-between text-xs">
-                        <span className="font-bold text-white">💎 Sabanera Dorado (Luxury)</span>
-                        <span className="font-mono text-[#00D4FF]">Ticket Medio: $5,000+</span>
-                      </div>
-                      <div className="p-3 bg-[#A855F7]/5 border border-[#A855F7]/10 rounded-xl flex items-center justify-between text-xs">
-                        <span className="font-bold text-white">💼 San Patricio/Caparra (Corporate)</span>
-                        <span className="font-mono text-[#A855F7]">Ticket Medio: $3,500+</span>
-                      </div>
-                      <div className="p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl flex items-center justify-between text-xs">
-                        <span className="font-bold text-white">🌴 Condado & Palmas (Hospitality)</span>
-                        <span className="font-mono text-amber-400">Ticket Medio: $4,000+</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white/[0.01] border border-white/5 p-4 rounded-xl mt-2 text-xs leading-relaxed text-white/70">
-                    <p className="font-bold text-white mb-1.5 flex items-center gap-1.5">
-                      <Compass className="w-4 h-4 text-[#00D4FF]" />
-                      {language === 'es' ? 'Consejo de Conversión en P.R.' : 'Local PR Conversion Blueprint'}
-                    </p>
-                    {language === 'es' 
-                      ? "Casi el 80% del capital premium local en servicios de software se concentra en Dorado, San Juan y Guaynabo. Dominar el posicionamiento en buscadores para estas tres ciudades garantiza cotizaciones cerradas de alto margen."
-                      : "Over 80% of local high-ticket digital service capital flows through Dorado, San Juan, and Guaynabo. Geo-targeting your digital ads specifically to these premium ZIP codes ensures high profit retainers."}
-                  </div>
-                </div>
-
-              </div>
+              <TownAnalyticsDashboard sessions={sessions} language={language} />
             </motion.div>
           )}
 
