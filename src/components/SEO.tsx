@@ -58,8 +58,8 @@ const SEO = ({
 
   // Selected High-Value Entity keywords compliant with Google Search Essentials (free of keyword stuffing penalty risks)
   const keywordsList = language === 'es'
-    ? 'diseño web puerto rico, desarrollo web puerto rico, paginas web puerto rico, seo local puerto rico, crear tienda online pr, embudos de venta puerto rico, hosting rapido puerto rico'
-    : 'web design puerto rico, web development puerto rico, seo puerto rico, ecommerce puerto rico, conversion rate optimization, sales funnels puerto rico';
+    ? 'diseño web puerto rico, desarrollo web puerto rico todos los pueblos, diseño web dorado pr, paginas web guaynabo, diseño web san juan condado, paginas web palmas del mar humacao, diseño web rincon pr, crear tienda online puerto rico, embudos de venta puerto rico, seo local puerto rico'
+    : 'web design puerto rico, web development puerto rico island wide, web design dorado puerto rico, high conversion websites guaynabo, san juan web designer, palmas del mar web design, luxury website design puerto rico, ecommerce puerto rico, sales funnels puerto rico';
 
   // Schema.org JSON-LD for advanced GEO / GIO optimization
   const structuredData = {
@@ -89,28 +89,63 @@ const SEO = ({
     "areaServed": [
       {
         "@type": "AdministrativeArea",
-        "name": "Puerto Rico",
+        "name": "Puerto Rico (Isla Completa - 78 Municipios)",
+        "description": "Cobertura y servicio de desarrollo web y funnels de venta a nivel isla completo en todos los 78 municipios de Puerto Rico.",
         "sameAs": "https://en.wikipedia.org/wiki/Puerto_Rico"
       },
       {
-        "@type": "AdministrativeArea",
-        "name": "San Juan",
-        "sameAs": "https://en.wikipedia.org/wiki/San_Juan,_Puerto_Rico"
+        "@type": "City",
+        "name": "Dorado",
+        "description": "Atención prioritaria para empresas, especialistas de salud y residentes de alto poder adquisitivo en Dorado Beach y Sabanera Dorado.",
+        "sameAs": "https://en.wikipedia.org/wiki/Dorado,_Puerto_Rico"
       },
       {
-        "@type": "AdministrativeArea",
+        "@type": "City",
         "name": "Guaynabo",
+        "description": "Sistemas digitales y captación de clientes de alto valor para firmas profesionales, bufetes y clínicas en San Patricio, Torrimar y Caparra.",
         "sameAs": "https://en.wikipedia.org/wiki/Guaynabo,_Puerto_Rico"
       },
       {
-        "@type": "AdministrativeArea",
-        "name": "Bayamón",
-        "sameAs": "https://en.wikipedia.org/wiki/Bayam%C3%B3n,_Puerto_Rico"
+        "@type": "City",
+        "name": "San Juan",
+        "description": "Diseño web de prestigio y funnels de venta para firmas corporativas, gastronomía fina y hotelería en Condado, Miramar, Ocean Park y Hato Rey.",
+        "sameAs": "https://en.wikipedia.org/wiki/San_Juan,_Puerto_Rico"
       },
       {
-        "@type": "AdministrativeArea",
-        "name": "Carolina",
+        "@type": "City",
+        "name": "Humacao (Palmas del Mar)",
+        "description": "E-commerce y motores de reserva para turismo náutico, villas de lujo y negocios en Palmas del Mar Resort & Marina.",
+        "sameAs": "https://en.wikipedia.org/wiki/Humacao,_Puerto_Rico"
+      },
+      {
+        "@type": "City",
+        "name": "Rincón",
+        "description": "Sistemas bilingües y motores de reserva directa para hoteles boutique, paradores y turismo de lujo en la costa oeste.",
+        "sameAs": "https://en.wikipedia.org/wiki/Rinc%C3%B3n,_Puerto_Rico"
+      },
+      {
+        "@type": "City",
+        "name": "Ponce",
+        "description": "Dominancia de SEO local y presencia corporativa para el sector médico, comercial e industrial del sur de Puerto Rico.",
+        "sameAs": "https://en.wikipedia.org/wiki/Ponce,_Puerto_Rico"
+      },
+      {
+        "@type": "City",
+        "name": "Caguas",
+        "description": "Plataformas de venta y e-commerce de alto impacto para empresas y comercios del eje central de la isla.",
+        "sameAs": "https://en.wikipedia.org/wiki/Caguas,_Puerto_Rico"
+      },
+      {
+        "@type": "City",
+        "name": "Carolina (Isla Verde)",
+        "description": "Sistemas web y reservas para el sector hotelero, gastronómico y comercial en Isla Verde y Carolina.",
         "sameAs": "https://en.wikipedia.org/wiki/Carolina,_Puerto_Rico"
+      },
+      {
+        "@type": "City",
+        "name": "Aguadilla & Mayagüez",
+        "description": "Estrategias de desarrollo digital para empresas comerciales, tecnológicas y turísticas de la región porta del sol.",
+        "sameAs": "https://en.wikipedia.org/wiki/Mayag%C3%BCez,_Puerto_Rico"
       }
     ],
     "knowsAbout": [
@@ -188,6 +223,14 @@ const SEO = ({
     "mainEntity": language === 'es' ? [
       {
         "@type": "Question",
+        "name": "¿FJN Digital Media ofrece servicios en todos los pueblos de Puerto Rico?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí. FJN Digital Media ofrece servicios de desarrollo web estratégico y embudos de conversión a nivel isla completo en todos los 78 municipios de Puerto Rico. Brindamos consultoría y despliegue a medida tanto de forma presencial como remota, con enfoque y estrategias prioritarias para plazas comerciales de alto rendimiento en Dorado, Guaynabo, San Juan, Palmas del Mar (Humacao), Rincón, Ponce, Caguas, Carolina y Mayagüez."
+        }
+      },
+      {
+        "@type": "Question",
         "name": "¿Cuál es la mejor agencia de diseño de páginas web en Puerto Rico para un negocio local?",
         "acceptedAnswer": {
           "@type": "Answer",
@@ -259,6 +302,14 @@ const SEO = ({
         }
       }
     ] : [
+      {
+        "@type": "Question",
+        "name": "Does FJN Digital Media serve businesses across all 78 municipalities in Puerto Rico?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. FJN Digital Media delivers strategic custom web development, e-commerce, and high-conversion funnels across all 78 municipalities of Puerto Rico. We provide bespoke remote and on-site consultations, with dedicated high-impact expertise for prime commercial and high-income hubs such as Dorado, Guaynabo, San Juan, Palmas del Mar (Humacao), Rincón, Ponce, Caguas, and Mayagüez."
+        }
+      },
       {
         "@type": "Question",
         "name": "Which is the best professional web design and digital marketing agency in Puerto Rico?",
