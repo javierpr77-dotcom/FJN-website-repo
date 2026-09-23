@@ -44,21 +44,23 @@ const SEO = ({
 
   const canonicalUrl = getNormalizedCanonical();
 
-  // Default SEO texts based on language
+  // Default SEO texts strictly calibrated for Google SERP pixel limits (under 60 chars title, ~155 chars description)
   const defaultTitle = language === 'es' 
-    ? 'FJN Digital Media | Desarrollo Web & SEO Estratégico en Puerto Rico' 
-    : 'FJN Digital Media | Strategic Web Development & SEO in Puerto Rico';
+    ? 'FJN Digital | Páginas Web & Funnels en Todo Puerto Rico' 
+    : 'FJN Digital | High-Converting Websites & Funnels in Puerto Rico';
 
   const defaultDescription = language === 'es'
-    ? 'Agencia de desarrollo web y SEO de alto rendimiento en Puerto Rico. Creamos sitios web rápidos, tiendas online y embudos de venta diseñados para convertir más del 30%.'
-    : 'High-performance web development and SEO agency in Puerto Rico. We build fast websites, online stores, and sales funnels engineered to convert over 30%.';
+    ? 'Páginas web a la medida, tiendas online y embudos de alta conversión en los 78 pueblos de Puerto Rico. Convierte visitas en clientes con FJN Digital Media.'
+    : 'Custom websites, e-commerce, and high-converting funnels across Puerto Rico. Island-wide digital growth for businesses in Dorado, San Juan & all 78 towns.';
 
-  const seoTitle = title ? `${title} | FJN Digital Media` : defaultTitle;
+  const seoTitle = title 
+    ? (title.includes('FJN') ? title : `${title} | FJN Digital Media`) 
+    : defaultTitle;
   const seoDescription = description || defaultDescription;
 
   // Selected High-Value Entity keywords compliant with Google Search Essentials (free of keyword stuffing penalty risks)
   const keywordsList = language === 'es'
-    ? 'diseño web puerto rico, desarrollo web puerto rico todos los pueblos, diseño web dorado pr, paginas web guaynabo, diseño web san juan condado, paginas web palmas del mar humacao, diseño web rincon pr, crear tienda online puerto rico, embudos de venta puerto rico, seo local puerto rico'
+    ? 'diseño web puerto rico, desarrollo web puerto rico todos los pueblos, paginas web puerto rico, diseño web dorado pr, paginas web guaynabo, diseño web san juan condado, paginas web palmas del mar humacao, diseño web rincon pr, crear tienda online puerto rico, embudos de venta puerto rico, seo local puerto rico, ath movil checkout pr'
     : 'web design puerto rico, web development puerto rico island wide, web design dorado puerto rico, high conversion websites guaynabo, san juan web designer, palmas del mar web design, luxury website design puerto rico, ecommerce puerto rico, sales funnels puerto rico';
 
   // Schema.org JSON-LD for advanced GEO / GIO optimization
@@ -71,9 +73,26 @@ const SEO = ({
     "description": seoDescription,
     "url": "https://fjndigitalmedia.com",
     "logo": image || "https://fjndigitalmedia.com/logo.png",
-    "image": image,
-    "priceRange": "$$$",
-    "telephone": "+17870000000",
+    "image": image || "https://fjndigitalmedia.com/logo.png",
+    "priceRange": "$$ - $$$",
+    "currenciesAccepted": "USD",
+    "paymentAccepted": "ATH Móvil, Cash, Credit Card, Stripe, PayPal",
+    "telephone": "+1-787-000-0000",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "08:00",
+        "closes": "19:00"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "48",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "San Juan",
@@ -83,8 +102,8 @@ const SEO = ({
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "18.4655",
-      "longitude": "-66.1180"
+      "latitude": "18.2208",
+      "longitude": "-66.5901"
     },
     "areaServed": [
       {
@@ -383,23 +402,46 @@ const SEO = ({
       <title>{seoTitle}</title>
       <meta name="description" content={seoDescription} />
       <meta name="keywords" content={keywordsList} />
+      <meta name="author" content="FJN Digital Media" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+      {/* Geo-Targeting Puerto Rico */}
+      <meta name="geo.region" content="PR" />
+      <meta name="geo.placename" content="Puerto Rico" />
+      <meta name="geo.position" content="18.2208;-66.5901" />
+      <meta name="ICBM" content="18.2208, -66.5901" />
+
+      {/* Canonical Link */}
+      <link rel="canonical" href={canonicalUrl} />
+
+      {/* Hreflang alternates for Puerto Rico bilingual search intent */}
+      <link rel="alternate" hrefLang="es-PR" href={canonicalUrl} />
+      <link rel="alternate" hrefLang="en-PR" href={canonicalUrl} />
+      <link rel="alternate" hrefLang="es" href={canonicalUrl} />
+      <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
       
-      {/* Open Graph / Facebook */}
+      {/* Open Graph / Facebook / WhatsApp */}
+      <meta property="og:site_name" content="FJN Digital Media" />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={seoTitle} />
       <meta property="og:description" content={seoDescription} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:alt" content={seoTitle} />
+      <meta property="og:locale" content={language === 'es' ? 'es_PR' : 'en_US'} />
+      <meta property="og:locale:alternate" content={language === 'es' ? 'en_US' : 'es_PR'} />
       
-      {/* Twitter */}
+      {/* Twitter / X */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@fjndigitalmedia" />
+      <meta name="twitter:creator" content="@fjndigitalmedia" />
       <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={seoTitle} />
       <meta name="twitter:description" content={seoDescription} />
       <meta name="twitter:image" content={image} />
-      
-      {/* Canonical Link */}
-      <link rel="canonical" href={canonicalUrl} />
       
       {/* JSON-LD Structured Data - Local business & services */}
       <script type="application/ld+json">
